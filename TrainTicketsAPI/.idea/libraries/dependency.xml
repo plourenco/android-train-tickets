@@ -1,0 +1,29 @@
+<component name="libraryTable">
+  <library name="dependency">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/target/dependency/hk2-api-2.5.0-b32.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/hk2-utils-2.5.0-b32.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/grizzly-http-server-2.3.28.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/osgi-resource-locator-1.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/javax.inject-2.5.0-b32.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/javax.ws.rs-api-2.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/hk2-locator-2.5.0-b32.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/validation-api-1.1.0.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/grizzly-http-2.3.28.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/javax.annotation-api-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/grizzly-framework-2.3.28.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/jersey-common-2.25.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/jersey-media-jaxb-2.25.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/jersey-guava-2.25.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/hamcrest-core-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/jersey-client-2.25.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/javassist-3.20.0-GA.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/jersey-server-2.25.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/aopalliance-repackaged-2.5.0-b32.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/junit-4.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/dependency/jersey-container-grizzly2-http-2.25.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
