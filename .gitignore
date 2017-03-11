@@ -1,8 +1,6 @@
-*/.DS_Store
-*/pom.xml
-*/.idea
-*/*.iml
 .DS_Store
+
 .idea
 *.iml
-pom.xml
+
+API/target
