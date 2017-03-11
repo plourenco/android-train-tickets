@@ -3,11 +3,11 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
-    <artifactId>simple-service</artifactId>
+    <groupId>feup.cm</groupId>
+    <artifactId>AndroidTrainTickets</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>simple-service</name>
+    <name>AndroidTrainTickets</name>
 
     <dependencyManagement>
         <dependencies>
@@ -52,7 +52,7 @@
                     <finalName>jersey-grizzly</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>com.example.Main</mainClass>
+                            <mainClass>feup.cm.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -101,7 +101,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.example.Main</mainClass>
+                    <mainClass>feup.cm.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
