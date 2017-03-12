@@ -1,19 +1,18 @@
 package com.example;
 
+import com.example.mysql.MySQLManager;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.logging.Logger;
 
-/**
- * Main class.
- *
- */
 public class Main {
-    // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://localhost:8080/myapp/";
+
+    public static final String BASE_URI = "http://localhost:8080/api/";
+    private static Logger logger;
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -31,15 +30,25 @@ public class Main {
 
     /**
      * Main method.
-     * @param args
-     * @throws IOException
+     * @param args args
      */
     public static void main(String[] args) throws IOException {
+        logger = Logger.getLogger(Main.class.getName());
         final HttpServer server = startServer();
-        System.out.println(String.format("Jersey app started with WADL available at "
-                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+
+        MySQLManager.init();
+        logger.info("Jersey Server has started...");
+
+        // end connection
         System.in.read();
         server.shutdownNow();
     }
-}
 
+    /**
+     * Get console logger
+     * @return logger
+     */
+    public static Logger getLogger() {
+        return logger;
+    }
+}
