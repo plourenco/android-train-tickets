@@ -30,7 +30,7 @@ public class Main {
 
     /**
      * Main method.
-     * @param args args
+     * @param args String[]
      */
     public static void main(String[] args) throws IOException {
         logger = Logger.getLogger(Main.class.getName());

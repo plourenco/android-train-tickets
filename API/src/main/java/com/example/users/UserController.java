@@ -2,24 +2,28 @@ package com.example.users;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-/**
- * Root resource (exposed at "myresource" path)
- */
 @Path("users")
 public class UserController {
 
+    private UserManager userManager = new UserManager();
+
     /**
-     * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "text/plain" media type.
-     *
-     * @return String that will be returned as a text/plain response.
+     * Returns a user object by username or id
+     * @param param String
      */
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
-        return "Got it!";
+    @Path("{param}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserModel getUserByName(@PathParam("param") String param) {
+        try {
+            return userManager.getUserById(Integer.parseInt(param));
+        }
+        catch(NumberFormatException e) {
+            return userManager.getUserByName(param);
+        }
     }
 }
