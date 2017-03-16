@@ -7,9 +7,10 @@ public class UserModel {
     private String email;
     private String password;
 
-    public UserModel(int id, String username, String password) {
+    public UserModel(int id, String username, String email, String password) {
         this.id = id;
         this.username = username;
+        this.email = email;
         this.password = password;
     }
 
@@ -24,4 +25,6 @@ public class UserModel {
     public String getPassword() {
         return password;
     }
+
+    public String getEmail() { return email; }
 }

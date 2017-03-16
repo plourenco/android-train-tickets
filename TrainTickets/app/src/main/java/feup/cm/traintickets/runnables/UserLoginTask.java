@@ -27,14 +27,14 @@ public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         UserController userController = new UserController();
-        JSONObject object = userController.getUserByName("teste");
+        JSONObject object = userController.getUserByEmail(mEmail);
 
-        try {
-            return object.getString("password").equals(mPassword);
+        if(object != null) {
+            try {
+                return object.getString("password").equals(mPassword);
+            } catch (JSONException ignored) { }
         }
-        catch(JSONException e) {
-            return false;
-        }
+        return false;
     }
 
     @Override

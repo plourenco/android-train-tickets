@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 public class UserController {
 
-    public JSONObject getUserByName(String username) {
-        return ServiceHandler.makeGet("users/" + username);
+    public JSONObject getUserByEmail(String email) {
+        return ServiceHandler.makeGet("users/" + email);
     }
 }
