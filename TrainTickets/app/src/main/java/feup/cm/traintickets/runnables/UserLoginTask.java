@@ -1,15 +1,12 @@
 package feup.cm.traintickets.runnables;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
 import feup.cm.traintickets.R;
-import feup.cm.traintickets.LoginActivity;
+import feup.cm.traintickets.activities.LoginActivity;
 import feup.cm.traintickets.controllers.UserController;
 
 public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {

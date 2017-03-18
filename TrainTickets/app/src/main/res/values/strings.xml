@@ -3,7 +3,9 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
+    <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
+    <string name="confirm_password">Confirm password</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -13,4 +15,7 @@
     </string>
     <string name="action_register">Register</string>
     <string name="action_sign_in">Sign in</string>
+
+    <!-- Strings related to objects -->
+    <string name="transition_icon">AppIcon</string>
 </resources>
