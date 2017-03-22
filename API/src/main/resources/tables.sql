@@ -3,8 +3,23 @@ CREATE DATABASE IF NOT EXISTS `traintickets`;
 USE `traintickets`;
 
 /*
+Drop tables
+*/
+set foreign_key_checks=0;
+
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS trains;
+DROP TABLE IF EXISTS stations;
+DROP TABLE IF EXISTS trips;
+DROP TABLE IF EXISTS steps;
+DROP TABLE IF EXISTS seats;
+DROP TABLE IF EXISTS tickets;
+DROP TABLE IF EXISTS bookings;
+
+/*
 Generate tables
  */
+set foreign_key_checks=1;
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INT NOT NULL AUTO_INCREMENT,

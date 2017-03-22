@@ -31,7 +31,7 @@ public class UserManager {
             PreparedStatement ps = MySQLManager.getConnection().prepareStatement(
                     "INSERT INTO `users` VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
-            ps.setInt(1, user.getIdUser());
+            ps.setInt(1, user.getId());
             ps.setString(2, user.getUsername());
             ps.setString(3, user.getPassword());
             int rows = ps.executeUpdate();

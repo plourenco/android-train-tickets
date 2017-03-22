@@ -27,7 +27,7 @@ public class StationManager {
             ps = MySQLManager.getConnection().prepareStatement("CALL getStations()");
             rs = ps.executeQuery();
             while (rs.next()){
-                int idStation = rs.getInt("idStations");
+                int idStation = rs.getInt("id");
                 int stationNumber = rs.getInt("stationNumber");
                 String stationName = rs.getString("stationName");
                 stations.add(new StationModel(idStation, stationNumber, stationName));

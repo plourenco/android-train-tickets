@@ -4,8 +4,6 @@ package com.example.station;
  * Created by mercurius on 15/03/17.
  */
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -13,13 +11,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class StationModel {
-    @JsonProperty("idStations")
-    private int stationID;
+    private int id;
     private int stationNumber;
     private String stationName;
 
-    public int getStationID() {
-        return stationID;
+    public int getId() {
+        return id;
     }
     public String getStationName() {
         return stationName;
@@ -28,11 +25,12 @@ public class StationModel {
         return stationNumber;
     }
 
-    public StationModel(int stationID, int stationNumber, String stationName) {
-        this.stationID = stationID;
+    public StationModel(int id, int stationNumber, String stationName) {
+        this.id = id;
         this.stationNumber = stationNumber;
         this.stationName = stationName;
     }
+
     public StationModel() {
     }
 }

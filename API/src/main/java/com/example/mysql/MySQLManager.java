@@ -12,7 +12,7 @@ public class MySQLManager {
     private static final String DB_VERSION = "1.0";
     private static final String host = "localhost";
     private static final String base = "traintickets";
-    private static final String pass = "root";
+    private static final String pass = "R00t";
     private static final String user = "root";
 
     /**
