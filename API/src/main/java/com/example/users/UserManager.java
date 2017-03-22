@@ -17,11 +17,14 @@ public class UserManager {
      */
     public int createUser(UserModel user) {
 
-        if (user == null) { throw new InvalidUserDataException("NullPointerException on user. User is not set."); }
+        if (user == null) {
+            throw new InvalidUserDataException("NullPointerException on user. User is not set.");
+        }
 
-        if ( user.getUsername().isEmpty() || user.getUsername() == null || user.getPassword().isEmpty()
+        if (user.getUsername().isEmpty() || user.getUsername() == null || user.getPassword().isEmpty()
                 || user.getPassword() == null || user.getEmail().isEmpty() || user.getEmail() == null) {
-            throw new InvalidUserDataException("Invalid data. Please verify if everything is correct. User not created"); }
+            throw new InvalidUserDataException("Invalid data. Please verify if everything is correct. User not created");
+        }
 
         try {
             PreparedStatement ps = MySQLManager.getConnection().prepareStatement("" +
@@ -31,7 +34,9 @@ public class UserManager {
             ps.setString(3, user.getPassword());
             int rows = ps.executeUpdate();
 
-            if (rows == 0) { throw new SQLException("User creation failed, no rows affected"); }
+            if (rows == 0) {
+                throw new SQLException("User creation failed, no rows affected");
+            }
 
             try (ResultSet generatedKey = ps.getGeneratedKeys()) {
                 if (generatedKey.next()) {
@@ -41,9 +46,11 @@ public class UserManager {
                 }
             }
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             Main.getLogger().severe(e.getMessage());
             return -1;
+        }
+    }
     public void createUser() {
         try {
             PreparedStatement ps = MySQLManager.getConnection().prepareStatement(
