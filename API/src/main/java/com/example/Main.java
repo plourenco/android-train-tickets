@@ -38,6 +38,7 @@ public class Main {
 
         MySQLManager.init();
         logger.info("Jersey Server has started...");
+        logger.info("URL: " + BASE_URI);
 
         // end connection
         System.in.read();
