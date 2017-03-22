@@ -3,15 +3,13 @@ package com.example.mysql;
 import com.example.Main;
 
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Scanner;
 
 public class MySQLManager {
 
     private static Connection conn = null;
+    private static final String DB_VERSION = "1.0";
     private static final String host = "localhost";
     private static final String base = "traintickets";
     private static final String pass = "root";
@@ -52,11 +50,24 @@ public class MySQLManager {
         conn = prepareConnection(null);
 
         if(conn != null) {
+            /* Create or check table structure */
             try {
                 executeSQL(conn, MySQLManager.class.getResourceAsStream("/tables.sql"));
+                if(!checkVersion(conn)) {
+                    Main.getLogger().severe("Database table structure was changed and is out of date.");
+                    Main.getLogger().severe("Please update it with sql files. This warning will be dismissed");
+                    setVersion(conn); // this will shut up the warning next time
+                }
             }
             catch (SQLException e) {
-                Main.getLogger().severe("Unable to execute SQL file");
+                Main.getLogger().info("Unable to execute SQL file. Perhaps database is already updated?");
+            }
+            /* Populate database */
+            try {
+                executeSQL(conn, MySQLManager.class.getResourceAsStream("/populate.sql"));
+            }
+            catch (SQLException ignored) {
+
             }
             finally {
                 try {
@@ -68,6 +79,36 @@ public class MySQLManager {
         }
     }
 
+    /**
+     * Check the version of the database structure
+     */
+    private static boolean checkVersion(Connection conn) {
+        try {
+            PreparedStatement st = conn.prepareStatement(
+                    "SELECT `cfg_value` FROM `config` WHERE `cfg_tag` = 'db_version'");
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                if (rs.getString("cfg_value").equals(DB_VERSION)) {
+                    return true;
+                }
+            }
+        }
+        catch (SQLException ignored) { }
+        return false;
+    }
+
+    /**
+     * Set the version of the database structure
+     */
+    private static void setVersion(Connection conn) {
+        try {
+            PreparedStatement st = conn.prepareStatement(
+                    "UPDATE `config` SET `cfg_value` = ? WHERE `cfg_tag` = 'db_version'");
+            st.setString(1, DB_VERSION);
+            st.executeUpdate();
+        }
+        catch (SQLException ignored) { }
+    }
 
     /**
      * This method will be used to import .sql files into the database
@@ -87,7 +128,7 @@ public class MySQLManager {
                     line = line.substring(i + 1, line.length() - " */".length());
                 }
                 if (line.trim().length() > 0) {
-                    st.execute(line);
+                    st.execute(line.contains("version") ? line.replace("{version}", DB_VERSION) : line);
                 }
             }
         }

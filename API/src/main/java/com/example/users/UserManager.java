@@ -13,7 +13,13 @@ public class UserManager {
      * Insert a new user into the database
      */
     public void createUser() {
-
+        try {
+            PreparedStatement ps = MySQLManager.getConnection().prepareStatement(
+                    "INSERT INTO `users`() VALUES()");
+        }
+        catch(SQLException e) {
+            Main.getLogger().severe(e.getMessage());
+        }
     }
 
     /**
