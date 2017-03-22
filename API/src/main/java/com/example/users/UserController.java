@@ -29,7 +29,6 @@ public class UserController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public int createUser(UserModel user) {
-        if (userManager == null) { userManager = new UserManager(); }
         return userManager.createUser(user);
     }
 }

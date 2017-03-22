@@ -23,17 +23,18 @@ public class UserManager {
 
         if (user.getUsername().isEmpty() || user.getUsername() == null || user.getPassword().isEmpty()
                 || user.getPassword() == null || user.getEmail().isEmpty() || user.getEmail() == null) {
-            throw new InvalidUserDataException("Invalid data. Please verify if everything is correct. User not created");
+            throw new InvalidUserDataException("Invalid data. " +
+                    "Please verify if everything is correct. User not created");
         }
 
         try {
-            PreparedStatement ps = MySQLManager.getConnection().prepareStatement("" +
+            PreparedStatement ps = MySQLManager.getConnection().prepareStatement(
                     "INSERT INTO `users` VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+
             ps.setInt(1, user.getIdUser());
             ps.setString(2, user.getUsername());
             ps.setString(3, user.getPassword());
             int rows = ps.executeUpdate();
-
             if (rows == 0) {
                 throw new SQLException("User creation failed, no rows affected");
             }
@@ -45,19 +46,10 @@ public class UserManager {
                     throw new SQLException("User creation failed, no ID obtained");
                 }
             }
-
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             Main.getLogger().severe(e.getMessage());
             return -1;
-        }
-    }
-    public void createUser() {
-        try {
-            PreparedStatement ps = MySQLManager.getConnection().prepareStatement(
-                    "INSERT INTO `users`() VALUES()");
-        }
-        catch(SQLException e) {
-            Main.getLogger().severe(e.getMessage());
         }
     }
 

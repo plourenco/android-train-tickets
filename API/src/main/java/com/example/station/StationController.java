@@ -14,14 +14,12 @@ import java.util.List;
 @Path("station")
 public class StationController {
 
-    StationManager stationManager;
+    private StationManager stationManager = new StationManager();
 
     @GET
     @Path("getStations")
     @Produces(MediaType.APPLICATION_JSON)
     public List<StationModel> getStations() {
-        if (stationManager == null) { stationManager = new StationManager(); }
         return stationManager.getStations();
     }
 }
-
