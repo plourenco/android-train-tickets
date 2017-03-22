@@ -5,6 +5,7 @@ package com.example.tickets;
  */
 
 import com.example.station.StationModel;
+import com.example.users.UserModel;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
@@ -15,13 +16,15 @@ import java.util.UUID;
  */
 @XmlRootElement
 public class TicketModel {
-    private int ticketID;
-    private UUID ticketUniqueID;
+    private int idTicket;
+    private UUID uniqueId;
     private StationModel departureStation;
     private StationModel arrivalStation;
     private Date ticketDate;
-    private float ticketPrice;
+    private float price;
     private int distance;
+    private Date purchaseDate;
+    private UserModel user;
 
     /**
      * Seat on the train
@@ -32,8 +35,8 @@ public class TicketModel {
      * Eventually we will need something here to generate/hold the QR Code
      */
 
-    public int getTicketID() {
-        return ticketID;
+    public int getIdTicket() {
+        return idTicket;
     }
     public StationModel getDepartureStation() {
         return departureStation;
@@ -44,8 +47,8 @@ public class TicketModel {
     public Date getTicketDate() {
         return ticketDate;
     }
-    public float getTicketPrice() {
-        return ticketPrice;
+    public float getPrice() {
+        return price;
     }
     public int getDistance() {
         return distance;
@@ -53,18 +56,27 @@ public class TicketModel {
     public int getSeat() {
         return seat;
     }
-    public UUID getTicketUniqueID() {
-        return ticketUniqueID;
+    public UUID getUniqueId() {
+        return uniqueId;
+    }
+    public Date getPurchaseDate() {
+        return purchaseDate;
+    }
+    public UserModel getUser() {
+        return user;
     }
 
-    public TicketModel(int ticketID, StationModel departureStation, StationModel arrivalStation, Date ticketDate, float ticketPrice, int distance, int seat, UUID ticketUniqueID) {
-        this.ticketID = ticketID;
+    public TicketModel(int ticketID, StationModel departureStation, StationModel arrivalStation, Date ticketDate,
+                       float price, int distance, int seat, UUID uniqueId, Date purchaseDate, UserModel user) {
+        this.idTicket = ticketID;
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
         this.ticketDate = ticketDate;
-        this.ticketPrice = ticketPrice;
+        this.price = price;
         this.distance = distance;
         this.seat = seat;
-        this.ticketUniqueID = ticketUniqueID;
+        this.uniqueId = uniqueId;
+        this.purchaseDate = purchaseDate;
+        this.user = user;
     }
 }

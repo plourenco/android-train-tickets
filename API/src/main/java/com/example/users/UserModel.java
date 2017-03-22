@@ -1,27 +1,46 @@
 package com.example.users;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class UserModel {
 
-    private int id;
+    private int idUser;
     private String username;
     private String email;
     private String password;
+    private int roleUser;
 
-    public UserModel(int id, String username, String password) {
-        this.id = id;
+    // Need to refactor this
+    public UserModel(int idUser, String username, String password) {
+        this.idUser = idUser;
         this.username = username;
         this.password = password;
     }
-
-    public int getId() {
-        return id;
+    public UserModel() {
+    }
+    public UserModel(int idUser, String username, String password, String email, int roleUser) {
+        this.idUser = idUser;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.roleUser = roleUser;
     }
 
+
+    public int getIdUser() {
+        return idUser;
+    }
     public String getUsername() {
         return username;
     }
-
     public String getPassword() {
         return password;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public int getRoleUser() {
+        return roleUser;
     }
 }

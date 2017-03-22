@@ -1,9 +1,6 @@
 package com.example.users;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("users")
@@ -25,5 +22,14 @@ public class UserController {
         catch(NumberFormatException e) {
             return userManager.getUserByName(param);
         }
+    }
+
+    @POST
+    @Path("register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public int createUser(UserModel user) {
+        if (userManager == null) { userManager = new UserManager(); }
+        return userManager.createUser(user);
     }
 }
