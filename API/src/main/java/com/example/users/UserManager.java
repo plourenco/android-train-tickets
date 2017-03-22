@@ -44,6 +44,13 @@ public class UserManager {
         } catch (SQLException e){
             Main.getLogger().severe(e.getMessage());
             return -1;
+    public void createUser() {
+        try {
+            PreparedStatement ps = MySQLManager.getConnection().prepareStatement(
+                    "INSERT INTO `users`() VALUES()");
+        }
+        catch(SQLException e) {
+            Main.getLogger().severe(e.getMessage());
         }
     }
 
@@ -51,10 +58,10 @@ public class UserManager {
      * Get a user from the database by username
      * @param username String
      */
-    public UserModel getUserByName(String username) {
+    public UserModel getUserByEmail(String username) {
         try {
             PreparedStatement ps = MySQLManager.getConnection().prepareStatement(
-                    "SELECT * FROM `users` WHERE username = ?");
+                    "SELECT * FROM `users` WHERE email = ?");
 
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
@@ -62,6 +69,7 @@ public class UserManager {
                 return new UserModel(
                         rs.getInt("id"),
                         rs.getString("username"),
+                        rs.getString("email"),
                         rs.getString("password"));
             }
         }
@@ -86,6 +94,7 @@ public class UserManager {
                 return new UserModel(
                         rs.getInt("id"),
                         rs.getString("username"),
+                        rs.getString("email"),
                         rs.getString("password"));
             }
         }

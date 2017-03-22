@@ -9,18 +9,18 @@ public class UserController {
     private UserManager userManager = new UserManager();
 
     /**
-     * Returns a user object by username or id
+     * Returns a user object by email or id
      * @param param String
      */
     @GET
     @Path("{param}")
     @Produces(MediaType.APPLICATION_JSON)
-    public UserModel getUserByName(@PathParam("param") String param) {
+    public UserModel getUser(@PathParam("param") String param) {
         try {
             return userManager.getUserById(Integer.parseInt(param));
         }
         catch(NumberFormatException e) {
-            return userManager.getUserByName(param);
+            return userManager.getUserByEmail(param);
         }
     }
 

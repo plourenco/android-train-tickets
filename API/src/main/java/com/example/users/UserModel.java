@@ -14,7 +14,10 @@ public class UserModel {
     // Need to refactor this
     public UserModel(int idUser, String username, String password) {
         this.idUser = idUser;
+    public UserModel(int id, String username, String email, String password) {
+        this.id = id;
         this.username = username;
+        this.email = email;
         this.password = password;
     }
     public UserModel() {
@@ -43,4 +46,5 @@ public class UserModel {
     public int getRoleUser() {
         return roleUser;
     }
+    public String getEmail() { return email; }
 }

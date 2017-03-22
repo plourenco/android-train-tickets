@@ -1,15 +1,12 @@
 package feup.cm.traintickets.runnables;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
 import feup.cm.traintickets.R;
-import feup.cm.traintickets.LoginActivity;
+import feup.cm.traintickets.activities.LoginActivity;
 import feup.cm.traintickets.controllers.UserController;
 
 public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
@@ -27,14 +24,14 @@ public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         UserController userController = new UserController();
-        JSONObject object = userController.getUserByName("teste");
+        JSONObject object = userController.getUserByEmail(mEmail);
 
-        try {
-            return object.getString("password").equals(mPassword);
+        if(object != null) {
+            try {
+                return object.getString("password").equals(mPassword);
+            } catch (JSONException ignored) { }
         }
-        catch(JSONException e) {
-            return false;
-        }
+        return false;
     }
 
     @Override
