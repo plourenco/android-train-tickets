@@ -120,3 +120,6 @@ insert into `steps` values(null,2,1,4,55,5.5,5,5,41,'10:19:00','11:00:00');
 
 insert into `steps` values(null,5,4,1,40,4.0,5,6,30,'12:00:00','12:30:00');
 insert into `steps` values(null,4,3,2,45,4.5,5,6,34,'12:35:00','13:09:00');
+
+DROP PROCEDURE IF EXISTS getStations;
+DROP PROCEDURE IF EXISTS getSchedule;
