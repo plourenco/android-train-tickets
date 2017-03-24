@@ -37,7 +37,7 @@ public class TimetableController {
     @GET
     @Path("timetables/{depStation}/{arrStation}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<StepModel> getSchedulesByStation(@PathParam("depStation") int depStation,
+    public List<TimetableModel> getSchedulesByStation(@PathParam("depStation") int depStation,
                                                  @PathParam("arrStation") int arrStation) {
 
         return timetableManager.getSchedule(depStation, arrStation); // Needs completion!!

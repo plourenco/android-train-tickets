@@ -52,8 +52,8 @@ ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `steps` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `departureStation` INT NOT NULL,
-  `arrivalStation` INT NOT NULL,
+  `departureStationId` INT NOT NULL,
+  `arrivalStationId` INT NOT NULL,
   `stepNumber` INT NOT NULL,
   `distance` INT NOT NULL,
   `price` REAL NOT NULL,
@@ -63,8 +63,8 @@ CREATE TABLE IF NOT EXISTS `steps` (
   `departureTime` TIME NOT NULL,
   `arrivalTime` TIME NOT NULL,
 PRIMARY KEY (`id`),
-FOREIGN KEY(`departureStation`) REFERENCES stations(`id`),
-FOREIGN KEY(`arrivalStation`) REFERENCES stations(`id`),
+FOREIGN KEY(`departureStationId`) REFERENCES stations(`id`),
+FOREIGN KEY(`arrivalStationId`) REFERENCES stations(`id`),
 FOREIGN KEY(`fkTrip`) references trips(`id`))
 ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
@@ -79,8 +79,8 @@ ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 CREATE TABLE IF NOT EXISTS `tickets` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `uniqueId` TEXT NOT NULL,
-  `departureStation` INT NOT NULL,
-  `arrivalStation` INT NOT NULL,
+  `departureStationId` INT NOT NULL,
+  `arrivalStationId` INT NOT NULL,
   `ticketDate` DATE NOT NULL,
   `price` REAL NOT NULL,
   `purchaseDate` DATE NOT NULL,
@@ -88,8 +88,8 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `fkTrip` INT NOT NULL,
   `isUsed` tinyint,
 PRIMARY KEY(`id`),
-FOREIGN KEY(`departureStation`) REFERENCES stations(`id`),
-FOREIGN KEY(`arrivalStation`) REFERENCES stations(`id`),
+FOREIGN KEY(`departureStationId`) REFERENCES stations(`id`),
+FOREIGN KEY(`arrivalStationId`) REFERENCES stations(`id`),
 FOREIGN KEY(`fkTrip`) REFERENCES trips(`id`),
 FOREIGN KEY(`fkUser`) REFERENCES users(`id`))
 ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;

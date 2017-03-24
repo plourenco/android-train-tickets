@@ -1,9 +1,8 @@
 package com.example.timetable;
 
 import com.example.Main;
+import com.example.exceptions.SQLExceptionMapper;
 import com.example.mysql.MySQLManager;
-import com.example.station.StationModel;
-import com.example.steps.StepModel;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,27 +25,29 @@ public class TimetableManager {
      * @param arrivalStation the id of the arrival station
      * @return a list of StepModel
      */
-    public List<StepModel> getSchedule(int departureStation, int arrivalStation) {
+    public List<TimetableModel> getSchedule(int departureStation, int arrivalStation) {
         try {
-            List<StepModel> steps = new ArrayList<>();
+            List<TimetableModel> schedule = new ArrayList<>();
             ps = MySQLManager.getConnection().prepareStatement("Call getSchedule(?,?)");
             ps.setInt(1, departureStation);
             ps.setInt(2, arrivalStation);
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                int stepId = rs.getInt("id");
                 String depStation = rs.getString("startStation");
                 String arrStation = rs.getString("endStation");
+                int tripId = rs.getInt("id");
+                int depStationId = rs.getInt("departureStationI");
+                int arrStationId = rs.getInt("arrivalStationId");
                 Time depTime = rs.getTime("departureTime");
                 Time arrTime = rs.getTime("arrivalTime");
-                steps.add(new StepModel(stepId, stepId, -1, -1d, -1, -1, depTime, arrTime,
-                        new StationModel(0, 0, depStation), new StationModel(0, 0, arrStation)));
+                schedule.add(new TimetableModel(depStation, arrStation, tripId, depStationId,
+                        arrStationId, depTime, arrTime));
             }
-            return steps;
-        } catch (SQLException sql) {
+            return schedule;
+        } catch (SQLException sql) { // Needs to rethrow
             Main.getLogger().severe(sql.getMessage());
+            throw new SQLExceptionMapper(sql.getMessage());
         }
-        return null;
     }
 }

@@ -60,14 +60,20 @@ public class MySQLManager {
                 }
             }
             catch (SQLException e) {
-                Main.getLogger().info("Unable to execute SQL file. Perhaps database is already updated?");
+                Main.getLogger().info("Unable to executeProcedure SQL file. Perhaps database is already updated?");
             }
             /* Populate database */
             try {
                 executeSQL(conn, MySQLManager.class.getResourceAsStream("/populate.sql"));
             }
             catch (SQLException ignored) {
-
+                Main.getLogger().severe(ignored.toString());
+            }
+            /* Run procedures */
+            try {
+                executeProcedure(conn, MySQLManager.class.getResourceAsStream("/procedures.sql"));
+            } catch (SQLException proc) {
+                Main.getLogger().severe("Error trying to create procedures");
             }
             finally {
                 try {
@@ -133,6 +139,45 @@ public class MySQLManager {
             }
         }
         finally {
+            if (st != null) st.close();
+        }
+    }
+
+    /**
+     * This method is used to import .sql procedures into the database
+     * This code is also very much "martelated", so use carefully
+     * @param conn A SQL connection
+     * @param in SQL file location
+     * @throws SQLException
+     */
+    private static void executeProcedure(Connection conn, InputStream in) throws SQLException {
+        Scanner s = new Scanner(in);
+        Statement st = null;
+        try {
+            st = conn.createStatement();
+            StringBuilder proc = new StringBuilder();
+            while (s.hasNext()) {
+                String line = s.nextLine().trim();
+
+                if (line.startsWith("#") && s.hasNext()) line = s.nextLine().trim();
+                if (line.startsWith("/*") && s.hasNext()) {
+                    do {
+                        line = s.nextLine().trim();
+                    } while (!line.endsWith("*/"));
+                }
+                if (line.equalsIgnoreCase("delimiter //") && s.hasNext()) line = s.nextLine().trim();
+                if (line.equalsIgnoreCase("delimiter ;") && s.hasNext()) line = s.nextLine().trim();
+
+                if ((line.trim().equalsIgnoreCase("end //") || line.trim().equalsIgnoreCase("end$$"))
+                        && s.hasNext()) {
+                    proc.append("end");
+                    st.execute(proc.toString());
+                    proc.setLength(0);
+                } else {
+                    proc.append(line.trim() + "\n");
+                }
+            }
+        } finally {
             if (st != null) st.close();
         }
     }
