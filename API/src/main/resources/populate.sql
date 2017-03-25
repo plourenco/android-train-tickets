@@ -123,3 +123,9 @@ insert into `steps` values(null,4,3,2,45,4.5,5,6,34,'12:35:00','13:09:00');
 
 DROP PROCEDURE IF EXISTS getStations;
 DROP PROCEDURE IF EXISTS getSchedule;
+DROP PROCEDURE IF EXISTS getFair;
+DROP PROCEDURE IF EXISTS availableTickets;
+DROP PROCEDURE IF EXISTS createUser;
+DROP PROCEDURE IF EXISTS loginCheck;
+DROP PROCEDURE IF EXISTS getUserTickets;
+DROP PROCEDURE IF EXISTS getTicketsControl;
