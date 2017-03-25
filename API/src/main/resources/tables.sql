@@ -6,6 +6,7 @@ USE `traintickets`;
 Drop tables
 */
 set foreign_key_checks=0;
+set sql_mode='';
 
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS trains;

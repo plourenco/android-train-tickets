@@ -17,7 +17,7 @@ public class StationController {
     private StationManager stationManager = new StationManager();
 
     @GET
-    @Path("getStations")
+    @Path("stations")
     @Produces(MediaType.APPLICATION_JSON)
     public List<StationModel> getStations() {
         return stationManager.getStations();
