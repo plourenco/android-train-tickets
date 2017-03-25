@@ -143,3 +143,24 @@ DROP PROCEDURE IF EXISTS createUser;
 DROP PROCEDURE IF EXISTS loginCheck;
 DROP PROCEDURE IF EXISTS getUserTickets;
 DROP PROCEDURE IF EXISTS getTicketsControl;
+
+
+
+#  INSERTS ONLY FOR TEST, TO BE REMOVED AFTER TESTS
+insert into users values (null,'usertest','1234','email@test',1);
+
+insert into tickets values(null,'QR01',1,5,'2016-03-25',10.5,'2016-03-23',1,4,false);
+insert into tickets values(null,'QR02',1,4,'2016-03-25',9.5,'2016-03-23',1,4,false);
+insert into tickets values(null,'QR03',3,5,'2016-03-25',6.5,'2016-03-23',1,4,false);
+insert into tickets values(null,'QR04',1,5,'2016-03-25',10.5,'2016-03-23',1,2,false);
+insert into tickets values(null,'QR05',4,5,'2016-03-25',2.5,'2016-03-23',1,3,false);
+insert into tickets values(null,'QR06',5,3,'2016-03-25',10.5,'2016-03-23',1,5,false);
+insert into tickets values(null,'QR07',3,1,'2016-03-25',6.5,'2016-03-23',1,5,false);
+insert into tickets values(null,'QR08',1,5,'2016-03-24',10.5,'2016-03-23',1,2,false);
+insert into tickets values(null,'QR09',4,5,'2016-03-24',2.5,'2016-03-23',1,3,false);
+insert into tickets values(null,'QR10',5,3,'2016-03-24',10.5,'2016-03-23',1,5,false);
+insert into tickets values(null,'QR11',3,1,'2016-03-24',6.5,'2016-03-23',1,5,false);
+
+
+INSERT INTO bookings VALUES(NULL,'2016-04-25',12,1,4);
+INSERT INTO bookings VALUES(NULL,'2016-04-25',5,2,4);

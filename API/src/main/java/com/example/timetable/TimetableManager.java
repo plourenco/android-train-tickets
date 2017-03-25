@@ -37,7 +37,7 @@ public class TimetableManager {
                 String depStation = rs.getString("startStation");
                 String arrStation = rs.getString("endStation");
                 int tripId = rs.getInt("id");
-                int depStationId = rs.getInt("departureStationI");
+                int depStationId = rs.getInt("departureStationId");
                 int arrStationId = rs.getInt("arrivalStationId");
                 Time depTime = rs.getTime("departureTime");
                 Time arrTime = rs.getTime("arrivalTime");
