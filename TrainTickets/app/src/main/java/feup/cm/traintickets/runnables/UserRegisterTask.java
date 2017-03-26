@@ -7,30 +7,28 @@ import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
 
-import feup.cm.traintickets.R;
-import feup.cm.traintickets.activities.LoginActivity;
 import feup.cm.traintickets.controllers.UserController;
 import feup.cm.traintickets.encryption.Encryption;
+import feup.cm.traintickets.models.UserModel;
 
-public abstract class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+public abstract class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
-    private final String mEmail;
-    private final String mPassword;
+    private final UserModel user;
 
-    public UserLoginTask(String email, String password) {
-        mEmail = email;
-        mPassword = password;
+    public UserRegisterTask(UserModel user) {
+        this.user = user;
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
         UserController userController = new UserController();
-        JSONObject object = userController.getUserByEmail(mEmail);
+        String res = userController.createUser(user);
 
-        if(object != null) {
+        if(res != null) {
             try {
-                return Encryption.compareHashes(object.getString("password"), mPassword);
-            } catch (JSONException | NoSuchAlgorithmException ignored) { }
+                return Integer.parseInt(res) != -1;
+            }
+            catch(NumberFormatException ignored) { }
         }
         return false;
     }

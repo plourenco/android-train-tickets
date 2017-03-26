@@ -53,37 +53,40 @@ public class ServiceHandler {
     /**
      * Make a POST request to a sub url with parameters
      * @param sUrl String
-     * @param params KeyValuePair[]
+     * @param jsonStr String
      */
-    public static JSONObject makePost(String sUrl, KeyValuePair... params) {
+    public static String makePost(String sUrl, String jsonStr) {
         StringBuilder result = new StringBuilder();
 
         try {
-            String queryString = join(params, "&");
             URL url = new URL(apiUrl + sUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("Content-Type", "application/json");
 
             DataOutputStream wr = null;
             try {
-                conn.setRequestProperty("Content-Length",
-                        String.valueOf(queryString.length()));
                 wr = new DataOutputStream(conn.getOutputStream());
-                wr.write(queryString.getBytes());
+                wr.write(jsonStr.getBytes());
+                wr.flush();
             }
             finally {
                 if(wr != null) wr.close();
             }
-
-            InputStream in = new BufferedInputStream(conn.getInputStream());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            InputStreamReader is = new InputStreamReader(conn.getResponseCode() / 100 == 2 ?
+                    conn.getInputStream() : conn.getErrorStream());
+            BufferedReader reader = new BufferedReader(is);
             String line;
             while ((line = reader.readLine()) != null) {
                 result.append(line);
             }
-            return new JSONObject(result.toString());
+            return result.toString();
         }
-        catch(IOException | JSONException e) {
+        catch(IOException e) {
             Log.d("Exception", e.getMessage());
         }
         return null;

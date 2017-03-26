@@ -20,7 +20,7 @@ import java.util.List;
 @Path("timetable")
 public class TimetableController {
 
-    TimetableManager timetableManager = new TimetableManager();
+    private final TimetableManager timetableManager = new TimetableManager();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

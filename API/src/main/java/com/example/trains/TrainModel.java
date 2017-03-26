@@ -39,6 +39,7 @@ public class TrainModel {
      * Constructors
      */
     public TrainModel() {
+
     }
     public TrainModel(int id, int maxCapacity, String description, List<SeatModel> seats) {
         this.id = id;

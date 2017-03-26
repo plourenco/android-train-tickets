@@ -1,12 +1,14 @@
 package com.example.users;
 
+import com.example.Main;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("users")
 public class UserController {
 
-    private UserManager userManager = new UserManager();
+    private final UserManager userManager = new UserManager();
 
     /**
      * Returns a user object by email or id

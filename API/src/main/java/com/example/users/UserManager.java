@@ -29,11 +29,12 @@ public class UserManager {
 
         try {
             PreparedStatement ps = MySQLManager.getConnection().prepareStatement(
-                    "INSERT INTO `users` VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                    "INSERT INTO `users` VALUES (NULL, ?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
-            ps.setInt(1, user.getId());
-            ps.setString(2, user.getUsername());
-            ps.setString(3, user.getPassword());
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, String.valueOf(user.getRoleUser()));
             int rows = ps.executeUpdate();
             if (rows == 0) {
                 throw new SQLException("User creation failed, no rows affected");
@@ -69,7 +70,8 @@ public class UserManager {
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("email"),
-                        rs.getString("password"));
+                        rs.getString("password"),
+                        rs.getInt("role"));
             }
         }
         catch(SQLException e) {
@@ -94,7 +96,8 @@ public class UserManager {
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("email"),
-                        rs.getString("password"));
+                        rs.getString("password"),
+                        rs.getInt("role"));
             }
         }
         catch(SQLException e) {

@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 @Path("tickets")
 public class TicketController {
 
-    private TicketManager ticketManager = new TicketManager();
+    private final TicketManager ticketManager = new TicketManager();
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent
@@ -58,7 +58,6 @@ public class TicketController {
                                                     @PathParam("depStation") int depStation,
                                                     @PathParam("arrStation") int arrStation,
                                                     @PathParam("trip") int trip) {
-        if (ticketManager == null) { ticketManager = new TicketManager(); }
         Date sqlDate = null;
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

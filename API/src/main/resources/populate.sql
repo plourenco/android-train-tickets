@@ -2,6 +2,10 @@
 Populate
  */
 
+/* INSERTS ONLY FOR TEST, TO BE REMOVED AFTER TESTS */
+insert into `users` values (null,'inspector','inspector','inspector@test.com',1);
+insert into `users` values(null,'test','test','test@test.com',2);
+
 insert into `trains` values(null,20,'Large');
 insert into `trains` values(null,15,'Medium');
 insert into `trains` values(null,25,'Extra Large');
@@ -121,8 +125,6 @@ insert into `steps` values(null,2,1,4,55,5.5,5,5,41,'10:19:00','11:00:00');
 insert into `steps` values(null,5,4,1,40,4.0,5,6,30,'12:00:00','12:30:00');
 insert into `steps` values(null,4,3,2,45,4.5,5,6,34,'12:35:00','13:09:00');
 
-insert into users values (null,'usertest','1234','email@test',1);
-
 insert into tickets values(null,'QR01',1,5,'2016-03-25',10.5,'2016-03-23',1,4,false);
 insert into tickets values(null,'QR02',1,4,'2016-03-25',9.5,'2016-03-23',1,4,false);
 insert into tickets values(null,'QR03',3,5,'2016-03-25',6.5,'2016-03-23',1,4,false);
@@ -134,33 +136,6 @@ insert into tickets values(null,'QR08',1,5,'2016-03-24',10.5,'2016-03-23',1,2,fa
 insert into tickets values(null,'QR09',4,5,'2016-03-24',2.5,'2016-03-23',1,3,false);
 insert into tickets values(null,'QR10',5,3,'2016-03-24',10.5,'2016-03-23',1,5,false);
 insert into tickets values(null,'QR11',3,1,'2016-03-24',6.5,'2016-03-23',1,5,false);
-
-DROP PROCEDURE IF EXISTS getStations;
-DROP PROCEDURE IF EXISTS getSchedule;
-DROP PROCEDURE IF EXISTS getFair;
-DROP PROCEDURE IF EXISTS availableTickets;
-DROP PROCEDURE IF EXISTS createUser;
-DROP PROCEDURE IF EXISTS loginCheck;
-DROP PROCEDURE IF EXISTS getUserTickets;
-DROP PROCEDURE IF EXISTS getTicketsControl;
-
-
-
-#  INSERTS ONLY FOR TEST, TO BE REMOVED AFTER TESTS
-insert into users values (null,'usertest','1234','email@test',1);
-
-insert into tickets values(null,'QR01',1,5,'2016-03-25',10.5,'2016-03-23',1,4,false);
-insert into tickets values(null,'QR02',1,4,'2016-03-25',9.5,'2016-03-23',1,4,false);
-insert into tickets values(null,'QR03',3,5,'2016-03-25',6.5,'2016-03-23',1,4,false);
-insert into tickets values(null,'QR04',1,5,'2016-03-25',10.5,'2016-03-23',1,2,false);
-insert into tickets values(null,'QR05',4,5,'2016-03-25',2.5,'2016-03-23',1,3,false);
-insert into tickets values(null,'QR06',5,3,'2016-03-25',10.5,'2016-03-23',1,5,false);
-insert into tickets values(null,'QR07',3,1,'2016-03-25',6.5,'2016-03-23',1,5,false);
-insert into tickets values(null,'QR08',1,5,'2016-03-24',10.5,'2016-03-23',1,2,false);
-insert into tickets values(null,'QR09',4,5,'2016-03-24',2.5,'2016-03-23',1,3,false);
-insert into tickets values(null,'QR10',5,3,'2016-03-24',10.5,'2016-03-23',1,5,false);
-insert into tickets values(null,'QR11',3,1,'2016-03-24',6.5,'2016-03-23',1,5,false);
-
 
 INSERT INTO bookings VALUES(NULL,'2016-04-25',12,1,4);
 INSERT INTO bookings VALUES(NULL,'2016-04-25',5,2,4);

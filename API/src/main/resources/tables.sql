@@ -8,19 +8,26 @@ Drop tables
 set foreign_key_checks=0;
 set sql_mode='';
 
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS trains;
-DROP TABLE IF EXISTS stations;
-DROP TABLE IF EXISTS trips;
-DROP TABLE IF EXISTS steps;
-DROP TABLE IF EXISTS seats;
-DROP TABLE IF EXISTS tickets;
-DROP TABLE IF EXISTS bookings;
+-- Creating table already checks existence, so it's commented
+-- DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS trains;
+-- DROP TABLE IF EXISTS stations;
+-- DROP TABLE IF EXISTS trips;
+-- DROP TABLE IF EXISTS steps;
+-- DROP TABLE IF EXISTS seats;
+-- DROP TABLE IF EXISTS tickets;
+-- DROP TABLE IF EXISTS bookings;
+
 
 /*
 Generate tables
  */
 set foreign_key_checks=1;
+
+CREATE TABLE IF NOT EXISTS `roles` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL UNIQUE,
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -28,7 +35,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `role` INT NOT NULL,
-PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+PRIMARY KEY (`id`),
+FOREIGN KEY (`role`) REFERENCES roles(`id`))
+ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `trains` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -113,3 +122,19 @@ CREATE TABLE IF NOT EXISTS `config` (
     PRIMARY KEY (`cfg_tag`));
 
 insert ignore into `config` VALUES( 'db_version', '{version}');
+
+INSERT INTO `roles` VALUES(1, 'inspector') ON DUPLICATE KEY UPDATE name = VALUES(name);
+INSERT INTO `roles` VALUES(2, 'user') ON DUPLICATE KEY UPDATE name = VALUES(name);
+
+/*
+Delete procedures, this IMPLIES they get re-added
+ */
+
+DROP PROCEDURE IF EXISTS getStations;
+DROP PROCEDURE IF EXISTS getSchedule;
+DROP PROCEDURE IF EXISTS getFair;
+DROP PROCEDURE IF EXISTS availableTickets;
+DROP PROCEDURE IF EXISTS createUser;
+DROP PROCEDURE IF EXISTS loginCheck;
+DROP PROCEDURE IF EXISTS getUserTickets;
+DROP PROCEDURE IF EXISTS getTicketsControl;

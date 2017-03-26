@@ -25,12 +25,12 @@ public class StationModel {
         return stationNumber;
     }
 
+    public StationModel() {
+
+    }
     public StationModel(int id, int stationNumber, String stationName) {
         this.id = id;
         this.stationNumber = stationNumber;
         this.stationName = stationName;
-    }
-
-    public StationModel() {
     }
 }

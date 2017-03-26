@@ -9,10 +9,10 @@ import java.util.Scanner;
 public class MySQLManager {
 
     private static Connection conn = null;
-    private static final String DB_VERSION = "1.0";
+    private static final String DB_VERSION = "1.1";
     private static final String host = "localhost";
     private static final String base = "traintickets";
-    private static final String pass = "R00t";
+    private static final String pass = "root";
     private static final String user = "root";
 
     /**
@@ -60,20 +60,16 @@ public class MySQLManager {
                 }
             }
             catch (SQLException e) {
-                Main.getLogger().info("Unable to executeProcedure SQL file. Perhaps database is already updated?");
+                Main.getLogger().info("Unable to execute SQL file. Perhaps database is already updated?");
+                e.printStackTrace();
             }
-            /* Populate database */
-            try {
-                executeSQL(conn, MySQLManager.class.getResourceAsStream("/populate.sql"));
-            }
-            catch (SQLException ignored) {
-                Main.getLogger().severe(ignored.toString());
-            }
+            /* Removed: Population HAS to be run manually, copy paste when you need it */
             /* Run procedures */
             try {
                 executeProcedure(conn, MySQLManager.class.getResourceAsStream("/procedures.sql"));
             } catch (SQLException proc) {
                 Main.getLogger().severe("Error trying to create procedures");
+                proc.printStackTrace();
             }
             finally {
                 try {

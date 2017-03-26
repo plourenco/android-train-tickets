@@ -1,15 +1,16 @@
-package com.example.steps;
+package feup.cm.traintickets.models;
 
-import com.example.station.StationModel;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Time;
 
 /**
- * Created by mercurius on 22/03/17.
+ * Created by pedro on 26/03/17.
  */
-@XmlRootElement
+
 public class StepModel {
+
     private int id;
     private int stepNumber;
     private int distance;
@@ -21,46 +22,6 @@ public class StepModel {
     private StationModel departureStation;
     private StationModel arrivalStation;
 
-    /**
-     * Getters
-     */
-    public int getId() {
-        return id;
-    }
-    public int getStepNumber() {
-        return stepNumber;
-    }
-    public int getDistance() {
-        return distance;
-    }
-    public double getPrice() {
-        return price;
-    }
-    public int getWaitingTime() {
-        return waitingTime;
-    }
-    public int getDuration() {
-        return duration;
-    }
-    public Time getDepartureTime() {
-        return departureTime;
-    }
-    public Time getArrivalTime() {
-        return arrivalTime;
-    }
-    public StationModel getDepartureStation() {
-        return departureStation;
-    }
-    public StationModel getArrivalStation() {
-        return arrivalStation;
-    }
-
-    /**
-     * Constructors
-     */
-    public StepModel() {
-
-    }
     public StepModel(int id, int stepNumber, int distance, double price, int waitingTime, int duration,
                      Time departureTime, Time arrivalTime, StationModel departureStation,
                      StationModel arrivalStation) {
@@ -74,5 +35,45 @@ public class StepModel {
         this.arrivalTime = arrivalTime;
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getStepNumber() {
+        return stepNumber;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getWaitingTime() {
+        return waitingTime;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public Time getDepartureTime() {
+        return departureTime;
+    }
+
+    public Time getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public StationModel getDepartureStation() {
+        return departureStation;
+    }
+
+    public StationModel getArrivalStation() {
+        return arrivalStation;
     }
 }

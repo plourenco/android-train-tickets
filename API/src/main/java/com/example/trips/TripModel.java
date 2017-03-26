@@ -30,16 +30,16 @@ public class TripModel {
     public String getIncrement() {
         return increment;
     }
-    public TrainModel getTrain() {
-        return train;
-    }
+    public TrainModel getTrain() { return train; }
     public List<StepModel> getSteps() {
         return steps;
     }
 
     public TripModel() {
+
     }
-    public TripModel(int id, String description, String direction, String increment, TrainModel train, List<StepModel> steps) {
+    public TripModel(int id, String description, String direction, String increment, TrainModel train,
+                     List<StepModel> steps) {
         this.id = id;
         this.description = description;
         this.direction = direction;

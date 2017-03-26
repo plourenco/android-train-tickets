@@ -14,7 +14,7 @@ import java.util.List;
 @Path("station")
 public class StationController {
 
-    private StationManager stationManager = new StationManager();
+    private final StationManager stationManager = new StationManager();
 
     @GET
     @Path("stations")

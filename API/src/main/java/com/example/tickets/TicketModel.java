@@ -60,6 +60,7 @@ public class TicketModel {
     }
 
     public TicketModel() {
+
     }
     public TicketModel(int id, UUID uniqueId, StationModel departureStation, StationModel arrivalStation,
                        Date ticketDate, float price, Date purchaseDate, TripModel trip,

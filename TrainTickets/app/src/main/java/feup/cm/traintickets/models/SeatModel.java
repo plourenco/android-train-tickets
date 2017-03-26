@@ -1,12 +1,14 @@
-package com.example.seats;
+package feup.cm.traintickets.models;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
- * Created by mercurius on 22/03/17.
+ * Created by pedro on 26/03/17.
  */
-@XmlRootElement
+
 public class SeatModel {
+
     private int id;
     private String seatNumber;
 
@@ -17,9 +19,6 @@ public class SeatModel {
         return seatNumber;
     }
 
-    public SeatModel() {
-
-    }
     public SeatModel(int id, String seatNumber) {
         this.id = id;
         this.seatNumber = seatNumber;

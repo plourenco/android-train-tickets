@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -19,9 +18,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.text.TextUtils;
-import android.transition.Fade;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,8 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import feup.cm.traintickets.BaseActivity;
+import feup.cm.traintickets.MainActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.runnables.UserLoginTask;
+import feup.cm.traintickets.util.StringCheck;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -174,7 +173,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        } else if(!isPasswordValid(password)) {
+        } else if(!StringCheck.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -185,7 +184,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!StringCheck.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -199,7 +198,25 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(this, email, password);
+            mAuthTask = new UserLoginTask(email, password) {
+                @Override
+                protected void onPostExecute(Boolean success) {
+                    mAuthTask = null;
+                    showProgress(false);
+                    if (success) {
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        mPasswordView.setError(getString(R.string.error_incorrect_credentials));
+                        mPasswordView.requestFocus();
+                    }
+                }
+                @Override
+                protected void onCancelled() {
+                    mAuthTask = null;
+                    showProgress(true);
+                }
+            };
             mAuthTask.execute((Void) null);
         }
     }
@@ -220,22 +237,6 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         else {
             startActivity(intent);
         }
-    }
-
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 4;
-    }
-
-    public void nullifyLoginTask() {
-        mAuthTask = null;
-    }
-
-    public EditText getPasswordView() {
-        return mPasswordView;
     }
 
     /**
