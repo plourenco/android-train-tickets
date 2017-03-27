@@ -21,7 +21,12 @@ public class Encryption {
     public static boolean compareHashes(String hash, String message)
             throws NoSuchAlgorithmException {
         String[] line = hash.split("\\$");
-        return hash.equals(getHash(message, line[2]));
+        try {
+            return hash.equals(getHash(message, line[2]));
+        }
+        catch(ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
     }
 
     private static String getSHA256(String message) throws NoSuchAlgorithmException {

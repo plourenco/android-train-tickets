@@ -21,9 +21,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.security.NoSuchAlgorithmException;
+
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.MainActivity;
 import feup.cm.traintickets.R;
+import feup.cm.traintickets.encryption.Encryption;
 import feup.cm.traintickets.models.UserModel;
 import feup.cm.traintickets.runnables.UserLoginTask;
 import feup.cm.traintickets.runnables.UserRegisterTask;
@@ -144,6 +147,16 @@ public class RegisterActivity extends BaseActivity {
             cancel = true;
         }
 
+        String hash = null;
+        try {
+            hash = Encryption.genHash(password);
+        }
+        catch(NoSuchAlgorithmException e) {
+            mPasswordView.setError(getString(R.string.error_invalid_register));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -152,7 +165,7 @@ public class RegisterActivity extends BaseActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            UserModel model = new UserModel(0, username, email, password,
+            UserModel model = new UserModel(0, username, email, hash,
                     getResources().getInteger(R.integer.role_user));
 
             mRegisterTask = new UserRegisterTask(model) {
@@ -162,6 +175,7 @@ public class RegisterActivity extends BaseActivity {
                     showProgress(false);
                     if (success) {
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     } else {
                         mPasswordView.setError(getString(R.string.error_invalid_register));
