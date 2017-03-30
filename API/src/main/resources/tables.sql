@@ -81,9 +81,9 @@ ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 CREATE TABLE IF NOT EXISTS `seats` (
   `id` INT NOT NULL auto_increment,
   `seatNumber` VARCHAR(10) NOT NULL,
-  `fkTrain` INT NOT NULL,
+  `trainId` INT NOT NULL,
 PRIMARY KEY(`id`),
-FOREIGN KEY(`fkTrain`) REFERENCES trains(`id`))
+FOREIGN KEY(`trainId`) REFERENCES trains(`id`))
 ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `tickets` (

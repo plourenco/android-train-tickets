@@ -20,6 +20,7 @@ public class StepModel {
     private Time arrivalTime;
     private StationModel departureStation;
     private StationModel arrivalStation;
+    private int tripId;
 
     /**
      * Getters
@@ -54,6 +55,9 @@ public class StepModel {
     public StationModel getArrivalStation() {
         return arrivalStation;
     }
+    public int getTripId() {
+        return tripId;
+    }
 
     /**
      * Constructors
@@ -63,7 +67,7 @@ public class StepModel {
     }
     public StepModel(int id, int stepNumber, int distance, double price, int waitingTime, int duration,
                      Time departureTime, Time arrivalTime, StationModel departureStation,
-                     StationModel arrivalStation) {
+                     StationModel arrivalStation, int tripId) {
         this.id = id;
         this.stepNumber = stepNumber;
         this.distance = distance;
@@ -74,5 +78,6 @@ public class StepModel {
         this.arrivalTime = arrivalTime;
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
+        this.tripId = tripId;
     }
 }

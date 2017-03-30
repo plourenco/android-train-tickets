@@ -40,6 +40,15 @@ public class Main {
         logger.info("Jersey Server has started...");
         logger.info("URL: " + BASE_URI);
 
+        /**
+         * This is to populate the holder objects
+         */
+        MySQLManager.populateStations();
+        MySQLManager.populateSeats();
+        MySQLManager.populateTrains();
+        MySQLManager.populateSteps();
+        MySQLManager.populateTrips();
+
         // end connection
         System.in.read();
         server.shutdownNow();
