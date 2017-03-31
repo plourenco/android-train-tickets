@@ -35,6 +35,16 @@ public class TripModel {
         return steps;
     }
 
+    public void setSteps(List<StepModel> steps) {
+        this.steps = steps;
+    }
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+    public void setTrain(TrainModel train) {
+        this.train = train;
+    }
+
     public TripModel() {
 
     }
