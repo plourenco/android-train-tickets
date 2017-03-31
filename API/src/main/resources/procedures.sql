@@ -192,3 +192,26 @@ create procedure getTrips()
     select * from trips;
   END //
 DELIMITER ;
+
+DELIMITER //
+create procedure buyTicket(IN uniqueUUID text,
+    IN depStation INT,
+    IN arrStation INT,
+    IN ticketDate Date,
+    IN price float,
+    IN purchadeDate Date,
+    IN userId INT,
+    IN tripID INT)
+  begin
+    INSERT INTO tickets VALUES(NULL,uniqueUUID,
+    depStation,
+    arrStation,
+    ticketDate,
+    price,
+    purchadeDate,
+    userId,
+    tripID,
+    FALSE);
+    SELECT * FROM tickets where id=last_insert_id();
+  END //
+DELIMITER ;
