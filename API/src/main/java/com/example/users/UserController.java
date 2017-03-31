@@ -26,11 +26,29 @@ public class UserController {
         }
     }
 
+    /**
+     * Register the user in the system
+     * @param user the model of the user
+     * @return returns the role id of the created user
+     */
     @POST
     @Path("register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public int createUser(UserModel user) {
         return userManager.createUser(user);
+    }
+
+    /**
+     * Authenticates a user in the system
+     * @param user the model of the user with at least email and password
+     * @return UserModel - the model of the user with only id, username and role
+     */
+    @POST
+    @Path("authenticate")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public UserModel authUser(UserModel user){
+        return userManager.authenticateUser(user.getEmail(), user.getPassword());
     }
 }

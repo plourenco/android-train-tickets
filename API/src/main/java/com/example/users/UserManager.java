@@ -2,6 +2,7 @@ package com.example.users;
 
 import com.example.Main;
 import com.example.exceptions.InvalidUserDataException;
+import com.example.exceptions.SQLExceptionMapper;
 import com.example.mysql.MySQLManager;
 
 import java.sql.PreparedStatement;
@@ -104,5 +105,32 @@ public class UserManager {
             Main.getLogger().severe(e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * Authenticates a user in the system
+     * @param email the email of the user
+     * @param password the password of the user
+     * @return UserModel the model of the user
+     */
+    public UserModel authenticateUser(String email, String password){
+        try {
+            PreparedStatement ps = MySQLManager.getConnection().prepareStatement("Call loginCheck(?,?)");
+            ps.setString(1, password);
+            ps.setString(2, email);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String username = rs.getString("username");
+                int role = rs.getInt("role");
+                return new UserModel(id, username, null, null, role);
+            } else {
+                return null;
+            }
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+            throw new SQLExceptionMapper(sql.getMessage());
+        }
     }
 }
