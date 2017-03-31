@@ -136,6 +136,7 @@ create procedure getUserTickets(IN userId INT)
   begin
     select sta.uniqueId,
       sta.id,
+      sta.ticketDate,
       sta.departureTime,
       stb.arrivalTime,
       sta.fromStation,
@@ -145,6 +146,7 @@ create procedure getUserTickets(IN userId INT)
       sta.Idtrip
     from(select tickets.uniqueId,
            tickets.id,
+           tickets.ticketDate,
            stations.id as idDeparture,
            steps.departureTime,
            stations.stationName as fromStation,
@@ -181,5 +183,12 @@ create procedure getTicketsControl(IN DateCheck Date,IN trip INT)
     from tickets where tickets.isUsed=false
                        and tickets.ticketDate=DateCheck
                        and tickets.fkTrip=trip;
+  END //
+DELIMITER ;
+
+DELIMITER //
+create procedure getTrips()
+  begin
+    select * from trips;
   END //
 DELIMITER ;
