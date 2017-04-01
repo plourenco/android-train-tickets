@@ -1,10 +1,20 @@
 package com.example.mysql;
 
 import com.example.Main;
+import com.example.dataHolder.*;
+import com.example.seats.SeatModel;
+import com.example.station.StationModel;
+import com.example.steps.StepModel;
+import com.example.trains.TrainModel;
+import com.example.trips.TripModel;
 
 import java.io.InputStream;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class MySQLManager {
 
@@ -12,7 +22,7 @@ public class MySQLManager {
     private static final String DB_VERSION = "1.1";
     private static final String host = "localhost";
     private static final String base = "traintickets";
-    private static final String pass = "root";
+    private static final String pass = "R00t";
     private static final String user = "root";
 
     /**
@@ -175,6 +185,159 @@ public class MySQLManager {
             }
         } finally {
             if (st != null) st.close();
+        }
+    }
+
+    /**
+     * This serves the purpose of populating the Stations (StationHolder) class holder.
+     */
+    public static void populateStations() {
+        PreparedStatement ps;
+        ResultSet rs;
+        try {
+            HashMap<Integer, StationModel> stations = new HashMap<>();
+            ps = MySQLManager.getConnection().prepareStatement("Call getStations()");
+            rs = ps.executeQuery();
+
+            while (rs.next()){
+                int idStation = rs.getInt("id");
+                int stationNumber = rs.getInt("stationNumber");
+                String stationName = rs.getString("stationName");
+                stations.put(idStation, new StationModel(idStation, stationNumber, stationName));
+            }
+
+            StationHolder.setStations(stations);
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+        }
+    }
+
+    /**
+     * This serves the purpose of populating the Seats (SeatHolder) class holder.
+     */
+    public static void populateSeats(){
+        PreparedStatement ps;
+        ResultSet rs;
+
+        try {
+            HashMap<Integer, SeatModel> seats = new HashMap<>();
+            ps = MySQLManager.getConnection().prepareStatement("SELECT * FROM seats;");
+            rs = ps.executeQuery();
+
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String seatNumber = rs.getString("seatNumber");
+                int trainId = rs.getInt("fkTrain");
+                seats.put(id, new SeatModel(id, seatNumber, trainId));
+            }
+            SeatHolder.setSeats(seats);
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+        }
+    }
+
+    /**
+     * This serves the purpose of populating the Trains (TrainHolder) class holder.
+     */
+    public static void populateTrains() {
+        PreparedStatement ps;
+        ResultSet rs;
+
+        try {
+            HashMap<Integer, TrainModel> trains = new HashMap<>();
+            List<SeatModel> seats;
+            ps = MySQLManager.getConnection().prepareStatement("SELECT * FROM trains;");
+            rs = ps.executeQuery();
+
+            while (rs.next()){
+                int id = rs.getInt("id");
+                int maxCap = rs.getInt("maxCapacity");
+                String description = rs.getString("description");
+                seats = SeatHolder.getSeats()
+                        .values()
+                        .stream()
+                        .filter(s -> s.getTrainId() == id)
+                        .collect(Collectors.toList());
+                trains.put(id, new TrainModel(id, maxCap, description, seats));
+            }
+            TrainHolder.setTrains(trains);
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+        }
+    }
+
+    /**
+     * This serves the purpose of populating the Steps (StepHolders) class holder.
+     */
+    public static void populateSteps(){
+        PreparedStatement ps;
+        ResultSet rs;
+
+        try {
+            HashMap<Integer, StepModel> steps = new HashMap<>();
+            ps = MySQLManager.getConnection().prepareStatement("SELECT * FROM steps;");
+            rs = ps.executeQuery();
+
+            while (rs.next()){
+                int id = rs.getInt("id");
+                int depStationId = rs.getInt("departureStationId");
+                int arrStationId = rs.getInt("arrivalStationId");
+                int stepNumber = rs.getInt("stepNumber");
+                int distance = rs.getInt("distance");
+                float price = rs.getFloat("price");
+                int waitingTime = rs.getInt("waitingTime");
+                int tripId = rs.getInt("fkTrip");
+                int duration = rs.getInt("duration");
+                Time depTime = rs.getTime("departureTime");
+                Time arrTime = rs.getTime("arrivalTime");
+
+                StationModel depStation = StationHolder.getStations().values().stream()
+                        .filter(s -> s.getId() == depStationId).findFirst().get();
+                StationModel arrStation = StationHolder.getStations().values().stream()
+                        .filter(s -> s.getId() == arrStationId).findFirst().get();
+
+                steps.put(id, new StepModel(id, stepNumber, distance, price, waitingTime,
+                        duration, depTime, arrTime, depStation, arrStation, tripId));
+            }
+            StepHolder.setSteps(steps);
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+        }
+    }
+
+    /**
+     * This serves the purpose of populating the Trips (TripHolder) class holder
+     */
+    public static void populateTrips(){
+        PreparedStatement ps;
+        ResultSet rs;
+
+        try {
+            HashMap<Integer, TripModel> trips = new HashMap<>();
+            List<StepModel> steps;
+            ps = MySQLManager.getConnection().prepareStatement("SELECT * FROM trips;");
+            rs = ps.executeQuery();
+
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String description = rs.getString("description");
+                String direction = rs.getString("direction");
+                String increment = rs.getString("increment");
+                int trainId = rs.getInt("skTrain");
+                steps = StepHolder.getSteps()
+                        .values().stream()
+                        .filter(s -> s.getTripId() == id)
+                        .collect(Collectors.toList());
+
+                TrainModel train = TrainHolder.getTrains().get(trainId);
+
+                trips.put(id, new TripModel(id, description, direction, increment,
+                        train, steps));
+            }
+
+            TripHolder.setTrips(trips);
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
         }
     }
 }

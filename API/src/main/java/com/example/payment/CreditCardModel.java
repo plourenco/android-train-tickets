@@ -19,7 +19,6 @@ public class CreditCardModel {
 
     public CreditCardModel() {
     }
-
     public CreditCardModel(String creditCardNumber, Date expiryDate, String cvv2) {
         this.creditCardNumber = creditCardNumber;
         this.expiryDate = expiryDate;
