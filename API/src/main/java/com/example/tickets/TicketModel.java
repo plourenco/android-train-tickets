@@ -6,7 +6,6 @@ package com.example.tickets;
 
 import com.example.station.StationModel;
 import com.example.trips.TripModel;
-import com.example.users.UserModel;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;

@@ -1,5 +1,8 @@
 package com.example.station;
 
+import com.example.security.Secured;
+import com.example.users.UserRole;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -18,6 +21,7 @@ public class StationController {
 
     @GET
     @Path("stations")
+    @Secured({UserRole.USER, UserRole.INSPECTOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<StationModel> getStations() {
         return stationManager.getStations();

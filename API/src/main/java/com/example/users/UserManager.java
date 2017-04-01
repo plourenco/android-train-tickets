@@ -1,9 +1,12 @@
 package com.example.users;
 
 import com.example.Main;
+import com.example.exceptions.EncryptionException;
 import com.example.exceptions.InvalidUserDataException;
 import com.example.mysql.MySQLManager;
+import com.example.security.PasswordSecurity;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,18 +16,24 @@ public class UserManager {
 
     /**
      * Insert a new user into the database
-     * @param user UserModel
+     * @param user RawUserModel
      */
-    public int createUser(UserModel user) {
+    public int createUser(RawUserModel user, UserRole role) {
 
         if (user == null) {
             throw new InvalidUserDataException("NullPointerException on user. User is not set.");
         }
-
         if (user.getUsername().isEmpty() || user.getUsername() == null || user.getPassword().isEmpty()
                 || user.getPassword() == null || user.getEmail().isEmpty() || user.getEmail() == null) {
             throw new InvalidUserDataException("Invalid data. " +
                     "Please verify if everything is correct. User not created");
+        }
+        String hash;
+        try {
+            hash = PasswordSecurity.generateHash(user.getPassword());
+        }
+        catch(NoSuchAlgorithmException e) {
+            throw new EncryptionException("Unable to encrypt password");
         }
 
         try {
@@ -32,9 +41,9 @@ public class UserManager {
                     "INSERT INTO `users` VALUES (NULL, ?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
+            ps.setString(2, hash);
             ps.setString(3, user.getEmail());
-            ps.setString(4, String.valueOf(user.getRoleUser()));
+            ps.setInt(4, role.id());
             int rows = ps.executeUpdate();
             if (rows == 0) {
                 throw new SQLException("User creation failed, no rows affected");
@@ -84,6 +93,7 @@ public class UserManager {
      * Get a user from the database by id
      * @param id int
      */
+    @Deprecated
     public UserModel getUserById(int id) {
         try {
             PreparedStatement ps = MySQLManager.getConnection().prepareStatement(

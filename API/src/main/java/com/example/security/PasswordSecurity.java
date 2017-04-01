@@ -1,20 +1,20 @@
-package feup.cm.traintickets.encryption;
+package com.example.security;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-public class Encryption {
+public class PasswordSecurity {
 
     private static SecureRandom rnd = new SecureRandom();
 
     public static String getHash(String message, String salt)
             throws NoSuchAlgorithmException {
-        return "$SHA$" + salt + "$" + getSHA256(getSHA256(message) + salt);
+        return "$SHA$" + salt + "$" + getSHA256(message + salt);
     }
 
-    public static String genHash(String message) throws NoSuchAlgorithmException {
+    public static String generateHash(String message) throws NoSuchAlgorithmException {
         return getHash(message, createSalt(16));
     }
 

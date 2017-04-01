@@ -5,17 +5,15 @@ import android.os.AsyncTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.NoSuchAlgorithmException;
-
-import feup.cm.traintickets.R;
-import feup.cm.traintickets.activities.LoginActivity;
 import feup.cm.traintickets.controllers.UserController;
-import feup.cm.traintickets.encryption.Encryption;
+import feup.cm.traintickets.models.TokenModel;
 
 public abstract class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
     private final String mEmail;
     private final String mPassword;
+
+    protected TokenModel token;
 
     public UserLoginTask(String email, String password) {
         mEmail = email;
@@ -25,12 +23,19 @@ public abstract class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         UserController userController = new UserController();
-        JSONObject object = userController.getUserByEmail(mEmail);
+        String res = userController.authenticate(mEmail, mPassword);
 
-        if(object != null) {
+        if(res != null) {
             try {
-                return Encryption.compareHashes(object.getString("password"), mPassword);
-            } catch (JSONException | NoSuchAlgorithmException ignored) { }
+                JSONObject object = new JSONObject(res);
+                if(object.getString("token") != null &&
+                        object.getLong("expires") != 0L) {
+                    token = new TokenModel(object.getString("token"), object.getString("refresh"),
+                            object.getLong("expires"));
+                    return true;
+                }
+            }
+            catch(JSONException ignored) { }
         }
         return false;
     }

@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * User Model is an instance from the database, passwords are assumed as hashed and secured
+ */
 @XmlRootElement
 public class UserModel {
 
@@ -22,7 +25,7 @@ public class UserModel {
     public String getUsername() {
         return username;
     }
-    public String getPassword() {
+    public String getHash() {
         return password;
     }
     public int getRoleUser() {
