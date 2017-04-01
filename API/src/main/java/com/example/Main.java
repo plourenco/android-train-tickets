@@ -45,7 +45,7 @@ public class Main {
         logger.info("Jersey Server has started...");
         logger.info("URL: " + BASE_URI);
 
-        /**
+        /*
          * This is to populate the holder objects
          */
         MySQLManager.populateStations();

@@ -1,6 +1,6 @@
 package com.example.security;
 
-import com.example.users.UserRole;
+import com.example.models.UserRole;
 
 import javax.inject.Provider;
 import javax.security.auth.Subject;

@@ -1,8 +1,10 @@
 package com.example.security;
 
-import com.example.users.UserManager;
-import com.example.users.UserModel;
-import com.example.users.UserRole;
+import com.example.annotations.Secured;
+import com.example.util.TokenHelper;
+import com.example.dao.UserManager;
+import com.example.models.UserModel;
+import com.example.models.UserRole;
 import org.glassfish.jersey.server.ContainerRequest;
 
 import javax.annotation.Priority;
@@ -22,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Secured
 @Provider
@@ -58,19 +61,26 @@ public class SecurityFilter implements ContainerRequestFilter {
         String strToken = extractJwtTokenFromAuthorizationHeader(authorizationHeader);
         UserManager manager = new UserManager();
         if (TokenHelper.isValid(strToken)) { // check if token is valid
-            String email = TokenHelper.getEmail(strToken);
-            UserRole role = idToRole(TokenHelper.getRole(strToken));
-            if (email != null && role != null) { // check if token identifies a user
-                UserModel model = manager.getUserByEmail(email);
-                if (model != null) { // check if user exists
-                    if(role.id() == model.getRoleUser()) { // check if token role corresponds to user role
-                        // if role changes, generate a new token
-                        List<UserRole> classRoles = extractRoles(resourceClass);
-                        List<UserRole> methodRoles = extractRoles(resourceMethod);
-                        // check if user has permission
-                        if(classRoles.contains(role) || methodRoles.contains(role)) {
-                            requestContext.setSecurityContext(new SecurityContextAuthorizer(uriInfo, () -> email, role));
-                            return;
+            if(Objects.equals(TokenHelper.getIssuer(strToken), "TrainTickets-Security")) {
+
+                String email = TokenHelper.getEmail(strToken);
+                UserRole role = UserRole.idToRole(TokenHelper.getRole(strToken));
+                if (email != null && role != null) {
+                    // check if token identifies a user
+                    UserModel model = manager.getUserByEmail(email);
+                    // check if user exists
+                    if (model != null) {
+                        // check if token role corresponds to user role
+                        if (role.id() == model.getRoleUser()) {
+                            // if role changes, generate a new token
+                            List<UserRole> classRoles = extractRoles(resourceClass);
+                            List<UserRole> methodRoles = extractRoles(resourceMethod);
+                            // check if user has permission
+                            if (classRoles.contains(role) || methodRoles.contains(role)) {
+                                requestContext.setSecurityContext(
+                                        new SecurityContextAuthorizer(uriInfo, () -> email, role));
+                                return;
+                            }
                         }
                     }
                 }
@@ -92,14 +102,6 @@ public class SecurityFilter implements ContainerRequestFilter {
                 return Arrays.asList(allowedRoles);
             }
         }
-    }
-
-    public UserRole idToRole(int role) {
-        for(UserRole r : UserRole.values()) {
-            if(r.id() == role)
-                return r;
-        }
-        return null;
     }
 
     private static String extractJwtTokenFromAuthorizationHeader(String auth) {
