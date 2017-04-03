@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="feup.cm.traintickets.activities.BuyTicketActivity"
+    tools:showIn="@layout/activity_buy_ticket">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:orientation="horizontal"
+            app:columnCount="2"
+            app:rowCount="1">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_column="0"
+                app:layout_columnWeight="1">
+
+                <ImageView
+                    android:id="@+id/ic_origin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/ic_directions_subway_black_24dp"
+                    android:tint="@color/colorLightText" />
+
+                <Spinner
+                    android:id="@+id/origin_station"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/ic_origin"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="20dp"
+                    android:color="@color/colorDarkText"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/origin_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/origin_station"
+                    android:layout_toEndOf="@+id/ic_origin"
+                    android:text="Origin"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_column="1"
+                app:layout_columnWeight="1">
+
+                <ImageView
+                    android:id="@+id/ic_destination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/ic_directions_subway_black_24dp"
+                    android:tint="@color/colorLightText" />
+
+                <Spinner
+                    android:id="@+id/destination_station"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/ic_destination"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="20dp"
+                    android:color="@color/colorDarkText"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/destination_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/destination_station"
+                    android:layout_toEndOf="@+id/ic_destination"
+                    android:text="Destination"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.GridLayout>
+
+        <View
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="16dp"
+                android:background="#29000000" />
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:orientation="horizontal"
+            app:columnCount="2"
+            app:rowCount="1">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_column="0"
+                app:layout_columnWeight="1">
+
+                <ImageView
+                    android:id="@+id/ic_departure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/ic_date_range_black_24dp"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/departure_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/ic_departure"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:text="Departure"
+                    android:textColor="@color/colorDarkText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/departure_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/departure_title"
+                    android:layout_toRightOf="@+id/ic_departure"
+                    android:text="21st August"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_column="1"
+                app:layout_columnWeight="1">
+
+                <ImageView
+                    android:id="@+id/ic_arrival"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/ic_date_range_black_24dp"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/arrival_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/ic_arrival"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:text="Arrival"
+                    android:textColor="@color/colorDarkText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/arrival_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/arrival_title"
+                    android:layout_toRightOf="@+id/ic_arrival"
+                    android:text="22nd August"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.GridLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="16dp"
+            android:background="#29000000" />
+
+        <!--<ListView
+            android:id="@+id/train_list"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+        </ListView>-->
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

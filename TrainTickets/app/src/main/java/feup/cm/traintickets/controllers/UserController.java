@@ -24,7 +24,7 @@ public class UserController {
         Gson gson = new Gson();
         Map<String, String> map = new HashMap<String, String>();
         map.put("token", refreshToken);
-        return ServiceHandler.makePost("users/auth", gson.toJson(map));
+        return ServiceHandler.makePost("users/refresh", gson.toJson(map));
     }
 
     public String createUser(UserModel user) {

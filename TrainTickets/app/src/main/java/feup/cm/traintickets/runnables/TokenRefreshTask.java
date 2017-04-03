@@ -1,5 +1,8 @@
 package feup.cm.traintickets.runnables;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -7,7 +10,7 @@ import feup.cm.traintickets.controllers.ServiceHandler;
 import feup.cm.traintickets.controllers.UserController;
 import feup.cm.traintickets.models.TokenModel;
 
-public class TokenRefreshTask implements Runnable {
+public abstract class TokenRefreshTask extends AsyncTask<Void, Void, Boolean> {
 
     private final String refresh;
     private TokenModel token;
@@ -17,7 +20,7 @@ public class TokenRefreshTask implements Runnable {
     }
 
     @Override
-    public void run() {
+    protected Boolean doInBackground(Void... params) {
         UserController userController = new UserController();
         String res = userController.refresh(refresh);
 
@@ -28,13 +31,21 @@ public class TokenRefreshTask implements Runnable {
                         object.getLong("expires") != 0L) {
                     token = new TokenModel(object.getString("token"), refresh,
                             object.getLong("expires"));
+                    return true;
                 }
             }
             catch(JSONException ignored) { }
         }
+        return false;
     }
 
-    public TokenModel getToken() {
+    @Override
+    protected abstract void onPostExecute(final Boolean success);
+
+    @Override
+    protected abstract void onCancelled();
+
+    protected TokenModel getToken() {
         return token;
     }
 }
