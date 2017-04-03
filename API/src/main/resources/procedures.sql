@@ -194,7 +194,8 @@ create procedure getTrips()
 DELIMITER ;
 
 DELIMITER //
-create procedure buyTicket(IN uniqueUUID text,
+create procedure buyTicket(
+    IN uniqueUUID text,
     IN depStation INT,
     IN arrStation INT,
     IN ticketDate Date,
@@ -213,5 +214,74 @@ create procedure buyTicket(IN uniqueUUID text,
     tripID,
     FALSE);
     SELECT * FROM tickets where id=last_insert_id();
+  END //
+DELIMITER ;
+
+DELIMITER //
+create procedure getFirstSeat(IN trip INT, in tripDate Date)
+  begin
+    select seatNumber,seatId,bookingId
+    from (select seats.seatNumber,
+            trips.skTrain,
+            trips.direction,
+            trains.maxCapacity,
+            trains.description,
+            trips.id as idTrip,
+            seats.id as seatId
+          from seats join trains on                                                                                                                                                                                                 seats.fkTrain=trains.id join trips on trains.id=trips.skTrain where trips.id=4) as sta left join
+      (select bookings.id as bookingId,
+         bookings.dateBooking,
+         bookings.fkSeat,
+         bookings.fkTicket,
+         bookings.fkTrip
+       from bookings
+      where bookings.fkTrip=trip and bookings.dateBooking=tripDate) as stb
+        on sta.seatId=stb.fkSeat where bookingId is null LIMIT 1;
+  END //
+DELIMITER ;
+
+DELIMITER //
+create procedure getAvailableSeatS(IN trip INT, in checkDate Date)
+  begin
+    select seatNumber,seatId,bookingId
+    from (select seats.seatNumber,
+            trips.skTrain,
+            trips.direction,
+            trains.maxCapacity,
+            trains.description,
+            trips.id as idTrip,
+            seats.id as seatId
+          from seats join trains on                                                                                                                                                                                                 seats.fkTrain=trains.id join trips on trains.id=trips.skTrain where trips.id=4) as sta left join
+      (select bookings.id as bookingId,
+         bookings.dateBooking,
+         bookings.fkSeat,
+         bookings.fkTicket,
+         bookings.fkTrip
+       from bookings
+       where bookings.fkTrip=trip and bookings.dateBooking=checkDate) as stb
+        on sta.seatId=stb.fkSeat where bookingId IS NULL;
+  END //
+DELIMITER ;
+
+DELIMITER //
+create procedure createBooking(IN tripDate Date, seatId INT,IN ticketID INT,IN tripId INT)
+  begin
+    INSERT INTO bookings VALUES(NULL,tripDate,seatId,ticketId,tripId);
+  END //
+DELIMITER ;
+
+DELIMITER //
+create procedure createRevisor(IN username TEXT,IN pass TEXT,IN email VARCHAR(255))
+  begin
+    INSERT INTO users values(null,username,pass,email,2);
+  END //
+DELIMITER ;
+
+DELIMITER //
+create procedure setStateToUsed(IN ticketUUID text)
+  begin
+    SET SQL_SAFE_UPDATES=0;
+    Update tickets SET isUsed=True WHERE uniqueID=ticketUUID;
+    SET SQL_SAFE_UPDATES=1;
   END //
 DELIMITER ;
