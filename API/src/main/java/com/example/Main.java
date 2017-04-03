@@ -1,9 +1,11 @@
 package com.example;
 
 import com.example.mysql.MySQLManager;
+import com.example.security.SecurityFilter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,6 +25,9 @@ public class Main {
         // in com.example package
         final ResourceConfig rc = new ResourceConfig().packages("com.example");
 
+        rc.register(RolesAllowedDynamicFeature.class);
+        rc.register(SecurityFilter.class);
+
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
@@ -40,7 +45,7 @@ public class Main {
         logger.info("Jersey Server has started...");
         logger.info("URL: " + BASE_URI);
 
-        /**
+        /*
          * This is to populate the holder objects
          */
         MySQLManager.populateStations();
