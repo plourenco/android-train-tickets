@@ -42,9 +42,9 @@
                     android:id="@+id/ticket_origin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Poçinha"
+                    android:text="@string/error_select_station"
                     android:textColor="@color/colorDarkText"
-                    android:textSize="25sp" />
+                    android:textSize="@dimen/activity_text_title" />
 
                 <TextView
                     android:id="@+id/ticket_destination"
@@ -52,9 +52,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/ticket_origin"
                     android:layout_marginTop="@dimen/activity_element_padding"
-                    android:text="Ribeira"
+                    android:text="@string/error_select_station"
                     android:textColor="@color/colorDarkText"
-                    android:textSize="25sp" />
+                    android:textSize="@dimen/activity_text_title" />
 
             </RelativeLayout>
 
@@ -69,9 +69,10 @@
                     android:id="@+id/ticket_date_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DATE"
+                    android:text="@string/display_date"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_form_title_sm"
+                    android:textAllCaps="true"
                     android:textStyle="bold" />
 
                 <TextView
@@ -81,7 +82,7 @@
                     android:paddingTop="@dimen/activity_element_padding"
                     android:text="16th July"
                     android:textColor="@color/colorDarkText"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_form_value" />
 
             </LinearLayout>
 
@@ -96,7 +97,8 @@
                     android:id="@+id/ticket_hour_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DEPARTURE"
+                    android:text="@string/display_departure"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="12sp"
                     android:textStyle="bold" />
