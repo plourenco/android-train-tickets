@@ -17,8 +17,8 @@
         <android.support.v7.widget.GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:orientation="horizontal"
             app:columnCount="2"
+            app:orientation="horizontal"
             app:rowCount="1">
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -41,9 +41,9 @@
                     android:id="@+id/origin_station"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/ic_origin"
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="20dp"
+                    android:layout_toEndOf="@+id/ic_origin"
                     android:color="@color/colorDarkText"
                     android:textSize="20sp" />
 
@@ -78,9 +78,9 @@
                     android:id="@+id/destination_station"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/ic_destination"
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="20dp"
+                    android:layout_toEndOf="@+id/ic_destination"
                     android:color="@color/colorDarkText"
                     android:textSize="20sp" />
 
@@ -98,16 +98,16 @@
         </android.support.v7.widget.GridLayout>
 
         <View
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="16dp"
-                android:background="#29000000" />
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="16dp"
+            android:background="#29000000" />
 
         <android.support.v7.widget.GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:orientation="horizontal"
             app:columnCount="2"
+            app:orientation="horizontal"
             app:rowCount="1">
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -194,11 +194,53 @@
             android:layout_marginTop="16dp"
             android:background="#29000000" />
 
-        <!--<ListView
-            android:id="@+id/train_list"
+        <android.support.v7.widget.GridLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp">
-        </ListView>-->
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
+            android:paddingTop="20dp"
+            app:columnCount="2"
+            app:orientation="horizontal"
+            app:rowCount="1">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_column="0"
+                app:layout_columnWeight="1">
+
+                <ImageView
+                    android:id="@+id/ic_payment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="16dp"
+                    app:srcCompat="@drawable/ic_payment_black_24dp"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/ticket_price_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/ic_payment"
+                    android:text="TICKET PRICE"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/ticket_price_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/ic_payment"
+                    android:layout_below="@id/ticket_price_title"
+                    android:text="$30.00"
+                    android:textColor="@color/colorDarkText"
+                    android:textSize="30sp" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.GridLayout>
 
     </LinearLayout>
 

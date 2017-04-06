@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class Main {
 
-    public static final String BASE_URI = "http://192.168.1.67:8080/api/";
+    public static final String BASE_URI = "http://localhost:8080/api/";
     private static Logger logger;
 
     /**
