@@ -5,6 +5,9 @@ Populate
 /* INSERTS ONLY FOR TEST, TO BE REMOVED AFTER TESTS */
 insert into `users` values (null,'inspector','inspector','inspector@test.com',1);
 insert into `users` values(null,'test','test','test@test.com',2);
+INSERT INTO `users` (`id`, `username`, `password`, `email`, `role`) VALUES
+(10, 'Pedro', '$SHA$20bfbd768f311eb5$622ccb5532f2568896c58a56130cdb' ||
+ '921298585b6d5e7b0efd17be12c5fbfbed', 'pedro@test.com', 2);
 
 insert into `trains` values(null,20,'Large');
 insert into `trains` values(null,15,'Medium');

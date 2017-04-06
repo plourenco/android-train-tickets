@@ -1,11 +1,7 @@
 package com.example;
 
-import com.example.dataHolder.*;
-import com.example.models.SeatModel;
-import com.example.models.StationModel;
-import com.example.models.StepModel;
-import com.example.models.TrainModel;
-import com.example.models.TripModel;
+import com.example.models.*;
+import com.example.dataholder.*;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
