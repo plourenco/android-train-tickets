@@ -6,7 +6,7 @@ public abstract class StationGetTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-
+        return false;
     }
 
     @Override

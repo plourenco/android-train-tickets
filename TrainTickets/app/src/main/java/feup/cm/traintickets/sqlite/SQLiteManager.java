@@ -19,7 +19,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
      * Properties
      */
     public final static String DATABASE_NAME = "traintickets";
-    public final static int DATABASE_VERSION = 4;
+    public final static int DATABASE_VERSION = 6;
 
     InputStream sql;
 
@@ -32,18 +32,18 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sql = context.getResources().openRawResource(i);
     }
 
-    public SQLiteManager(Context context, String name,
-                         SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
-    }
-
-    public SQLiteManager(Context context, String name, SQLiteDatabase.CursorFactory factory,
-                         int version, DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        getSqlFromFile(sqLiteDatabase);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        Log.w("Tickets", "Upgrading database, which will destroy all old data");
+        onCreate(sqLiteDatabase);
+    }
+
+    private void getSqlFromFile(SQLiteDatabase sqLiteDatabase) {
         try {
             Scanner scanner = new Scanner(sql);
             while (scanner.hasNext()) {
@@ -53,12 +53,5 @@ public class SQLiteManager extends SQLiteOpenHelper {
         } catch (Exception e) {
             Log.d("SQLite", e.getMessage());
         }
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        Log.w("Tickets", "Upgrading database, which will destroy all old data");
-        sqLiteDatabase.execSQL("drop table tickets");
-        onCreate(sqLiteDatabase);
     }
 }
