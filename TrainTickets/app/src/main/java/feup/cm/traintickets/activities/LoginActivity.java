@@ -20,10 +20,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -32,9 +35,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.MainActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.runnables.UserLoginTask;
@@ -45,10 +48,11 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends BaseActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     private static final int REQUEST_READ_CONTACTS = 0;
     private UserLoginTask mAuthTask = null;
+    private SharedPreferences sharedPrefs;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -56,11 +60,13 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private View mProgressView;
     private View mLoginFormView;
 
-    private SharedPreferences sharedPrefs;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set full screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         if(android.os.Build.VERSION.SDK_INT >= 21) {
             getWindow().setEnterTransition(null);
@@ -101,11 +107,14 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         mProgressView = findViewById(R.id.login_progress);
 
         sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
-        String email = sharedPrefs.getString("LOGIN_EMAIL", "");
-        String password = sharedPrefs.getString("LOGIN_PWD", "");
+        String token = sharedPrefs.getString("LOGIN_TOKEN", "");
+        Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
 
-        if(!email.isEmpty() && !password.isEmpty()) {
-            login(email, password, false);
+        if(!token.isEmpty() && expires.after(new Date())) {
+            Intent intent = new Intent(getApplicationContext(), BuyTicketActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -210,7 +219,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            login(email, password, true);
+            login(email, password);
         }
     }
 
@@ -219,19 +228,19 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
      * @param email String
      * @param password String
      */
-    private void login(final String email, final String password, final boolean save) {
+    private void login(final String email, final String password) {
         mAuthTask = new UserLoginTask(email, password) {
             @Override
             protected void onPostExecute(Boolean success) {
                 mAuthTask = null;
                 showProgress(false);
                 if (success) {
-                    if(save) {
-                        SharedPreferences.Editor editor = sharedPrefs.edit();
-                        editor.putString("LOGIN_EMAIL", email);
-                        editor.putString("LOGIN_PWD", password);
-                        editor.apply();
-                    }
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putString("LOGIN_TOKEN", token.getToken());
+                    editor.putString("LOGIN_REFRESH", token.getRefresh());
+                    editor.putLong("LOGIN_EXPIRES", token.getExpires().getTime());
+                    editor.apply();
+
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

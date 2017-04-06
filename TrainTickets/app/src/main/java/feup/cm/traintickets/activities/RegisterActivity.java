@@ -5,18 +5,12 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.transition.Fade;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,9 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.MainActivity;
 import feup.cm.traintickets.R;
-import feup.cm.traintickets.encryption.Encryption;
 import feup.cm.traintickets.models.UserModel;
-import feup.cm.traintickets.runnables.UserLoginTask;
 import feup.cm.traintickets.runnables.UserRegisterTask;
 import feup.cm.traintickets.util.StringCheck;
 
@@ -147,16 +139,6 @@ public class RegisterActivity extends BaseActivity {
             cancel = true;
         }
 
-        String hash = null;
-        try {
-            hash = Encryption.genHash(password);
-        }
-        catch(NoSuchAlgorithmException e) {
-            mPasswordView.setError(getString(R.string.error_invalid_register));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -165,7 +147,7 @@ public class RegisterActivity extends BaseActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            UserModel model = new UserModel(0, username, email, hash,
+            UserModel model = new UserModel(0, username, email, password,
                     getResources().getInteger(R.integer.role_user));
 
             mRegisterTask = new UserRegisterTask(model) {

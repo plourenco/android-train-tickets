@@ -1,16 +1,15 @@
 package com.example.mysql;
 
 import com.example.Main;
-import com.example.dataHolder.*;
-import com.example.seats.SeatModel;
-import com.example.station.StationModel;
-import com.example.steps.StepModel;
-import com.example.trains.TrainModel;
-import com.example.trips.TripModel;
+import com.example.dataholder.*;
+import com.example.models.SeatModel;
+import com.example.models.StationModel;
+import com.example.models.StepModel;
+import com.example.models.TrainModel;
+import com.example.models.TripModel;
 
 import java.io.InputStream;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -22,7 +21,7 @@ public class MySQLManager {
     private static final String DB_VERSION = "1.1";
     private static final String host = "localhost";
     private static final String base = "traintickets";
-    private static final String pass = "R00t";
+    private static final String pass = "root";
     private static final String user = "root";
 
     /**

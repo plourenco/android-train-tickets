@@ -1,14 +1,9 @@
 package feup.cm.traintickets.runnables;
 
 import android.os.AsyncTask;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.security.NoSuchAlgorithmException;
+import android.util.Log;
 
 import feup.cm.traintickets.controllers.UserController;
-import feup.cm.traintickets.encryption.Encryption;
 import feup.cm.traintickets.models.UserModel;
 
 public abstract class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
@@ -23,12 +18,15 @@ public abstract class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
     protected Boolean doInBackground(Void... params) {
         UserController userController = new UserController();
         String res = userController.createUser(user);
+        Log.d("hello", "InBackground");
 
         if(res != null) {
             try {
                 return Integer.parseInt(res) != -1;
             }
-            catch(NumberFormatException ignored) { }
+            catch(NumberFormatException ignored) {
+                ignored.printStackTrace();
+            }
         }
         return false;
     }

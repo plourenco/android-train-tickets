@@ -28,11 +28,15 @@
         <activity
             android:name=".activities.RegisterActivity"
             android:label="@string/action_register"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.BuyTicketActivity"
+            android:label="@string/title_activity_buy_ticket"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
