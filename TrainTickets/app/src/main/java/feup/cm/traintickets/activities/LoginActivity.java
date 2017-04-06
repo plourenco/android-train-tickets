@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
 
         if(!token.isEmpty() && expires.after(new Date())) {
-            Intent intent = new Intent(getApplicationContext(), BuyTicketActivity.class);
+            Intent intent = new Intent(getApplicationContext(), SingleTicketActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
