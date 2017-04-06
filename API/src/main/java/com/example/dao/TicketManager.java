@@ -1,13 +1,13 @@
 package com.example.dao;
 
 import com.example.Main;
-import com.example.dataholder.TripHolder;
+import com.example.dataHolder.StationHolder;
+import com.example.dataHolder.TripHolder;
 import com.example.exceptions.IllegalArgumentExceptionMapper;
 import com.example.exceptions.SQLExceptionMapper;
 import com.example.models.AvailableTicketModel;
 import com.example.models.TicketModel;
 import com.example.mysql.MySQLManager;
-import com.example.dataholder.StationHolder;
 import com.example.models.StationModel;
 import com.example.models.StepModel;
 import com.example.models.TripModel;
