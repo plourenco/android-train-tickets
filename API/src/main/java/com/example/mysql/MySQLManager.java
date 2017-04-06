@@ -1,7 +1,7 @@
 package com.example.mysql;
 
 import com.example.Main;
-import com.example.dataHolder.*;
+import com.example.dataholder.*;
 import com.example.models.SeatModel;
 import com.example.models.StationModel;
 import com.example.models.StepModel;

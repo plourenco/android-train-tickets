@@ -11,10 +11,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-/**
- * Created by mercurius on 21/03/17.
- */
-
 @Path("station")
 public class StationController {
 

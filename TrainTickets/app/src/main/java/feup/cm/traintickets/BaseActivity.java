@@ -19,6 +19,7 @@ import feup.cm.traintickets.util.Callback;
 public class BaseActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPrefs;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected boolean tokenValid() {
         sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
-        String token = sharedPrefs.getString("LOGIN_TOKEN", "");
+        this.token = sharedPrefs.getString("LOGIN_TOKEN", "");
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
 
         return !(token.isEmpty() || expires.before(new Date()));
@@ -71,4 +72,6 @@ public class BaseActivity extends AppCompatActivity {
     protected SharedPreferences getSharedPrefs() {
         return sharedPrefs;
     }
+
+    protected String getToken() { return token; }
 }

@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -17,9 +18,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
+import feup.cm.traintickets.models.StationModel;
+import feup.cm.traintickets.runnables.StationGetTask;
 
-public class BuyTicketActivity extends AppCompatActivity {
+public class BuyTicketActivity extends BaseActivity {
 
     private Spinner origin;
     private Spinner dest;
@@ -45,28 +49,32 @@ public class BuyTicketActivity extends AppCompatActivity {
         dest = (Spinner) findViewById(R.id.destination_station);
         appBar = (AppBarLayout) findViewById(R.id.app_bar);
 
-        final TextView title = (TextView) findViewById(R.id.toolbar_title);
-        final CharSequence titleText = title.getText();
-        appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
-                boolean toolbarCollapsed = Math.abs(offset) >= appBarLayout.getTotalScrollRange();
-                title.setText(toolbarCollapsed ? titleText : "");
-            }
-        });
-
         loadStations();
     }
 
     protected void loadStations() {
-        List<String> list = new ArrayList<String>();
-        list.add("Pocinha");
-        list.add("Ribeira");
-        list.add("Bairro Alto");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_view, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        origin.setAdapter(dataAdapter);
-        dest.setAdapter(dataAdapter);
+        final List<String> list = new ArrayList<String>();
+        StationGetTask task = new StationGetTask(getToken()) {
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if(success) {
+                    for(StationModel station : getStations()) {
+                        list.add(station.getStationName());
+                    }
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(BuyTicketActivity.this,
+                            R.layout.spinner_view, list);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    origin.setAdapter(dataAdapter);
+                    dest.setAdapter(dataAdapter);
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        task.execute((Void) null);
     }
 }

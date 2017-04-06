@@ -1,8 +1,8 @@
 package com.example.dao;
 
 import com.example.Main;
-import com.example.dataHolder.StationHolder;
-import com.example.dataHolder.TripHolder;
+import com.example.dataholder.StationHolder;
+import com.example.dataholder.TripHolder;
 import com.example.exceptions.IllegalArgumentExceptionMapper;
 import com.example.exceptions.SQLExceptionMapper;
 import com.example.models.AvailableTicketModel;
