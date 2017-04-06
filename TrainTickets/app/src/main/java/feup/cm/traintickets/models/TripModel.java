@@ -24,4 +24,11 @@ public class TripModel {
         this.train = train;
         this.steps = steps;
     }
+    public TripModel(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 }
