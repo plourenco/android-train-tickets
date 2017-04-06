@@ -37,6 +37,15 @@
             android:name=".activities.BuyTicketActivity"
             android:label="@string/title_activity_buy_ticket"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SingleTicketActivity"
+            android:label="@string/title_activity_ticket_single"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="feup.cm.traintickets.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -1,13 +1,13 @@
 package com.example.dao;
 
 import com.example.Main;
-import com.example.dataholder.TripHolder;
+import com.example.dataHolder.StationHolder;
+import com.example.dataHolder.TripHolder;
 import com.example.exceptions.IllegalArgumentExceptionMapper;
 import com.example.exceptions.SQLExceptionMapper;
 import com.example.models.AvailableTicketModel;
 import com.example.models.TicketModel;
 import com.example.mysql.MySQLManager;
-import com.example.dataholder.StationHolder;
 import com.example.models.StationModel;
 import com.example.models.StepModel;
 import com.example.models.TripModel;
@@ -66,7 +66,7 @@ public class TicketManager {
     /**
      * This generates a ticket, not yet validated nor saved on the database, just to demonstrate
      * the parameters to the client.
-     * @param tripId the id of the trip choosen
+     * @param tripId the id of the trip chosen
      * @param startStationId the id of the starting station
      * @param arrStationId the id of the arrival station
      * @return TicketModel the ticket, with id 0, no uniqueId, no ticketDate nor purchaseDate and also no isUsed flag
@@ -190,5 +190,48 @@ public class TicketManager {
             Main.getLogger().severe(sql.getMessage());
             throw new SQLExceptionMapper(sql.getMessage());
         }
+    }
+
+    /**
+     * This method creates the ticket in the database and returns it as a valid ticket
+     * @param ticket the ticket to be validated
+     * @param userId the id of the user
+     * @return TicketModel the validated ticket to be used
+     */
+    public TicketModel buyTicket(TicketModel ticket, int userId) {
+        try {
+            ticket.setUniqueId(UUID.randomUUID());
+            ps = MySQLManager.getConnection().prepareStatement("Call buyTicket(?,?,?,?,?,?,?,?)");
+            ps.setString(1, ticket.getUniqueId().toString());
+            ps.setInt(2, ticket.getDepartureStation().getId());
+            ps.setInt(3, ticket.getArrivalStation().getId());
+            ps.setDate(4, ticket.getTicketDate());
+            ps.setFloat(5, ticket.getPrice());
+            ps.setDate(6, ticket.getPurchaseDate());
+            ps.setInt(7, userId);
+            ps.setInt(8, ticket.getTrip().getId());
+
+            rs = ps.executeQuery();
+            TicketModel ticketToRetrieve;
+            if (rs.next()) {
+                int ticketId = rs.getInt("id");
+                String uniqueId = rs.getString("uniqueId");
+                int depStationId = rs.getInt("departureStationId");
+                int arrStationId = rs.getInt("arrivalStationId");
+                Date ticketDate = rs.getDate("ticketDate");
+                float price = rs.getFloat("price");
+                Date purchaseDate = rs.getDate("purchaseDate");
+                int idUser = rs.getInt("fkUser");
+                int tripId = rs.getInt("fkTrip");
+                boolean used = rs.getBoolean("isUsed");
+
+                // TO:DO TICKET
+            }
+
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+            throw new SQLExceptionMapper(sql.getMessage());
+        }
+        return null;
     }
 }

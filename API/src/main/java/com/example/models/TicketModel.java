@@ -5,8 +5,8 @@ package com.example.models;
  */
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.sql.Date;
 import java.sql.Time;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -43,7 +43,7 @@ public class TicketModel {
     public StationModel getArrivalStation() {
         return arrivalStation;
     }
-    public Date getTicketDate() {
+    public java.sql.Date getTicketDate() {
         return ticketDate;
     }
     public float getPrice() {
@@ -74,10 +74,14 @@ public class TicketModel {
         return seat;
     }
 
+    public void setUniqueId(UUID uniqueId) {
+        this.uniqueId = uniqueId;
+    }
+
     public TicketModel() {
 
     }
-    public TicketModel(int id, UUID uuid, Date ticketDate, StationModel departureStation, StationModel arrivalStation) {
+    public TicketModel(int id, UUID uuid, java.sql.Date ticketDate, StationModel departureStation, StationModel arrivalStation) {
         this.id = id;
         this.uniqueId = uuid;
         this.ticketDate = ticketDate;
@@ -96,7 +100,7 @@ public class TicketModel {
         this.trip = trip;
     }
     public TicketModel(int id, UUID uniqueId, StationModel departureStation, StationModel arrivalStation,
-                       Date ticketDate, float price, Date purchaseDate, TripModel trip,
+                       java.sql.Date ticketDate, float price, Date purchaseDate, TripModel trip,
                        boolean isUsed, int duration, Time departureTime, Time arrivalTime) {
         this.id = id;
         this.uniqueId = uniqueId;

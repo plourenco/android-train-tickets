@@ -18,49 +18,55 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/toolbar_buy_ticket"
             android:fitsSystemWindows="true"
+            android:background="@drawable/toolbar_buy_ticket"
+            android:adjustViewBounds="true"
+            app:expandedTitleTextAppearance="@android:color/transparent"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="100dp"
-                android:gravity="center">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="@dimen/collapsing_margin_horizontal"
+                android:layout_marginBottom="@dimen/collapsing_margin_vertical">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/title_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="POC"
                     android:textColor="@android:color/white"
-                    android:textSize="27sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/ic_title_destination"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/title_left"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="5dp"
-                    android:src="@drawable/ic_compare_arrows_black_24dp"
-                    android:textSize="27sp"
-                    android:tint="#fff" />
+                    android:textSize="30sp"
+                    android:text="@string/error_select_station"/>
 
                 <TextView
-                    android:id="@+id/title_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/ic_title_destination"
-                    android:text="RIB"
-                    android:textColor="@android:color/white"
-                    android:textSize="27sp"
-                    android:textStyle="bold" />
+                    android:layout_below="@id/title_left"
+                    android:id="@+id/title_sub"
+                    android:textSize="14sp"
+                    android:text="@string/display_station"/>
 
             </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/toolbar_title"
+                    android:textSize="20sp"
+                    android:textColor="#fff"
+                    android:text="@string/title_activity_buy_ticket"/>
+
+            </android.support.v7.widget.Toolbar>
+
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
@@ -72,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_navigate_next_white_24dp"
+        android:src="@android:drawable/ic_dialog_email"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end" />
 
