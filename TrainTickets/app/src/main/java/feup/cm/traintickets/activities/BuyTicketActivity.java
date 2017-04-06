@@ -56,7 +56,6 @@ public class BuyTicketActivity extends AppCompatActivity {
         });
 
         loadStations();
-        //loadTrains("Pocinha", "Ribeira");
     }
 
     protected void loadStations() {
@@ -69,15 +68,5 @@ public class BuyTicketActivity extends AppCompatActivity {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         origin.setAdapter(dataAdapter);
         dest.setAdapter(dataAdapter);
-    }
-
-    protected void loadTrains(String origin, String destination) {
-        List<String> list = new ArrayList<String>();
-        list.add("Pocinha");
-        list.add("Ribeira");
-        list.add("Bairro Alto");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                R.layout.list_view, list);
-        trains.setAdapter(dataAdapter);
     }
 }

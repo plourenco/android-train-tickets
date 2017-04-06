@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -41,6 +42,7 @@ import java.util.List;
 import feup.cm.traintickets.MainActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.runnables.UserLoginTask;
+import feup.cm.traintickets.sqlite.SQLiteManager;
 import feup.cm.traintickets.util.StringCheck;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -63,6 +65,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SQLiteDatabase sql = new SQLiteManager(this).getReadableDatabase();
+        Cursor cursor = sql.rawQuery("Select * from tickets", null);
+
         // Set full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

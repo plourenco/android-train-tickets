@@ -22,7 +22,7 @@ public class StationController {
 
     @GET
     @Path("stations")
-    @Secured({UserRole.USER, UserRole.INSPECTOR})
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public List<StationModel> getStations() {
         return stationManager.getStations();

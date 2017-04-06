@@ -76,7 +76,8 @@ public class SecurityFilter implements ContainerRequestFilter {
                             List<UserRole> classRoles = extractRoles(resourceClass);
                             List<UserRole> methodRoles = extractRoles(resourceMethod);
                             // check if user has permission
-                            if (classRoles.contains(role) || methodRoles.contains(role)) {
+                            if (classRoles.isEmpty() || methodRoles.isEmpty() ||
+                                    classRoles.contains(role) || methodRoles.contains(role)) {
                                 requestContext.setSecurityContext(
                                         new SecurityContextAuthorizer(uriInfo, () -> email, role));
                                 return;
