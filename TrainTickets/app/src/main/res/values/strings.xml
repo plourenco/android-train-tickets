@@ -40,4 +40,10 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_credentials">Incorrect email or password</string>
     <string name="error_field_required">This field is required</string>
+
+    <!-- Strings train:list-->
+    <string name="listasaida">Saída:</string>
+    <string name="listachegada">Chegada:</string>
+    <string name="listaduracao">Duração:</string>
+    <string name="listacomboio">Comboio:</string>
 </resources>
