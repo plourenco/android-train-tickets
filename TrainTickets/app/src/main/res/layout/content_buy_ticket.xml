@@ -39,10 +39,11 @@
 
                 <Spinner
                     android:id="@+id/origin_station"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/layout_form_content_bottom"
                     android:layout_marginTop="@dimen/layout_form_content_top"
+                    android:layout_gravity="fill_horizontal"
                     android:layout_toEndOf="@+id/ic_origin"
                     android:color="@color/colorDarkText"
                     android:textSize="@dimen/text_form_title" />

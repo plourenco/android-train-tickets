@@ -4,5 +4,4 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:textColor="@color/colorDarkText"
-    android:textSize="@dimen/text_form_title"
-    android:ellipsize="end"/>
+    android:textSize="@dimen/text_form_title"/>

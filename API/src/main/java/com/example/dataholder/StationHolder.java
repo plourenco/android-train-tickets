@@ -1,4 +1,4 @@
-package com.example.dataHolder;
+package com.example.dataholder;
 
 import com.example.models.StationModel;
 
