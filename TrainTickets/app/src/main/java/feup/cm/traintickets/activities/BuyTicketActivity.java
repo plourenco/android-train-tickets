@@ -1,6 +1,7 @@
 package feup.cm.traintickets.activities;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -39,6 +40,7 @@ public class BuyTicketActivity extends BaseTitleActivity {
     private Spinner dest;
 
     private EditText departure;
+    private DatePicker depatureDate;
     private TextView title;
 
     @Override
@@ -46,19 +48,28 @@ public class BuyTicketActivity extends BaseTitleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_ticket);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         origin = (Spinner) findViewById(R.id.origin_station);
         dest = (Spinner) findViewById(R.id.destination_station);
         title = (TextView) findViewById(R.id.title_left);
         departure = (EditText) findViewById(R.id.departure_desc);
+
+        // Set forward button behaviour
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(origin.getSelectedItem().toString()
+                        .equals(dest.getSelectedItem().toString())) {
+                    TextView errorText = (TextView) dest.getSelectedView();
+                    errorText.setError("");
+                    Snackbar.make(view, getString(R.string.error_same_stations),
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    return;
+                }
+                Intent intent = new Intent(getApplicationContext(), TrainListActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Set origin change listener
         AdapterView.OnItemSelectedListener sLis = new AdapterView.OnItemSelectedListener() {
@@ -92,9 +103,11 @@ public class BuyTicketActivity extends BaseTitleActivity {
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(BuyTicketActivity.this, date, calendar
+                DatePickerDialog dialog = new DatePickerDialog(BuyTicketActivity.this, date, calendar
                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                dialog.show();
             }
         });
 
