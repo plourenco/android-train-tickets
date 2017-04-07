@@ -30,6 +30,7 @@
     <string name="display_ticket_price">Ticket Price</string>
     <string name="display_origin">Origin</string>
     <string name="display_departure">Departure</string>
+    <string name="display_destination">Destination</string>
     <string name="display_arrival">Arrival</string>
     <string name="display_date">Date</string>
 

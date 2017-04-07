@@ -11,10 +11,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:orientation="vertical">
 
         <android.support.v7.widget.GridLayout
+            android:id="@+id/grid_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:columnCount="2"
@@ -35,15 +38,14 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/icon_form_margin"
                     app:srcCompat="@drawable/ic_directions_subway_black_24dp"
-                    android:tint="@color/colorLightText" />
+                    android:tint="@color/colorPrimaryDark" />
 
                 <Spinner
                     android:id="@+id/origin_station"
-                    android:layout_width="0dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/layout_form_content_bottom"
                     android:layout_marginTop="@dimen/layout_form_content_top"
-                    android:layout_gravity="fill_horizontal"
                     android:layout_toEndOf="@+id/ic_origin"
                     android:color="@color/colorDarkText"
                     android:textSize="@dimen/text_form_title" />
@@ -73,11 +75,11 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="16dp"
                     app:srcCompat="@drawable/ic_directions_subway_black_24dp"
-                    android:tint="@color/colorLightText" />
+                    android:tint="@color/colorPrimaryDark" />
 
                 <Spinner
                     android:id="@+id/destination_station"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="20dp"
@@ -91,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/destination_station"
                     android:layout_toEndOf="@+id/ic_destination"
-                    android:text="Destination"
+                    android:text="@string/display_destination"
                     android:textSize="14sp" />
 
             </RelativeLayout>
@@ -125,7 +127,7 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/icon_form_margin"
                     app:srcCompat="@drawable/ic_date_range_black_24dp"
-                    android:tint="@color/colorPrimary" />
+                    android:tint="@color/colorPrimaryDark" />
 
                 <TextView
                     android:id="@+id/departure_title"
@@ -138,52 +140,16 @@
                     android:textColor="@color/colorDarkText"
                     android:textSize="@dimen/text_form_title" />
 
-                <TextView
+                <EditText
                     android:id="@+id/departure_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
                     android:layout_below="@+id/departure_title"
                     android:layout_toEndOf="@+id/ic_departure"
-                    android:text="21st August"
+                    android:layout_marginStart="-3dp"
+                    android:hint="Date"
                     android:textSize="@dimen/text_form_value" />
-
-            </RelativeLayout>
-
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_column="1"
-                app:layout_columnWeight="1">
-
-                <ImageView
-                    android:id="@+id/ic_arrival"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/icon_form_margin"
-                    app:srcCompat="@drawable/ic_date_range_black_24dp"
-                    android:tint="@color/colorPrimary" />
-
-                <TextView
-                    android:id="@+id/arrival_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/ic_arrival"
-                    android:paddingBottom="@dimen/layout_form_content_bottom"
-                    android:paddingTop="@dimen/layout_form_content_top"
-                    android:text="@string/display_arrival"
-                    android:textColor="@color/colorDarkText"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/arrival_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/arrival_title"
-                    android:layout_toEndOf="@+id/ic_arrival"
-                    android:text="22nd August"
-                    android:textSize="14sp" />
 
             </RelativeLayout>
 
@@ -207,7 +173,7 @@
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_column="0"
+                app:layout_column="1"
                 app:layout_columnWeight="1">
 
                 <ImageView
@@ -218,7 +184,7 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/icon_form_margin"
                     app:srcCompat="@drawable/ic_payment_black_24dp"
-                    android:tint="@color/colorPrimary" />
+                    android:tint="@color/colorPrimaryDark" />
 
                 <TextView
                     android:id="@+id/ticket_price_title"
