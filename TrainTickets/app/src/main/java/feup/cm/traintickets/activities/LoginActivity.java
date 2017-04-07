@@ -71,14 +71,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TicketBrowser tb = new TicketBrowser(this.getApplicationContext());
-        TicketModel tM = tb.get(1);
-        List<TicketModel> tit = tb.getAll();
-        TicketModel ttm = new TicketModel(10, UUID.randomUUID(), new StationModel(1), new StationModel(2), java.sql.Date.valueOf("2016-07-12"), 10.2f, java.sql.Date.valueOf("2016-07-10"),
-                new TripModel(1), false);
-        tb.create(ttm);
-        tb.delete(-1);
-
         // Set full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
