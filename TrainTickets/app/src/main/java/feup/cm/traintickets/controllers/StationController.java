@@ -1,10 +1,8 @@
 package feup.cm.traintickets.controllers;
 
-import org.json.JSONObject;
-
 public class StationController {
 
-    public JSONObject getStations() {
-        return ServiceHandler.makeGet("station/stations");
+    public String getStations(String token) {
+        return ServiceHandler.makeGet("station/stations", token);
     }
 }

@@ -3,10 +3,8 @@ package feup.cm.traintickets;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -14,9 +12,8 @@ import java.util.Date;
 
 import feup.cm.traintickets.activities.LoginActivity;
 import feup.cm.traintickets.runnables.TokenRefreshTask;
-import feup.cm.traintickets.util.Callback;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseTitleActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPrefs;
     private String token;
@@ -24,10 +21,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Set full screen
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if(!tokenValid()) {
             refreshToken();

@@ -1,7 +1,7 @@
 package com.example;
 
+import com.example.dataholder.*;
 import com.example.models.*;
-import com.example.dataHolder.*;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

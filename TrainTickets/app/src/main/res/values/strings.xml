@@ -25,11 +25,13 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_ticket_single">Ticket Details</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_train_list">MainActivity</string>
 
     <string name="display_station">Station</string>
     <string name="display_ticket_price">Ticket Price</string>
     <string name="display_origin">Origin</string>
-    <string name="display_departure">Departure</string>
+    <string name="display_departure">Departure Date</string>
+    <string name="display_destination">Destination</string>
     <string name="display_arrival">Arrival</string>
     <string name="display_date">Date</string>
 
@@ -40,6 +42,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_credentials">Incorrect email or password</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_same_stations">The origin and destination stations can\'t be the same</string>
 
     <!-- Strings train:list-->
     <string name="listasaida">Saída:</string>

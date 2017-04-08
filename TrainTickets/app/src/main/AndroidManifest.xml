@@ -38,6 +38,10 @@
             android:label="@string/title_activity_buy_ticket"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activities.TrainListActivity"
+            android:label="@string/title_activity_train_list"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".activities.SingleTicketActivity"
             android:label="@string/title_activity_ticket_single"
             android:parentActivityName=".MainActivity"

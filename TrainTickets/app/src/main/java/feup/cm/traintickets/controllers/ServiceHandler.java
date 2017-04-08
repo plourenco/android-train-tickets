@@ -19,22 +19,23 @@ import feup.cm.traintickets.util.KeyValuePair;
 
 public class ServiceHandler {
 
-    private static final String apiUrl = "http://192.168.1.73:8080/api/";
+    private static final String apiUrl = "http://10.0.2.2:8080/api/";
 
     /**
      * Make a GET request to a sub url with parameters
      * @param sUrl String
      * @param params KeyValuePair[]
      */
-    public static JSONObject makeGet(String sUrl, KeyValuePair... params) {
+    public static String makeGet(String sUrl, String token, KeyValuePair... params) {
         StringBuilder result = new StringBuilder();
 
         try {
             String queryString = join(params, "&");
             URL url = new URL(apiUrl + sUrl + queryString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if(token != null)
+                conn.setRequestProperty("Authorization", "Bearer " + token);
             conn.setRequestMethod("GET");
-            conn.setReadTimeout(1000);
 
             InputStream in = new BufferedInputStream(conn.getInputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -42,10 +43,11 @@ public class ServiceHandler {
             while ((line = reader.readLine()) != null) {
                 result.append(line);
             }
-            return new JSONObject(result.toString());
+            return result.toString();
         }
-        catch(IOException | JSONException e) {
+        catch(IOException e) {
             Log.d("Exception", e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -55,7 +57,7 @@ public class ServiceHandler {
      * @param sUrl String
      * @param jsonStr String
      */
-    public static String makePost(String sUrl, String jsonStr) {
+    public static String makePost(String sUrl, String jsonStr, String token) {
         StringBuilder result = new StringBuilder();
 
         try {
@@ -67,6 +69,8 @@ public class ServiceHandler {
 
             conn.setRequestProperty("Accept", "application/json");
             conn.setRequestProperty("Content-Type", "application/json");
+            if(token != null)
+                conn.setRequestProperty("Authorization", "Bearer " + token);
 
             DataOutputStream wr = null;
             try {
@@ -90,6 +94,14 @@ public class ServiceHandler {
             Log.d("Exception", e.getMessage());
         }
         return null;
+    }
+
+    public static String makePost(String sUrl, String jsonStr) {
+        return makePost(sUrl, jsonStr, null);
+    }
+
+    public static String makeGet(String sUrl, KeyValuePair... params) {
+        return makeGet(sUrl, null, params);
     }
 
     /**
