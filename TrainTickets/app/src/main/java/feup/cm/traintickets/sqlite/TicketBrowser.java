@@ -7,8 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.android.internal.util.Predicate;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
