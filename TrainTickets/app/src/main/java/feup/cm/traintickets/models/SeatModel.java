@@ -12,6 +12,10 @@ public class SeatModel {
     private int id;
     private String seatNumber;
 
+    public SeatModel(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

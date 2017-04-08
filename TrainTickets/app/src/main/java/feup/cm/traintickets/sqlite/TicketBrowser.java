@@ -3,8 +3,11 @@ package feup.cm.traintickets.sqlite;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import com.android.internal.util.Predicate;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import feup.cm.traintickets.models.SeatModel;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.models.TripModel;
@@ -49,8 +53,10 @@ public class TicketBrowser implements IOperation<TicketModel> {
             int arrStation = cursor.getInt(10);
             int trip = cursor.getInt(11);
             int seat = cursor.getInt(12);
-            return new TicketModel(id1, UUID.fromString(uniqueId),new StationModel(depStation), new StationModel(arrStation),
-                    ticketDate, price, purchaseDate, new TripModel(trip), isUsed);
+            return new TicketModel(id1, UUID.fromString(uniqueId), new StationModel(depStation),
+                    new StationModel(arrStation), ticketDate, price, purchaseDate,
+                    new TripModel(trip), isUsed, departureTime, arrivalTime, new SeatModel(seat),
+                    duration);
         } else {
             return null;
         }
@@ -70,31 +76,39 @@ public class TicketBrowser implements IOperation<TicketModel> {
         }
     }
 
-    //TO:DO change the hardcoded values and model!
     @Override
     public void create(TicketModel ticketModel) {
         ContentValues values = new ContentValues();
-        values.put("uniqueId", ticketModel.getUniqueId().toString());
-        values.put("duration", 10);
-        values.put("departureTime", "20:00:00");
-        values.put("arrivalTime", "20:10:00");
-        values.put("price", ticketModel.getPrice());
-        values.put("ticketDate", ticketModel.getTicketDate().toString());
-        values.put("purchaseDate", ticketModel.getPurchaseDate().toString());
-        values.put("isUsed", ticketModel.isUsed() ? 1 : 0);
-        values.put("departureStation", ticketModel.getDepartureStation().getId());
-        values.put("arrivalStation", ticketModel.getArrivalStation().getId());
-        values.put("trip", ticketModel.getTrip().getId());
-        values.put("seat", "1");
+        try {
+            values.put("uniqueId", ticketModel.getUniqueId().toString());
+            values.put("duration", ticketModel.getDuration());
+            values.put("departureTime", ticketModel.getDepartureTime().toString());
+            values.put("arrivalTime", ticketModel.getArrivalTime().toString());
+            values.put("price", ticketModel.getPrice());
+            values.put("ticketDate", ticketModel.getTicketDate().toString());
+            values.put("purchaseDate", ticketModel.getPurchaseDate().toString());
+            values.put("isUsed", ticketModel.isUsed() ? 1 : 0);
+            values.put("departureStation", ticketModel.getDepartureStation().getId());
+            values.put("arrivalStation", ticketModel.getArrivalStation().getId());
+            values.put("trip", ticketModel.getTrip().getId());
+            values.put("seat", ticketModel.getSeatModel().getId());
+        } catch (NullPointerException npe) {
+            throw new NullPointerException(npe.getMessage());
+        }
         try {
             sqLiteWritableDatabase.insertOrThrow("tickets", null, values);
-        } catch (Exception e) {
-            Log.w("SQL", e.getMessage());
+        } catch (SQLException e) {
+            Log.e("SQL", e.getMessage());
         }
     }
 
+    /**
+     * Delete a record in the sqlite database
+     * @param id the id to be deleted
+     * @return int - returns the number of affected rows
+     */
     @Override
-    public void delete(int id) {
-        sqLiteWritableDatabase.delete("tickets", "id = ?", new String[]{""+id});
+    public int delete(int id) {
+        return sqLiteWritableDatabase.delete("tickets", "id = ?", new String[]{""+id});
     }
 }
