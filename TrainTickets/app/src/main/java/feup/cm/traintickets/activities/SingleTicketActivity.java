@@ -20,11 +20,12 @@ import com.google.zxing.common.BitMatrix;
 import java.sql.Date;
 import java.util.UUID;
 
+import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
 
-public class SingleTicketActivity extends AppCompatActivity {
+public class SingleTicketActivity extends BaseActivity {
 
     ImageView qrCodeImageView;
     Bitmap bitmap;
@@ -46,7 +47,7 @@ public class SingleTicketActivity extends AppCompatActivity {
         qrCodeImageView = (ImageView)findViewById(R.id.imageView2);
 
 
-        /**
+        /*
          * For test purposes
          * Need to add an Intent here!
          */

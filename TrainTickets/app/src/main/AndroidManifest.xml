@@ -53,6 +53,15 @@
         </activity>
         <activity android:name=".activities.QRCodeReaderActivity">
         </activity>
+        <activity
+            android:name=".activities.TicketListActivity"
+            android:label="@string/title_activity_ticket_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="feup.cm.traintickets.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

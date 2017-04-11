@@ -49,4 +49,6 @@
     <string name="listachegada">Chegada:</string>
     <string name="listaduracao">Duração:</string>
     <string name="listacomboio">Comboio:</string>
+    <string name="title_activity_ticket_list">TicketListActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
