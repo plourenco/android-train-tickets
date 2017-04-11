@@ -18,7 +18,7 @@ public class StationController {
 
     @GET
     @Path("stations")
-    //@Secured
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public List<StationModel> getStations() {
         return stationManager.getStations();

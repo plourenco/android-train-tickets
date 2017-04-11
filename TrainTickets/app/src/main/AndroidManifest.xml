@@ -40,6 +40,7 @@
         <activity
             android:name=".activities.TrainListActivity"
             android:label="@string/title_activity_train_list"
+            android:exported="true"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.SingleTicketActivity"
@@ -52,6 +53,15 @@
                 android:value="feup.cm.traintickets.MainActivity" />
         </activity>
         <activity android:name=".activities.QRCodeReaderActivity">
+        </activity>
+        <activity
+            android:name=".activities.TicketListActivity"
+            android:label="@string/title_activity_ticket_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="feup.cm.traintickets.MainActivity" />
         </activity>
     </application>
 

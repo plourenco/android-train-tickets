@@ -4,10 +4,6 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.UUID;
 
-/**
- * Created by pedro on 26/03/17.
- */
-
 public class TicketModel {
 
     private int id;
@@ -27,7 +23,8 @@ public class TicketModel {
     /**
      * Constructors
      */
-    public TicketModel() {
+    public TicketModel(float price) {
+        this.price = price;
     }
     public TicketModel(int id, UUID uniqueId, StationModel departureStation,
                        StationModel arrivalStation, Date ticketDate, float price, Date purchaseDate,
@@ -47,6 +44,7 @@ public class TicketModel {
         this.seatModel = seatModel;
         this.duration = duration;
     }
+
     public TicketModel(int id, UUID uniqueId, StationModel departureStation, StationModel arrivalStation,
                        Date ticketDate, float price, Date purchaseDate, TripModel trip,
                        boolean isUsed) {
