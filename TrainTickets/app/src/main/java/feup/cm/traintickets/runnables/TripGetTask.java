@@ -13,6 +13,7 @@ import feup.cm.traintickets.controllers.TrainController;
 import feup.cm.traintickets.controllers.TripController;
 import feup.cm.traintickets.datamanagers.StepDataManager;
 import feup.cm.traintickets.datamanagers.TrainDataManager;
+import feup.cm.traintickets.datamanagers.TripDataManager;
 import feup.cm.traintickets.models.StepModel;
 import feup.cm.traintickets.models.TrainModel;
 import feup.cm.traintickets.models.TripModel;
@@ -45,17 +46,36 @@ public abstract class TripGetTask extends AsyncTask<Void, Void, Boolean> {
                     String desc = obj.getString("description");
                     String direction = obj.getString("direction");
                     String increment = obj.getString("increment");
-                    JSONObject train = obj.getJSONObject("train");
-                    int idTrain = train.getInt("id");
+                    JSONArray stepObj = obj.getJSONArray("steps");
+                    List<StepModel> steps = new ArrayList<>();
+                    for (int j = 0; j < stepObj.length(); j++) {
 
-                    TrainModel trainModel = null;
+                        JSONObject obj2 = stepObj.getJSONObject(j);
 
-                    for (int j = 0; j < TrainDataManager.getTrains().size(); j++) {
-                        if (TrainDataManager.getTrains().get(j).getId() == idTrain)
-                            trainModel = TrainDataManager.getTrains().get(j);
+                        StepModel step = null;
+                        int idStep = obj2.getInt("id");
+
+                        for(int k = 0; k < StepDataManager.getSteps().size(); k++) {
+                            if (StepDataManager.getSteps().get(k).getId() == idStep){
+                                step = StepDataManager.getSteps().get(k);
+                                break;
+                            }
+                        }
+                        steps.add(step);
                     }
 
-                    trips.add(new TripModel(id, desc, direction, increment, trainModel, null));
+                    JSONObject trainObj = obj.getJSONObject("train");
+                    int idTrain = trainObj.getInt("id");
+                    TrainModel train = null;
+
+                    for (int z = 0; z < TrainDataManager.getTrains().size(); z++) {
+                        if (TrainDataManager.getTrains().get(z).getId() == idTrain){
+                            train = TrainDataManager.getTrains().get(z);
+                            break;
+                        }
+                    }
+
+                    trips.add(new TripModel(id, desc, direction, increment, train, steps));
                 }
                 return true;
             }

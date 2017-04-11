@@ -2,9 +2,6 @@ package com.example.models;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Created by mercurius on 22/03/17.
- */
 @XmlRootElement
 public class SeatModel {
     private int id;

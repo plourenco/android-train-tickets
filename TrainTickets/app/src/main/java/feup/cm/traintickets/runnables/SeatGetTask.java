@@ -38,7 +38,10 @@ public abstract class SeatGetTask extends AsyncTask<Void, Void, Boolean> {
                 JSONArray array = new JSONArray(res);
                 for(int i=0; i<array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
-                    seats.add(new SeatModel(obj.getInt("id"), obj.getString("seatNumber")));
+                    seats.add(new SeatModel(
+                            obj.getInt("id"),
+                            obj.getString("seatNumber"),
+                            obj.getInt("trainId")));
                 }
                 return true;
             }

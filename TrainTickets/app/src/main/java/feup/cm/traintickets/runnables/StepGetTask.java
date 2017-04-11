@@ -41,32 +41,30 @@ public abstract class StepGetTask extends AsyncTask<Void, Void, Boolean> {
                 for(int i=0; i<array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
                     int id = obj.getInt("id");
-                    int depStationId = obj.getInt("departureStationId");
-                    int arrStationId = obj.getInt("arrivalStationId");
                     int stepNumber = obj.getInt("stepNumber");
                     int distance = obj.getInt("distance");
-                    float price = (float) obj.get("price");
+                    double price = obj.getDouble("price");
                     int waitingTime = obj.getInt("waitingTime");
-                    int tripId = obj.getInt("fkTrip");
                     int duration = obj.getInt("duration");
                     Time depTime = Time.valueOf(obj.getString("departureTime"));
                     Time arrTime = Time.valueOf(obj.getString("arrivalTime"));
+                    int tripId = obj.getInt("tripId");
 
+                    int depStationId = obj.getJSONObject("departureStation").getInt("id");
+                    int arrStationId = obj.getJSONObject("arrivalStation").getInt("id");
                     StationModel depStation = null;
                     StationModel arrStation = null;
 
-                    for(int j = 0; j < StationDataManager.getStations().size(); j++) {
-                        if (StationDataManager.getStations().get(j).getId() == depStationId) {
+                    for (int j = 0; j < StationDataManager.getStations().size(); j++) {
+                        if (StationDataManager.getStations().get(j).getId() == depStationId)
                             depStation = StationDataManager.getStations().get(j);
-                        }
 
-                        if (StationDataManager.getStations().get(j).getId() == arrStationId) {
+                        if (StationDataManager.getStations().get(j).getId() == arrStationId)
                             arrStation = StationDataManager.getStations().get(j);
-                        }
                     }
 
                     steps.add(new StepModel(id, stepNumber, distance, price, waitingTime, duration,
-                            depTime, arrTime, depStation, arrStation));
+                            depTime, arrTime, depStation, arrStation, tripId));
                 }
                 return true;
             }

@@ -41,13 +41,12 @@ public class BaseTitleActivity extends AppCompatActivity {
         if(!tokenValid()) {
             refreshToken();
         }
+
         final TripGetTask tripGetTask = new TripGetTask(getToken()) {
             @Override
             protected void onPostExecute(Boolean success) {
                 if (success)
                     TripDataManager.setTrips(getTrips());
-
-                List<TripModel> tripModels = TripDataManager.getTrips();
             }
 
             @Override
