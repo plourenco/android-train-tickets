@@ -9,9 +9,25 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import java.util.Date;
+import java.util.List;
 
 import feup.cm.traintickets.activities.LoginActivity;
+import feup.cm.traintickets.datamanagers.SeatDataManager;
+import feup.cm.traintickets.datamanagers.StationDataManager;
+import feup.cm.traintickets.datamanagers.StepDataManager;
+import feup.cm.traintickets.datamanagers.TrainDataManager;
+import feup.cm.traintickets.datamanagers.TripDataManager;
+import feup.cm.traintickets.models.SeatModel;
+import feup.cm.traintickets.models.StationModel;
+import feup.cm.traintickets.models.StepModel;
+import feup.cm.traintickets.models.TrainModel;
+import feup.cm.traintickets.models.TripModel;
+import feup.cm.traintickets.runnables.SeatGetTask;
+import feup.cm.traintickets.runnables.StationGetTask;
+import feup.cm.traintickets.runnables.StepGetTask;
 import feup.cm.traintickets.runnables.TokenRefreshTask;
+import feup.cm.traintickets.runnables.TrainGetTask;
+import feup.cm.traintickets.runnables.TripGetTask;
 
 public class BaseTitleActivity extends AppCompatActivity {
 
@@ -25,6 +41,86 @@ public class BaseTitleActivity extends AppCompatActivity {
         if(!tokenValid()) {
             refreshToken();
         }
+        final TripGetTask tripGetTask = new TripGetTask(getToken()) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success)
+                    TripDataManager.setTrips(getTrips());
+
+                List<TripModel> tripModels = TripDataManager.getTrips();
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        //tripGetTask.execute((Void) null);
+
+        final StepGetTask stepGetTask = new StepGetTask(getToken()) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    StepDataManager.setSteps(getSteps());
+                    tripGetTask.execute((Void) null);
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        //stepGetTask.execute((Void) null);
+
+        final TrainGetTask trainGetTask = new TrainGetTask(getToken()) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    TrainDataManager.setTrains(getTrains());
+                    stepGetTask.execute((Void) null);
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        //trainGetTask.execute((Void) null);
+
+        final SeatGetTask seatGetTask = new SeatGetTask(getToken()) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    SeatDataManager.setSeats(getSeats());
+                    trainGetTask.execute((Void) null);
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        //seatGetTask.execute((Void) null);
+
+        StationGetTask task = new StationGetTask(getToken()) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    StationDataManager.setStations(getStations());
+                    seatGetTask.execute((Void) null);
+                }
+
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        task.execute((Void) null);
     }
 
     protected boolean tokenValid() {
