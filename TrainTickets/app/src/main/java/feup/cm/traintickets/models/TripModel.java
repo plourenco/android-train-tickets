@@ -30,4 +30,19 @@ public class TripModel {
     public int getId() {
         return id;
     }
+    public String getDescription() {
+        return description;
+    }
+    public String getDirection() {
+        return direction;
+    }
+    public String getIncrement() {
+        return increment;
+    }
+    public List<StepModel> getSteps() {
+        return steps;
+    }
+    public TrainModel getTrain() {
+        return train;
+    }
 }
