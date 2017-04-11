@@ -15,8 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.security.NoSuchAlgorithmException;
-
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.MainActivity;
 import feup.cm.traintickets.R;

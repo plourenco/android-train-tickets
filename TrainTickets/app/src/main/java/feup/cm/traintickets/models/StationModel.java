@@ -3,10 +3,6 @@ package feup.cm.traintickets.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by pedro on 26/03/17.
- */
-
 public class StationModel {
 
     private int id;

@@ -6,6 +6,7 @@
     <color name="colorDarkText">#bf000000</color>
     <color name="colorMediumText">#9b000000</color>
     <color name="colorLightText">#89000000</color>
+    <color name="colorGrayMedium">#69000000</color>
     <color name="colorGray">#1c000000</color>
     <color name="QRCodeBlack">#000000</color>
     <color name="QRCodeWhite">#ffffff</color>

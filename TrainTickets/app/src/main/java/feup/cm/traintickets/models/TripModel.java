@@ -2,10 +2,6 @@ package feup.cm.traintickets.models;
 
 import java.util.List;
 
-/**
- * Created by pedro on 26/03/17.
- */
-
 public class TripModel {
 
     private int id;

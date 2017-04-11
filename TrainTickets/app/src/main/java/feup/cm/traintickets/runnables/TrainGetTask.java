@@ -11,7 +11,9 @@ import java.util.List;
 
 import feup.cm.traintickets.controllers.StationController;
 import feup.cm.traintickets.controllers.TrainController;
+import feup.cm.traintickets.models.SeatModel;
 import feup.cm.traintickets.models.StationModel;
+import feup.cm.traintickets.models.StepModel;
 import feup.cm.traintickets.models.TrainModel;
 
 /**
@@ -42,7 +44,18 @@ public abstract class TrainGetTask extends AsyncTask<Void, Void, Boolean> {
                     int id = obj.getInt("id");
                     int maxCap = obj.getInt("maxCapacity");
                     String desc = obj.getString("description");
-                    trains.add(new TrainModel(id, maxCap, desc, null));
+                    JSONArray seats = obj.getJSONArray("seats");
+                    List<SeatModel> seatsList = new ArrayList<>();
+                    for (int j = 0; j < seats.length(); j++) {
+                        JSONObject obj2 = seats.getJSONObject(j);
+                        seatsList.add(new SeatModel(
+                                obj2.getInt("id"),
+                                obj2.getString("seatNumber"),
+                                obj2.getInt("trainId")
+                        ));
+                    }
+
+                    trains.add(new TrainModel(id, maxCap, desc, seatsList));
                 }
                 return true;
             }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_buyticket"
+        android:enabled="true"
+        android:icon="@drawable/ic_payment_black_24dp"
+        android:title="Buy Ticket" />
+    <item
+        android:id="@+id/action_tickets"
+        android:enabled="true"
+        android:icon="@drawable/ic_compare_arrows_black_24dp"
+        android:title="Tickets" />
+    <item
+        android:id="@+id/action_timetables"
+        android:enabled="true"
+        android:icon="@drawable/ic_directions_subway_black_24dp"
+        android:title="Timetables" />
+    <item
+        android:id="@+id/action_settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="Settings" />
+</menu>

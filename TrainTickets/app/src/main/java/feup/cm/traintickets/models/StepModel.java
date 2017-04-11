@@ -8,7 +8,6 @@ import java.sql.Time;
 /**
  * Created by pedro on 26/03/17.
  */
-
 public class StepModel {
 
     private int id;
@@ -21,10 +20,11 @@ public class StepModel {
     private Time arrivalTime;
     private StationModel departureStation;
     private StationModel arrivalStation;
+    private int tripId;
 
     public StepModel(int id, int stepNumber, int distance, double price, int waitingTime, int duration,
                      Time departureTime, Time arrivalTime, StationModel departureStation,
-                     StationModel arrivalStation) {
+                     StationModel arrivalStation, int tripId) {
         this.id = id;
         this.stepNumber = stepNumber;
         this.distance = distance;
@@ -35,6 +35,7 @@ public class StepModel {
         this.arrivalTime = arrivalTime;
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
+        this.tripId = tripId;
     }
 
     public int getId() {
@@ -75,5 +76,9 @@ public class StepModel {
 
     public StationModel getArrivalStation() {
         return arrivalStation;
+    }
+
+    public int getTripId() {
+        return tripId;
     }
 }
