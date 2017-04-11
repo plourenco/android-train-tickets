@@ -40,6 +40,7 @@
         <activity
             android:name=".activities.TrainListActivity"
             android:label="@string/title_activity_train_list"
+            android:exported="true"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.SingleTicketActivity"
