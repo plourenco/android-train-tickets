@@ -36,6 +36,9 @@ public class TrainModel {
     /**
      * Constructors
      */
+    public TrainModel(int idTrain) {
+        this.id = idTrain;
+    }
     public TrainModel() {
 
     }

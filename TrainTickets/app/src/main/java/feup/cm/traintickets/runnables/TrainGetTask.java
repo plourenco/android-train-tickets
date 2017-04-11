@@ -1,0 +1,65 @@
+package feup.cm.traintickets.runnables;
+
+import android.os.AsyncTask;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import feup.cm.traintickets.controllers.StationController;
+import feup.cm.traintickets.controllers.TrainController;
+import feup.cm.traintickets.models.StationModel;
+import feup.cm.traintickets.models.TrainModel;
+
+/**
+ * Created by mercurius on 11/04/17.
+ */
+
+public abstract class TrainGetTask extends AsyncTask<Void, Void, Boolean> {
+
+    private String token;
+
+    protected List<TrainModel> trains;
+
+    public TrainGetTask(String token) {
+        this.token = token;
+        this.trains = new ArrayList<>();
+    }
+
+    @Override
+    protected Boolean doInBackground(Void... params) {
+        TrainController trainController = new TrainController();
+        String res = trainController.getTrains(token);
+
+        if(res != null) {
+            try {
+                JSONArray array = new JSONArray(res);
+                for(int i=0; i<array.length(); i++) {
+                    JSONObject obj = array.getJSONObject(i);
+                    int id = obj.getInt("id");
+                    int maxCap = obj.getInt("maxCapacity");
+                    String desc = obj.getString("description");
+                    trains.add(new TrainModel(id, maxCap, desc, null));
+                }
+                return true;
+            }
+            catch (JSONException | NullPointerException ignored) {
+                ignored.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected abstract void onPostExecute(final Boolean success);
+
+    @Override
+    protected abstract void onCancelled();
+
+    protected List<TrainModel> getTrains() {
+        return trains;
+    }
+}

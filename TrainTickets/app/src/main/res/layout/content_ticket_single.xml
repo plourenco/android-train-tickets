@@ -8,6 +8,14 @@
     tools:context="feup.cm.traintickets.activities.SingleTicketActivity"
     tools:showIn="@layout/activity_ticket_single">
 
+    <ProgressBar
+        android:id="@+id/ticket_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
     <!-- A CardView that contains a TextView -->
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"

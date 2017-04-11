@@ -1,6 +1,10 @@
 package feup.cm.traintickets.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,7 +30,8 @@ public class SingleTicketActivity extends AppCompatActivity {
     Bitmap bitmap;
     TicketModel ticket;
     public final static int QRCODE_WIDTH = 500;
-
+    public View cardView;
+    public View ticketProgressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,10 @@ public class SingleTicketActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        cardView = findViewById(R.id.card_view);
+        ticketProgressView = findViewById(R.id.ticket_progress);
         qrCodeImageView = (ImageView)findViewById(R.id.imageView2);
+
 
         /**
          * For test purposes
@@ -50,16 +58,17 @@ public class SingleTicketActivity extends AppCompatActivity {
                 ticket.getArrivalStation().getId();
 
         generateQR(textToEncode);
-
     }
 
     private void generateQR(final String textToEncode) {
+        showProgress(true);
         final Thread runner = new Thread() {
             @Override
             public void run() {
                 try {
                     bitmap = textToImageEncode(textToEncode);
                     qrCodeImageView.setImageBitmap(bitmap);
+                    showProgress(false);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -100,5 +109,34 @@ public class SingleTicketActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
         bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
         return bitmap;
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+        cardView.setVisibility(show ? View.GONE : View.VISIBLE);
+        cardView.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                cardView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        ticketProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        ticketProgressView.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                ticketProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 }
