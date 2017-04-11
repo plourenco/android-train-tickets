@@ -49,23 +49,18 @@
             android:name=".activities.SingleTicketActivity"
             android:label="@string/title_activity_ticket_single"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="feup.cm.traintickets.MainActivity" />
         </activity>
-        <activity android:name=".activities.QRCodeGeneratorActivity">
+        <activity
+            android:name=".activities.QRCodeReaderActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.QRCodeReaderActivity">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
         </activity>
     </application>
 

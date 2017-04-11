@@ -37,7 +37,8 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
     @Override
     protected void onPause() {
         super.onPause();
-        scannerView.stopCamera();
+        if (scannerView != null)
+            scannerView.stopCamera();
     }
 
     @Override
