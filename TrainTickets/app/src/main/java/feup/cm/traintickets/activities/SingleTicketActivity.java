@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -20,10 +21,15 @@ import com.google.zxing.common.BitMatrix;
 import java.sql.Date;
 import java.util.UUID;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
+import feup.cm.traintickets.util.QREncryption;
+import se.simbio.encryption.Encryption;
 
 public class SingleTicketActivity extends BaseActivity {
 
@@ -46,7 +52,6 @@ public class SingleTicketActivity extends BaseActivity {
         ticketProgressView = findViewById(R.id.ticket_progress);
         qrCodeImageView = (ImageView)findViewById(R.id.imageView2);
 
-
         /*
          * For test purposes
          * Need to add an Intent here!
@@ -58,7 +63,18 @@ public class SingleTicketActivity extends BaseActivity {
                 ticket.getTicketDate().toString() + "\n" +
                 ticket.getArrivalStation().getId();
 
-        generateQR(textToEncode);
+        String crypt = null;
+
+        try {
+            Encryption enc = QREncryption.getInstance();
+            crypt = enc.encryptOrNull(textToEncode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (crypt != null)
+            generateQR(crypt);
+        else
+            Toast.makeText(this, "Error generating QR Code", Toast.LENGTH_SHORT).show();
     }
 
     private void generateQR(final String textToEncode) {

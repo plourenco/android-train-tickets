@@ -49,7 +49,6 @@
     <string name="listachegada">Chegada:</string>
     <string name="listaduracao">Duração:</string>
     <string name="listacomboio">Comboio:</string>
-<<<<<<< HEAD
     <string name="train_list_departure_tv">Departure Time</string>
     <string name="train_list_arrival_tv">Arrival Time</string>
     <string name="train_list_duration_tv">Duration</string>
@@ -60,8 +59,6 @@
     <string name="train_list_departure_txt">8:00</string>
     <string name="train_list_arrival_txt">10:00</string>
     <string name="train_list_duration_txt">120 mn</string>
-=======
     <string name="title_activity_ticket_list">TicketListActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
->>>>>>> a541719472a75baf91512d24db66a4bdea63b4f0
 </resources>

@@ -10,7 +10,9 @@ import android.widget.Button;
 import com.google.zxing.Result;
 
 import feup.cm.traintickets.R;
+import feup.cm.traintickets.util.QREncryption;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import se.simbio.encryption.Encryption;
 
 public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
@@ -46,7 +48,21 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
         Log.w("QRReader", result.getText());
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Scan Result");
-        alert.setMessage(result.getText());
+
+        String decrypted = null;
+
+        try {
+            Encryption encryption = QREncryption.getInstance();
+            decrypted = encryption.decryptOrNull(result.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (decrypted != null)
+            alert.setMessage(decrypted);
+        else
+            alert.setMessage("Error reading QRCode");
+
         AlertDialog dialog = alert.create();
         dialog.show();
 

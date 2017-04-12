@@ -52,7 +52,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="feup.cm.traintickets.MainActivity" />
         </activity>
-        <activity android:name=".activities.QRCodeReaderActivity">
+        <activity
+            android:name=".activities.QRCodeReaderActivity"
+            android:exported="true">
         </activity>
         <activity
             android:name=".activities.TicketListActivity"
