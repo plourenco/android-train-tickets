@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import feup.cm.traintickets.controllers.SeatController;
-import feup.cm.traintickets.datamanagers.SeatDataManager;
 import feup.cm.traintickets.models.SeatModel;
 
 /**

@@ -3,6 +3,7 @@ package feup.cm.traintickets.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 
 import javax.crypto.SecretKey;
@@ -28,6 +31,7 @@ import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
+import feup.cm.traintickets.runnables.TicketGetTask;
 import feup.cm.traintickets.util.QREncryption;
 import se.simbio.encryption.Encryption;
 
@@ -52,11 +56,18 @@ public class SingleTicketActivity extends BaseActivity {
         ticketProgressView = findViewById(R.id.ticket_progress);
         qrCodeImageView = (ImageView)findViewById(R.id.imageView2);
 
+        /**
+         * This is yet to be implemented.
+         * The code is only here for agility purposes!
+         */
+        //Intent ticketIntent = getIntent();
+        //TicketModel ticket1 = (TicketModel) ticketIntent.getSerializableExtra("TICKET");
+
         /*
          * For test purposes
          * Need to add an Intent here!
          */
-        ticket = new TicketModel(1, UUID.randomUUID(), null, new StationModel(1), Date.valueOf("2017-06-12"),
+        ticket = new TicketModel(1, UUID.randomUUID(), null, new StationModel(1), Date.valueOf("2017-01-12"),
                 1, Date.valueOf("2017-06-12"), null, false);
 
         String textToEncode = ticket.getUniqueId() + "\n" +
@@ -65,16 +76,20 @@ public class SingleTicketActivity extends BaseActivity {
 
         String crypt = null;
 
-        try {
-            Encryption enc = QREncryption.getInstance();
-            crypt = enc.encryptOrNull(textToEncode);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (ticket.getTicketDate().after(Calendar.getInstance().getTime())) {
+            try {
+                Encryption enc = QREncryption.getInstance();
+                crypt = enc.encryptOrNull(textToEncode);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (crypt != null)
+                generateQR(crypt);
+            else
+                Toast.makeText(this, "Error generating QR Code", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Ticket has expired QR Code generation", Toast.LENGTH_LONG).show();
         }
-        if (crypt != null)
-            generateQR(crypt);
-        else
-            Toast.makeText(this, "Error generating QR Code", Toast.LENGTH_SHORT).show();
     }
 
     private void generateQR(final String textToEncode) {

@@ -1,10 +1,11 @@
 package feup.cm.traintickets.models;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
 import java.util.UUID;
 
-public class TicketModel {
+public class TicketModel implements Serializable {
 
     private int id;
     private UUID uniqueId;

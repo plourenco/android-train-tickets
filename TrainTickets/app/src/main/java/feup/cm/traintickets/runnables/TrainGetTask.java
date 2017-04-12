@@ -9,11 +9,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import feup.cm.traintickets.controllers.StationController;
 import feup.cm.traintickets.controllers.TrainController;
 import feup.cm.traintickets.models.SeatModel;
-import feup.cm.traintickets.models.StationModel;
-import feup.cm.traintickets.models.StepModel;
 import feup.cm.traintickets.models.TrainModel;
 
 /**
