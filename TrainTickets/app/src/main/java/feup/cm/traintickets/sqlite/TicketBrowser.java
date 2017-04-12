@@ -18,10 +18,6 @@ import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.models.TripModel;
 
-/**
- * Created by mercurius on 06/04/17.
- */
-
 public class TicketBrowser implements IOperation<TicketModel> {
 
     SQLiteDatabase sqLiteReadableDatabase;
@@ -34,7 +30,7 @@ public class TicketBrowser implements IOperation<TicketModel> {
     }
 
     @Override
-    public TicketModel get(int id) {
+    public TicketModel get(String id) {
         cursor = sqLiteReadableDatabase.rawQuery("Select * from tickets where id = ?", new String[]{""+id});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -66,7 +62,7 @@ public class TicketBrowser implements IOperation<TicketModel> {
         if (cursor.getCount() > 0) {
             List<TicketModel> tickets = new ArrayList<>();
             while (cursor.moveToNext()) {
-                tickets.add(get(cursor.getInt(0)));
+                tickets.add(get(""+cursor.getInt(0)));
             }
             return tickets;
         } else {
@@ -85,7 +81,7 @@ public class TicketBrowser implements IOperation<TicketModel> {
             values.put("price", ticketModel.getPrice());
             values.put("ticketDate", ticketModel.getTicketDate().toString());
             values.put("purchaseDate", ticketModel.getPurchaseDate().toString());
-            values.put("isUsed", ticketModel.isUsed() ? 1 : 0);
+            values.put("isUsed", ticketModel.getIsUsed() ? 1 : 0);
             values.put("departureStation", ticketModel.getDepartureStation().getId());
             values.put("arrivalStation", ticketModel.getArrivalStation().getId());
             values.put("trip", ticketModel.getTrip().getId());

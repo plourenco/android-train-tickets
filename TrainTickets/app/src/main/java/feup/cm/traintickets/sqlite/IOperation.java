@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 public interface IOperation<T> {
-    T get(int id);
+    T get(String id);
     List<T> getAll();
     void create(T t);
     int delete(int id);

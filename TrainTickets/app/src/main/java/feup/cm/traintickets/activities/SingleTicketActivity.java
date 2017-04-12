@@ -22,6 +22,7 @@ import com.google.zxing.common.BitMatrix;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import javax.crypto.SecretKey;
@@ -31,7 +32,10 @@ import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
+import feup.cm.traintickets.models.TripModel;
 import feup.cm.traintickets.runnables.TicketGetTask;
+import feup.cm.traintickets.sqlite.SQLiteManager;
+import feup.cm.traintickets.sqlite.TicketBrowser;
 import feup.cm.traintickets.util.QREncryption;
 import se.simbio.encryption.Encryption;
 
@@ -63,16 +67,23 @@ public class SingleTicketActivity extends BaseActivity {
         //Intent ticketIntent = getIntent();
         //TicketModel ticket1 = (TicketModel) ticketIntent.getSerializableExtra("TICKET");
 
+        TicketBrowser tb = new TicketBrowser(this);
+        tb.getAll();
+
         /*
          * For test purposes
          * Need to add an Intent here!
          */
-        ticket = new TicketModel(1, UUID.randomUUID(), null, new StationModel(1), Date.valueOf("2017-01-12"),
-                1, Date.valueOf("2017-06-12"), null, false);
+        ticket = new TicketModel(-1, UUID.fromString("2ad4b8eb-f39b-45d7-817d-9ca67c67133d"), new StationModel(3),
+                new StationModel(4), Date.valueOf("2017-12-10"), 1, Date.valueOf("2017-06-12"),
+                new TripModel(1), false);
 
-        String textToEncode = ticket.getUniqueId() + "\n" +
-                ticket.getTicketDate().toString() + "\n" +
-                ticket.getArrivalStation().getId();
+        String textToEncode = ticket.getUniqueId() + ";#" +
+                              ticket.getTicketDate().toString() + ";#" +
+                              ticket.getArrivalStation().getId() + ";#" +
+                              ticket.getDepartureStation().getId() + ";#" +
+                              ticket.getIsUsed() + ";#" +
+                              ticket.getTrip().getId();
 
         String crypt = null;
 

@@ -60,6 +60,17 @@ public class TicketModel implements Serializable {
         this.isUsed = isUsed;
     }
 
+    public TicketModel(int id, UUID uniqueId, StationModel depStation, StationModel arrStation,
+                       Date ticketDate, boolean isUsed, TripModel trip) {
+        this.id = id;
+        this.uniqueId = uniqueId;
+        this.departureStation = depStation;
+        this.arrivalStation = arrStation;
+        this.ticketDate = ticketDate;
+        this.isUsed = isUsed;
+        this.trip = trip;
+    }
+
     /**
      * Getters
      */
@@ -87,7 +98,7 @@ public class TicketModel implements Serializable {
     public TripModel getTrip() {
         return trip;
     }
-    public boolean isUsed() {
+    public boolean getIsUsed() {
         return isUsed;
     }
     public Time getDepartureTime() {

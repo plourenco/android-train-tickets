@@ -8,17 +8,12 @@ import android.util.Log;
 import java.io.InputStream;
 import java.util.Scanner;
 
-/**
- * Created by mercurius on 06/04/17.
- */
-
 public class SQLiteManager extends SQLiteOpenHelper {
-
     /**
      * Properties
      */
     public final static String DATABASE_NAME = "traintickets";
-    public final static int DATABASE_VERSION = 6;
+    public final static int DATABASE_VERSION = 10;
 
     InputStream sql;
 
@@ -47,7 +42,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
             Scanner scanner = new Scanner(sql);
             while (scanner.hasNext()) {
                 String sql = scanner.nextLine().trim();
-                sqLiteDatabase.execSQL(sql);
+                if (!sql.isEmpty())
+                    sqLiteDatabase.execSQL(sql);
             }
         } catch (Exception e) {
             Log.d("SQLite", e.getMessage());
