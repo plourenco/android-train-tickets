@@ -80,4 +80,11 @@ public class TicketReviserBrowser implements IOperation<TicketModel> {
     public int delete(int id) {
         return sqLiteWritableDatabase.delete("ticketsReviser", "id = ?", new String[]{""+id});
     }
+
+    public void setTicketUsed(String uuid) {
+        ContentValues cv = new ContentValues();
+        cv.put("isUsed", 1);
+
+        sqLiteWritableDatabase.update("ticketsReviser", cv, "uniqueId=?", new String[]{uuid});
+    }
 }

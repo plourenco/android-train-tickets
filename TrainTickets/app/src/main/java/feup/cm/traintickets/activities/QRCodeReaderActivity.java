@@ -59,6 +59,7 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
 
         String decrypted = null;
         boolean match = false;
+        boolean alreadyScanned = false;
 
         try {
             Encryption encryption = QREncryption.getInstance();
@@ -77,8 +78,14 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
                 depStation = new StationModel(Integer.parseInt(params[3]));
                 isUsed = Boolean.valueOf(params[4]);
                 trip = new TripModel(Integer.parseInt(params[5]));
-                if(getTicketToRevise(uuid, ticketDate, arrStation, depStation, isUsed, trip))
-                    match = true;
+                try {
+                    if(getTicketToRevise(uuid, ticketDate, arrStation, depStation, isUsed, trip)) {
+                        match = true;
+                        setTicketUsed(uuid);
+                    }
+                } catch (RuntimeException re) {
+                    alreadyScanned = true;
+                }
             }
 
         } catch (Exception e) {
@@ -86,10 +93,13 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
         }
 
         if (decrypted != null) {
-          if (match) {
-              alert.setMessage("Valid ticket");
-          } else
-              alert.setMessage("Invalid ticket");
+            if (alreadyScanned)
+                alert.setMessage("Already scanned the ticket");
+            else
+                if (match)
+                    alert.setMessage("Valid ticket");
+                else
+                    alert.setMessage("Invalid ticket");
         } else
             alert.setMessage("Error reading QRCode");
 
@@ -103,14 +113,22 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
         });
     }
 
+    private void setTicketUsed(UUID uuid) {
+        TicketReviserBrowser ticketReviserBrowser = new TicketReviserBrowser(this);
+        ticketReviserBrowser.setTicketUsed(uuid.toString());
+    }
+
     private void resumeCamera(){
         scannerView.resumeCameraPreview(this);
     }
 
     private boolean getTicketToRevise(UUID uuid, Date ticketDate, StationModel arrStation,
-                                      StationModel depStation, boolean isUsed, TripModel trip) {
+                                      StationModel depStation, boolean isUsed, TripModel trip) throws RuntimeException {
         TicketReviserBrowser ticketReviserBrowser = new TicketReviserBrowser(this);
         TicketModel tm = ticketReviserBrowser.get(uuid.toString());
+
+        if (tm.getIsUsed())
+            throw new RuntimeException("Already scanned the ticket");
 
         return tm.getTicketDate().equals(ticketDate)
                 && tm.getArrivalStation().getId() == arrStation.getId()
