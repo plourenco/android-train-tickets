@@ -285,3 +285,49 @@ create procedure setStateToUsed(IN ticketUUID text)
     SET SQL_SAFE_UPDATES=1;
   END //
 DELIMITER ;
+
+# Get all timetables
+DELIMITER //
+create procedure getTimeTable()
+  begin
+  select
+    trains.id as idTrain,
+    trains.description as traindescription,
+    trips.description as tripdescription,
+    trips.direction as direction,
+    trips.id as tripId,
+    trips.increment as increment,
+    stc.idStepDep as idStep,
+    stc.idStationDep as idStationDep,
+    stc.idStationArr as idStationArr,
+    stc.stationNameDe as stationNameDep,
+    stc.stationNameArr as stationNameArr,
+    stc.departureTime as departureTime,
+    stc.arrivalTime as arrivalTime,
+    stc.duration as duration,
+    stc.waitingTime as waitingTime
+  from(select * from(select steps.id as idStepDep,
+	  steps.departureStationId as idStepStationDep,
+    steps.fkTrip fkTripDep,
+    steps.duration,
+    steps.waitingTime,
+    steps.departureTime,steps.arrivalTime,
+    stations.id as idStationDep,
+    stations.stationName as stationNameDe,
+    stations.stationNumber as stationNumberDep
+    from steps join stations on
+	  steps.departureStationId=stations.id) as sta
+  join(
+  select steps.id as idStepArr,
+	steps.arrivalStationId as isStepStationArr,
+    steps.fkTrip as fkTripArr,
+    stations.id as idStationArr,
+    stations.stationName as stationNameArr,
+    stations.stationNumber as stationNumberArr
+    from steps join stations on
+	steps.arrivalStationId=stations.id) as stb
+    on sta.idStepDep=stb.IdStepArr order by idStepDep) as stc
+    join trips on stc.fkTripDep=trips.id join trains on trips.skTrain=trains.id
+    order by idTrain,tripId,idStep;
+    end //
+DELIMITER ;

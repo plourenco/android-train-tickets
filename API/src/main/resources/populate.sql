@@ -127,6 +127,18 @@ insert into `steps` values(null,2,1,4,55,5.5,5,5,41,'10:19:00','11:00:00');
 
 insert into `steps` values(null,5,4,1,40,4.0,5,6,30,'12:00:00','12:30:00');
 insert into `steps` values(null,4,3,2,45,4.5,5,6,34,'12:35:00','13:09:00');
+insert into `steps` values(null,3,2,3,80,8.0,5,6,60,'13:14:00','14:14:00');
+insert into `steps` values(null,2,1,4,55,5.5,5,6,41,'14:19:00','15:00:00');
+
+insert into `steps` values(null,5,4,1,40,4.0,5,7,30,'16:00:00','16:30:00');
+insert into `steps` values(null,4,3,2,45,4.5,5,7,34,'16:35:00','17:09:00');
+insert into `steps` values(null,3,2,3,80,8.0,5,7,60,'17:14:00','18:14:00');
+insert into `steps` values(null,2,1,4,55,5.5,5,7,41,'18:19:00','19:00:00');
+
+insert into `steps` values(null,5,4,1,40,4.0,5,8,30,'20:00:00','20:30:00');
+insert into `steps` values(null,4,3,2,45,4.5,5,8,34,'20:35:00','21:09:00');
+insert into `steps` values(null,3,2,3,80,8.0,5,8,60,'21:14:00','22:14:00');
+insert into `steps` values(null,2,1,4,55,5.5,5,8,41,'22:19:00','23:00:00');
 
 insert into tickets values(null,'QR01',1,5,'2016-03-25',10.5,'2016-03-23',1,4,false);
 insert into tickets values(null,'QR02',1,4,'2016-03-25',9.5,'2016-03-23',1,4,false);
