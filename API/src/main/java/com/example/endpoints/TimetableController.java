@@ -4,6 +4,7 @@ package com.example.endpoints;
  * Created by mercurius on 15/03/17.
  */
 
+import com.example.models.TimetableCompleteModel;
 import com.example.models.TimetableModel;
 import com.example.dao.TimetableManager;
 
@@ -24,9 +25,10 @@ public class TimetableController {
     private final TimetableManager timetableManager = new TimetableManager();
 
     @GET
+    @Path("full")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getTimetableByTrain(){
-        return "Timetables here!";
+    public List<TimetableCompleteModel> getTimetables(){
+        return timetableManager.getFullTimetable();
     }
 
     /**

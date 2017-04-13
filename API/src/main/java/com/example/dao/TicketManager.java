@@ -240,7 +240,7 @@ public class TicketManager {
         try {
             int rows = 0;
             for (TicketModel t : tickets) {
-                ps = MySQLManager.getConnection().prepareStatement("UPDATE tickets SET isUsed = '1' WHERE uniqueId = ?");
+                ps = MySQLManager.getConnection().prepareStatement("Call setStateToUsed(?)");
                 ps.setString(1, t.getUniqueId().toString());
 
                rows = ps.executeUpdate();
@@ -252,7 +252,7 @@ public class TicketManager {
         }
     }
 
-    public List<TicketModel> downloadTickets(String direction, String trip, int stationId) {
+    public List<TicketModel> downloadTickets(String direction, String trip, Date date) {
        /* try {
 
         } catch (SQLException sql) {
@@ -260,5 +260,41 @@ public class TicketManager {
             throw new SQLExceptionMapper(sql.getMessage());
         }*/
         return null;
+    }
+
+    public List<TicketModel> getAllUserTicket(int userId) {
+        List<TicketModel> tickets = new ArrayList<>();
+        try {
+            ps = MySQLManager.getConnection().prepareStatement("SELECT * FROM tickets WHERE fkUser=?");
+            ps.setInt(1, userId);
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String uuid = rs.getString("uniqueId");
+                int departureStationId = rs.getInt("departureStationId");
+                int arrivalStationId = rs.getInt("arrivalStationId");
+                Date ticketDate = rs.getDate("ticketDate");
+                float price = rs.getFloat("price");
+                Date purchaseDate = rs.getDate("purchaseDate");
+                int tripId = rs.getInt("fkTrip");
+                boolean isUsed = rs.getBoolean("isUsed");
+
+                StationModel depStation = StationHolder.getStations().values().stream()
+                        .filter(s -> s.getId() == departureStationId).findFirst().get();
+                StationModel arrStation = StationHolder.getStations().values().stream()
+                        .filter(s -> s.getId() == arrivalStationId).findFirst().get();
+
+                TripModel trip = TripHolder.getTrips().get(tripId);
+
+                tickets.add(new TicketModel(id, UUID.fromString(uuid), depStation, arrStation, ticketDate, price,
+                        purchaseDate, trip, isUsed, 0, null, null));
+            }
+
+            return tickets;
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+            throw new SQLExceptionMapper(sql.getMessage());
+        }
     }
 }

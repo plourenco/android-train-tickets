@@ -26,20 +26,19 @@ public class TicketController {
     private final TicketManager ticketManager = new TicketManager();
 
     @GET
-    @Path("download/{direction}/{trip}/{station}")
+    @Path("user-tickets/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<TicketModel> getAllUserTickets(@QueryParam("id")int id) {
+        return ticketManager.getAllUserTicket(id);
+    }
+
+    @GET
+    @Path("download/{direction}/{trip}/{date}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<TicketModel> downloadTickets(@QueryParam("direction")String direction,
                                              @QueryParam("trip")String trip,
-                                             @QueryParam("station")String station) {
-        StationModel stationModel = StationHolder.getStations().values()
-                .stream().filter(p -> p.getStationName().equals(station)).findFirst().get();
-
-        if (stationModel == null) {
-            Main.getLogger().severe("Station Model is null in download tickets");
-            return null;
-        }
-
-        return ticketManager.downloadTickets(direction, trip, stationModel.getId());
+                                             @QueryParam("date")Date date) {
+        return ticketManager.downloadTickets(direction, trip, date);
     }
 
     @POST

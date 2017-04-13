@@ -42,7 +42,7 @@ public class UserController {
                     return new TokenModel(
                             TokenHelper.getJWTString(user.getEmail(), user.getRoleUser(), calendar.getTime()),
                             TokenHelper.getJWTRefresh(user.getEmail(), user.getRoleUser()),
-                                    calendar.getTime());
+                                    calendar.getTime(), user.getId());
                 }
             }
             catch(NoSuchAlgorithmException ignored) { }

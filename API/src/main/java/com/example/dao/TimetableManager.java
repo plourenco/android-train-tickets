@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.Main;
 import com.example.exceptions.SQLExceptionMapper;
+import com.example.models.TimetableCompleteModel;
 import com.example.models.TimetableModel;
 import com.example.mysql.MySQLManager;
 
@@ -46,6 +47,39 @@ public class TimetableManager {
                         arrStationId, depTime, arrTime));
             }
             return schedule;
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+            throw new SQLExceptionMapper(sql.getMessage());
+        }
+    }
+
+    public List<TimetableCompleteModel> getFullTimetable() {
+        try {
+            List<TimetableCompleteModel> completeSchedule = new ArrayList<>();
+            ps = MySQLManager.getConnection().prepareStatement("Call getTimeTable()");
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int idTrain = rs.getInt("idTrain");
+                String trainDesc = rs.getString("traindescription");
+                String tripDesc = rs.getString("tripdescription");
+                String direction = rs.getString("direction");
+                int tripId = rs.getInt("tripId");
+                String increment = rs.getString("increment");
+                int idStep = rs.getInt("idStep");
+                int idStationDep = rs.getInt("idStationDep");
+                int idStationArr = rs.getInt("idStationArr");
+                String stationNameDep = rs.getString("stationNameDep");
+                String stationNameArr = rs.getString("stationNameArr");
+                Time departureTime = rs.getTime("departureTime");
+                Time arrivalTime = rs.getTime("arrivalTime");
+                int duration = rs.getInt("duration");
+                int waitingTime = rs.getInt("waitingTime");
+                completeSchedule.add(new TimetableCompleteModel(idTrain, trainDesc, tripDesc, direction, tripId,
+                        increment, idStep, idStationDep, idStationArr, stationNameDep, stationNameArr, departureTime,
+                        arrivalTime, duration, waitingTime));
+            }
+            return completeSchedule;
         } catch (SQLException sql) { // Needs to rethrow
             Main.getLogger().severe(sql.getMessage());
             throw new SQLExceptionMapper(sql.getMessage());
