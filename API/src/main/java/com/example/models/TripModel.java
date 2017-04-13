@@ -15,6 +15,7 @@ public class TripModel {
     private List<StepModel> steps;
     private TrainModel train;
 
+
     public int getId() {
         return id;
     }
@@ -42,8 +43,9 @@ public class TripModel {
         this.train = train;
     }
 
-    public TripModel() {
-
+    public TripModel() {}
+    public TripModel(int idTrip) {
+        this.id = idTrip;
     }
     public TripModel(int id, String description, String direction, String increment, TrainModel train,
                      List<StepModel> steps) {

@@ -15,6 +15,10 @@ public class StationModel {
     private int stationNumber;
     private String stationName;
 
+    public StationModel(int depStationId) {
+        this.id = depStationId;
+    }
+
     public int getId() {
         return id;
     }

@@ -341,6 +341,7 @@ create procedure getTicketsRevisor(IN direction TEXT,IN Trip TEXT,IN dateTrip DA
    tickets.departureStationId,
    tickets.arrivalStationId,
    tickets.ticketDate,
+   tickets.isUsed,
    tickets.price,
    tickets.purchaseDate,
    tickets.fkTrip as idTrip,
@@ -352,6 +353,7 @@ create procedure getTicketsRevisor(IN direction TEXT,IN Trip TEXT,IN dateTrip DA
    join trips on tickets.fkTrip=trips.id
 	where trips.direction=direction
     and trips.description=Trip
+    and tickets.isUsed=0
     and tickets.ticketDate=dateTrip;
   END //
 DELIMITER ;

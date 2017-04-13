@@ -28,17 +28,19 @@ public class TicketController {
     @GET
     @Path("user-tickets/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<TicketModel> getAllUserTickets(@QueryParam("id")int id) {
+    public List<TicketModel> getAllUserTickets(@PathParam("id")int id) {
         return ticketManager.getAllUserTicket(id);
     }
 
     @GET
     @Path("download/{direction}/{trip}/{date}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<TicketModel> downloadTickets(@QueryParam("direction")String direction,
-                                             @QueryParam("trip")String trip,
-                                             @QueryParam("date")Date date) {
-        return ticketManager.downloadTickets(direction, trip, date);
+    public List<TicketModel> downloadTickets(@PathParam("direction")String direction,
+                                             @PathParam("trip") String trip,
+                                             @PathParam("date")String date) {
+
+        Date date2 = Date.valueOf(date);
+        return ticketManager.downloadTickets(direction, trip, date2);
     }
 
     @POST

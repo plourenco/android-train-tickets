@@ -253,13 +253,31 @@ public class TicketManager {
     }
 
     public List<TicketModel> downloadTickets(String direction, String trip, Date date) {
-       /* try {
+       try {
+           List<TicketModel> tickets = new ArrayList<>();
+           ps = MySQLManager.getConnection().prepareStatement("Call getTicketsRevisor(?,?,?)");
+           ps.setString(1, direction);
+           ps.setString(2, trip);
+           ps.setDate(3, date);
 
+           rs = ps.executeQuery();
+           while (rs.next()) {
+               int id = rs.getInt("idTicket");
+               UUID uniqueId = UUID.fromString(rs.getString("uniqueId"));
+               int depStationId = rs.getInt("departureStationId");
+               int arrStationId = rs.getInt("arrivalStationId");
+               Date ticketDate = rs.getDate("ticketDate");
+               int idTrip = rs.getInt("idTrip");
+               boolean isUsed = rs.getBoolean("isUsed");
+
+               tickets.add(new TicketModel(id, uniqueId, new StationModel(depStationId), new StationModel(arrStationId),
+                       ticketDate, new TripModel(idTrip), isUsed));
+           }
+           return tickets;
         } catch (SQLException sql) {
             Main.getLogger().severe(sql.getMessage());
             throw new SQLExceptionMapper(sql.getMessage());
-        }*/
-        return null;
+        }
     }
 
     public List<TicketModel> getAllUserTicket(int userId) {

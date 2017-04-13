@@ -40,6 +40,7 @@ public class TicketModel {
     public StationModel getDepartureStation() {
         return departureStation;
     }
+
     public StationModel getArrivalStation() {
         return arrivalStation;
     }
@@ -58,7 +59,6 @@ public class TicketModel {
     public TripModel getTrip() {
         return trip;
     }
-
     @JsonProperty(value = "isUsed")
     public boolean isUsed() {
         return isUsed;
@@ -67,6 +67,7 @@ public class TicketModel {
     public int getDuration() {
         return duration;
     }
+
     public Time getDepartureTime() {
         return departureTime;
     }
@@ -79,13 +80,23 @@ public class TicketModel {
     public int getId() {
         return id;
     }
-
     public void setUniqueId(UUID uniqueId) {
         this.uniqueId = uniqueId;
     }
 
     public TicketModel() {
 
+    }
+
+    public TicketModel(int id, UUID uniqueId, StationModel departureStation, StationModel arrivalStation,
+                       Date ticketDate, TripModel trip, boolean isUsed) {
+        this.id = id;
+        this.uniqueId = uniqueId;
+        this.departureStation = departureStation;
+        this.arrivalStation = arrivalStation;
+        this.ticketDate = ticketDate;
+        this.trip = trip;
+        this.isUsed = isUsed;
     }
     public TicketModel(int id, UUID uuid, java.sql.Date ticketDate, StationModel departureStation, StationModel arrivalStation) {
         this.id = id;
