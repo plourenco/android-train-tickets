@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 import feup.cm.traintickets.R;
+import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.models.TrainTripModel;
 
 public class TrainListAdapter extends ArrayAdapter<TrainTripModel>  {
@@ -30,8 +31,8 @@ public class TrainListAdapter extends ArrayAdapter<TrainTripModel>  {
         TextView txtDuration;
     }
 
-    public TrainListAdapter(ArrayList<TrainTripModel> data,Context context){
-        super(context,R.layout.content_train_list,data);
+    public TrainListAdapter(ArrayList<TrainTripModel> data, Context context){
+        super(context,R.layout.row_item,data);
         this.dataSet=data;
         this.mContext=context;
     }
@@ -41,7 +42,7 @@ public class TrainListAdapter extends ArrayAdapter<TrainTripModel>  {
     }
 
     @Override
-    public View getView(int position,View convertView,ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
 
         TrainTripModel dataModel = getItem(position);
         ViewHolder viewHolder;
@@ -51,7 +52,7 @@ public class TrainListAdapter extends ArrayAdapter<TrainTripModel>  {
         if(convertView==null){
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.content_train_list,parent,false);
+            convertView = inflater.inflate(R.layout.row_item,parent,false);
             viewHolder.txtTitle=(TextView)convertView.findViewById(R.id.train_ticket_title_txt);
             viewHolder.txtId=(TextView)convertView.findViewById(R.id.train_ticket_id_txt);
             viewHolder.txtDeparture=(TextView)convertView.findViewById(R.id.train_list_departure_txt);

@@ -24,12 +24,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.adapters.TicketListAdapter;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
 
-public class TicketListActivity extends AppCompatActivity {
+public class TicketListActivity extends BaseActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -64,16 +65,6 @@ public class TicketListActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
 
 

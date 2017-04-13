@@ -42,6 +42,7 @@ import java.util.UUID;
 
 import feup.cm.traintickets.MainActivity;
 import feup.cm.traintickets.R;
+import feup.cm.traintickets.adapters.TicketListAdapter;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.models.TripModel;
@@ -119,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
 
         if(!token.isEmpty() && expires.after(new Date())) {
-            Intent intent = new Intent(getApplicationContext(), SingleTicketActivity.class);
+            Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
