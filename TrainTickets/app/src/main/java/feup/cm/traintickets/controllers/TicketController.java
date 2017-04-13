@@ -3,6 +3,7 @@ package feup.cm.traintickets.controllers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.sql.Date;
 import java.text.DateFormat;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class TicketController {
         return ServiceHandler.makePost("tickets/sync", gson.toJson(tickets), token);
     }
 
-    public String downloadTickets(String direction, String trip, String station, String token) {
-        return ServiceHandler.makeGet("tickets/download/" + direction + "/" + trip + "/" + station, token);
+    public String downloadTickets(String direction, String trip, Date date, String token) {
+        return ServiceHandler.makeGet("tickets/download/" + direction + "/" + trip + "/" + date.toString(), token);
     }
 }

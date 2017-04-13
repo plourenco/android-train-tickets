@@ -11,18 +11,15 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
-import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 
 public class ReviserActivity extends AppCompatActivity {
 
-    Spinner station;
     Spinner direction;
     Spinner trip;
 
     Button dlTicket;
 
-    String stationToSend;
     String directionToSend;
     String tripToSend;
 
@@ -31,7 +28,6 @@ public class ReviserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviser);
 
-        station = (Spinner)findViewById(R.id.spStation);
         direction = (Spinner)findViewById(R.id.spDirection);
         trip = (Spinner)findViewById(R.id.spTrip);
         dlTicket = (Button)findViewById(R.id.dlTickets);
@@ -46,14 +42,11 @@ public class ReviserActivity extends AppCompatActivity {
         /**
          * Hardcoded values
          * TODO populate with data managers
+         * TODO DATE
          */
-        final List<String> stations = new ArrayList<>();
-        stations.add("Porto");
-        stations.add("Pocinha");
-
         List<String> directions = new ArrayList<>();
-        directions.add("Positive");
-        directions.add("Negative");
+        directions.add("Porto");
+        directions.add("Pocinha");
 
         List<String> trips = new ArrayList<>();
         trips.add("Morning");
@@ -61,23 +54,8 @@ public class ReviserActivity extends AppCompatActivity {
         trips.add("Afternoon");
         trips.add("Night");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(ReviserActivity.this, R.layout.spinner_view, stations);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        station.setAdapter(dataAdapter);
-        station.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                stationToSend = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                stationToSend = parent.getSelectedItem().toString();
-            }
-        });
-
         ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(ReviserActivity.this, R.layout.spinner_view, directions);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         direction.setAdapter(dataAdapter1);
         direction.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -92,7 +70,7 @@ public class ReviserActivity extends AppCompatActivity {
         });
 
         ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<>(ReviserActivity.this, R.layout.spinner_view, trips);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         trip.setAdapter(dataAdapter2);
         trip.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
