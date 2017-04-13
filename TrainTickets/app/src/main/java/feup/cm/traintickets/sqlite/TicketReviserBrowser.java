@@ -8,12 +8,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import feup.cm.traintickets.controllers.TicketController;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.models.TripModel;
+import feup.cm.traintickets.runnables.SyncPostTask;
 
 public class TicketReviserBrowser implements IOperation<TicketModel> {
 
@@ -48,7 +51,15 @@ public class TicketReviserBrowser implements IOperation<TicketModel> {
 
     @Override
     public List<TicketModel> getAll() {
-        return null;
+        cursor = sqLiteReadableDatabase.rawQuery("Select * from ticketsReviser", null);
+        if (cursor.getCount() > 0) {
+            List<TicketModel> tickets = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                tickets.add(get(cursor.getString(1)));
+            }
+            return tickets;
+        } else
+            return null;
     }
 
     /**
@@ -79,5 +90,38 @@ public class TicketReviserBrowser implements IOperation<TicketModel> {
     @Override
     public int delete(int id) {
         return sqLiteWritableDatabase.delete("ticketsReviser", "id = ?", new String[]{""+id});
+    }
+
+    public void setTicketUsed(String uuid) {
+        ContentValues cv = new ContentValues();
+        cv.put("isUsed", 1);
+
+        sqLiteWritableDatabase.update("ticketsReviser", cv, "uniqueId=?", new String[]{uuid});
+    }
+
+    public void deleteAll() {
+        sqLiteWritableDatabase.delete("ticketsReviser", null, null);
+    }
+    /**
+     * Synchronize tickets with server db
+     * @param tickets
+     * @param token
+     */
+    public void synchronize(List<TicketModel> tickets, String token) {
+        SyncPostTask syncPostTask = new SyncPostTask(token, tickets) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                // TODO Delete from SQLite
+                if (success) {
+                    deleteAll();
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        syncPostTask.execute((Void) null);
     }
 }

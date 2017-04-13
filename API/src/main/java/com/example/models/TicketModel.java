@@ -4,6 +4,11 @@ package com.example.models;
  * Created by mercurius on 15/03/17.
  */
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Date;
 import java.sql.Time;
@@ -13,6 +18,7 @@ import java.util.UUID;
  * This class serves the purpose of being the model of a train ticket.
  */
 @XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class TicketModel {
     private int id;
     private UUID uniqueId;
@@ -22,24 +28,18 @@ public class TicketModel {
     private float price;
     private Date ticketDate;
     private Date purchaseDate;
+
+    @JsonIgnore
     private boolean isUsed;
+
     private StationModel departureStation;
     private StationModel arrivalStation;
     private TripModel trip;
     private SeatModel seat;
 
-    /**
-     * Eventually we will need something here to generate/hold the QR Code
-     */
-    public int getId() {
-        return id;
-    }
-
     public StationModel getDepartureStation() {
         return departureStation;
     }
-
-
     public StationModel getArrivalStation() {
         return arrivalStation;
     }
@@ -58,9 +58,12 @@ public class TicketModel {
     public TripModel getTrip() {
         return trip;
     }
+
+    @JsonProperty(value = "isUsed")
     public boolean isUsed() {
         return isUsed;
     }
+
     public int getDuration() {
         return duration;
     }
@@ -72,6 +75,9 @@ public class TicketModel {
     }
     public SeatModel getSeat() {
         return seat;
+    }
+    public int getId() {
+        return id;
     }
 
     public void setUniqueId(UUID uniqueId) {

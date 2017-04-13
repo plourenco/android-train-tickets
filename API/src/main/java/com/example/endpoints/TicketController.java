@@ -1,13 +1,16 @@
 package com.example.endpoints;
 
 import com.example.Main;
+import com.example.dataholder.StationHolder;
 import com.example.exceptions.ParseExceptionMapper;
 import com.example.models.AvailableTicketModel;
+import com.example.models.StationModel;
 import com.example.models.TicketModel;
 import com.example.dao.TicketManager;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -21,6 +24,35 @@ import java.util.List;
 public class TicketController {
 
     private final TicketManager ticketManager = new TicketManager();
+
+    @GET
+    @Path("download/{direction}/{trip}/{station}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<TicketModel> downloadTickets(@QueryParam("direction")String direction,
+                                             @QueryParam("trip")String trip,
+                                             @QueryParam("station")String station) {
+        StationModel stationModel = StationHolder.getStations().values()
+                .stream().filter(p -> p.getStationName().equals(station)).findFirst().get();
+
+        if (stationModel == null) {
+            Main.getLogger().severe("Station Model is null in download tickets");
+            return null;
+        }
+
+        return ticketManager.downloadTickets(direction, trip, stationModel.getId());
+    }
+
+    @POST
+    @Path("sync")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String updateUsedTicket(List<TicketModel> tickets) {
+        int rows = ticketManager.syncTickets(tickets);
+        if (rows > 0){
+            return rows + " rows updated";
+        } else {
+            return "!update";
+        }
+    }
 
     /**
      * Gets the available tickets for a given date, departure station, arrival station and trip.
