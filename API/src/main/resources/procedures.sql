@@ -331,3 +331,27 @@ create procedure getTimeTable()
     order by idTrain,tripId,idStep;
     end //
 DELIMITER ;
+
+DELIMITER //
+create procedure getTicketsRevisor(IN direction TEXT,IN Trip TEXT,IN dateTrip DATE)
+  begin
+   select
+   tickets.id as idTicket,
+   tickets.uniqueId,
+   tickets.departureStationId,
+   tickets.arrivalStationId,
+   tickets.ticketDate,
+   tickets.price,
+   tickets.purchaseDate,
+   tickets.fkTrip as idTrip,
+   trips.description,
+   trips.direction,
+   trips.increment,
+   trips.skTrain as idTrain
+   from tickets
+   join trips on tickets.fkTrip=trips.id
+	where trips.direction=direction
+    and trips.description=Trip
+    and tickets.ticketDate=dateTrip;
+  END //
+DELIMITER ;
