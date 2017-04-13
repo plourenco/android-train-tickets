@@ -123,7 +123,8 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
     }
 
     private boolean getTicketToRevise(UUID uuid, Date ticketDate, StationModel arrStation,
-                                      StationModel depStation, boolean isUsed, TripModel trip) throws RuntimeException {
+                                      StationModel depStation, boolean isUsed, TripModel trip)
+                                      throws RuntimeException {
         TicketReviserBrowser ticketReviserBrowser = new TicketReviserBrowser(this);
         TicketModel tm = ticketReviserBrowser.get(uuid.toString());
 

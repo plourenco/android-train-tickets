@@ -21,6 +21,7 @@ import com.google.zxing.common.BitMatrix;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +37,7 @@ import feup.cm.traintickets.models.TripModel;
 import feup.cm.traintickets.runnables.TicketGetTask;
 import feup.cm.traintickets.sqlite.SQLiteManager;
 import feup.cm.traintickets.sqlite.TicketBrowser;
+import feup.cm.traintickets.sqlite.TicketReviserBrowser;
 import feup.cm.traintickets.util.QREncryption;
 import se.simbio.encryption.Encryption;
 
@@ -66,9 +68,6 @@ public class SingleTicketActivity extends BaseActivity {
          */
         //Intent ticketIntent = getIntent();
         //TicketModel ticket1 = (TicketModel) ticketIntent.getSerializableExtra("TICKET");
-
-        TicketBrowser tb = new TicketBrowser(this);
-        tb.getAll();
 
         /*
          * For test purposes

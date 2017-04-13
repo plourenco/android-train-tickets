@@ -11,6 +11,7 @@ import com.example.mysql.MySQLManager;
 import com.example.models.StationModel;
 import com.example.models.StepModel;
 import com.example.models.TripModel;
+import sun.security.krb5.internal.Ticket;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -225,13 +226,39 @@ public class TicketManager {
                 int tripId = rs.getInt("fkTrip");
                 boolean used = rs.getBoolean("isUsed");
 
-                // TO:DO TICKET
+                // TODO TICKET
             }
 
         } catch (SQLException sql) {
             Main.getLogger().severe(sql.getMessage());
             throw new SQLExceptionMapper(sql.getMessage());
         }
+        return null;
+    }
+
+    public int syncTickets(List<TicketModel> tickets) {
+        try {
+            int rows = 0;
+            for (TicketModel t : tickets) {
+                ps = MySQLManager.getConnection().prepareStatement("UPDATE tickets SET isUsed = '1' WHERE uniqueId = ?");
+                ps.setString(1, t.getUniqueId().toString());
+
+               rows = ps.executeUpdate();
+            }
+            return rows;
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+            throw new SQLExceptionMapper(sql.getMessage());
+        }
+    }
+
+    public List<TicketModel> downloadTickets(String direction, String trip, int stationId) {
+       /* try {
+
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+            throw new SQLExceptionMapper(sql.getMessage());
+        }*/
         return null;
     }
 }
