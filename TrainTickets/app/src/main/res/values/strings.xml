@@ -24,8 +24,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_ticket_single">Ticket Details</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_train_list">MainActivity</string>
+    <string name="title_activity_train_list">List of Available Trains</string>
+    <string name="title_activity_ticket_list">Tickets You Own</string>
 
     <string name="display_station">Station</string>
     <string name="display_ticket_price">Ticket Price</string>
@@ -34,6 +34,8 @@
     <string name="display_destination">Destination</string>
     <string name="display_arrival">Arrival</string>
     <string name="display_date">Date</string>
+    <string name="display_ticket_active">Active</string>
+    <string name="display_ticket_expired">Expired</string>
 
     <string name="error_match_password">Passwords do not match</string>
     <string name="error_invalid_register">Unable to complete registration</string>
@@ -43,12 +45,9 @@
     <string name="error_incorrect_credentials">Incorrect email or password</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_same_stations">The origin and destination stations can\'t be the same</string>
+    <string name="error_no_tickets">There are no available tickets</string>
 
     <!-- Strings train:list-->
-    <string name="listasaida">Saída:</string>
-    <string name="listachegada">Chegada:</string>
-    <string name="listaduracao">Duração:</string>
-    <string name="listacomboio">Comboio:</string>
     <string name="train_list_departure_tv">Departure Time</string>
     <string name="train_list_arrival_tv">Arrival Time</string>
     <string name="train_list_duration_tv">Duration</string>
@@ -59,6 +58,4 @@
     <string name="train_list_departure_txt">8:00</string>
     <string name="train_list_arrival_txt">10:00</string>
     <string name="train_list_duration_txt">120 mn</string>
-    <string name="title_activity_ticket_list">TicketListActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

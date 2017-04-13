@@ -55,7 +55,9 @@ public abstract class TrainTripGetTask extends AsyncTask<Void, Void, Boolean> {
     protected abstract void onPostExecute(Boolean success);
 
     @Override
-    protected abstract void onCancelled();
+    protected void onCancelled() {
+
+    }
 
     public List<TrainTripModel> getTraintrips() { return traintrips; }
 }

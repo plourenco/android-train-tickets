@@ -90,7 +90,9 @@ public abstract class TripGetTask extends AsyncTask<Void, Void, Boolean> {
     protected abstract void onPostExecute(final Boolean success);
 
     @Override
-    protected abstract void onCancelled();
+    protected void onCancelled() {
+
+    }
 
     protected List<TripModel> getTrips() {
         return trips;

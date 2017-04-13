@@ -36,5 +36,7 @@ public abstract class SyncPostTask extends AsyncTask<Void, Void, Boolean> {
     protected abstract void onPostExecute(Boolean success);
 
     @Override
-    protected abstract void onCancelled();
+    protected void onCancelled() {
+
+    }
 }

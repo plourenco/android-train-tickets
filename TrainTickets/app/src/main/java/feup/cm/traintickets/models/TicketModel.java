@@ -24,9 +24,6 @@ public class TicketModel implements Serializable {
     /**
      * Constructors
      */
-    public TicketModel(float price) {
-        this.price = price;
-    }
     public TicketModel(int id, UUID uniqueId, StationModel departureStation,
                        StationModel arrivalStation, Date ticketDate, float price, Date purchaseDate,
                        TripModel trip, boolean isUsed, Time departureTime, Time arrivalTime,

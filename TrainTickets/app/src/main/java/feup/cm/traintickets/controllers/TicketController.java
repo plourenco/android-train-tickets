@@ -10,6 +10,11 @@ import java.util.List;
 import feup.cm.traintickets.models.TicketModel;
 
 public class TicketController {
+
+    public String getUserTickets(String token, int userid) {
+        return ServiceHandler.makeGet("tickets/user-tickets/" + userid, token);
+    }
+
     public String getPrice(String token, int tripId, int depStationId, int arrStationId) {
         return ServiceHandler.makeGet("tickets/gen-ticket-price/" + tripId
                 + "/" + depStationId + "/" + arrStationId, token);

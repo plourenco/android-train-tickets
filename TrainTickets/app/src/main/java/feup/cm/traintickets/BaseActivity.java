@@ -30,6 +30,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private BottomNavigationViewEx bottomNav;
     private SharedPreferences sharedPrefs;
+    private int userId;
     private String token;
 
     @Override
@@ -59,6 +60,7 @@ public class BaseActivity extends AppCompatActivity {
     protected boolean tokenValid() {
         sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
         this.token = sharedPrefs.getString("LOGIN_TOKEN", "");
+        this.userId = sharedPrefs.getInt("LOGIN_ID", 0);
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
 
         return !(token.isEmpty() || expires.before(new Date()));
@@ -97,88 +99,5 @@ public class BaseActivity extends AppCompatActivity {
 
     protected String getToken() { return token; }
 
-    /**
-     * Cache persistent data
-     */
-    protected void cache() {
-
-        final TripGetTask tripGetTask = new TripGetTask(getToken()) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success)
-                    TripDataManager.setTrips(getTrips());
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-        //tripGetTask.execute((Void) null);
-
-        final StepGetTask stepGetTask = new StepGetTask(getToken()) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success) {
-                    StepDataManager.setSteps(getSteps());
-                    tripGetTask.execute((Void) null);
-                }
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-        //stepGetTask.execute((Void) null);
-
-        final TrainGetTask trainGetTask = new TrainGetTask(getToken()) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success) {
-                    TrainDataManager.setTrains(getTrains());
-                    stepGetTask.execute((Void) null);
-                }
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-        //trainGetTask.execute((Void) null);
-
-        final SeatGetTask seatGetTask = new SeatGetTask(getToken()) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success) {
-                    SeatDataManager.setSeats(getSeats());
-                    trainGetTask.execute((Void) null);
-                }
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-        //seatGetTask.execute((Void) null);
-
-        StationGetTask task = new StationGetTask(getToken()) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success) {
-                    StationDataManager.setStations(getStations());
-                    seatGetTask.execute((Void) null);
-                }
-
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-        task.execute((Void) null);
-    }
+    protected int getUserId() { return userId; }
 }

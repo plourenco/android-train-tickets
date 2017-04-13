@@ -49,7 +49,9 @@ public abstract class StationGetTask extends AsyncTask<Void, Void, Boolean> {
     protected abstract void onPostExecute(final Boolean success);
 
     @Override
-    protected abstract void onCancelled();
+    protected void onCancelled() {
+
+    }
 
     protected List<StationModel> getStations() {
         return stations;

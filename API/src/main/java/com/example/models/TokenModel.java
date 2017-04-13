@@ -35,4 +35,6 @@ public class TokenModel {
     public Date getExpires() {
         return expires;
     }
+
+    public int getUserId() { return userId; }
 }

@@ -12,13 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.TicketModel;
 
 public class TicketListAdapter extends ArrayAdapter<TicketModel> implements View.OnClickListener{
 
-    private ArrayList<TicketModel> dataSet;
+    private List<TicketModel> dataSet;
     Context mContext;
 
     // View lookup cache
@@ -28,7 +29,7 @@ public class TicketListAdapter extends ArrayAdapter<TicketModel> implements View
         ImageView info;
     }
 
-    public TicketListAdapter(ArrayList<TicketModel> data, Context context) {
+    public TicketListAdapter(List<TicketModel> data, Context context) {
         super(context, R.layout.row_item, data);
         this.dataSet = data;
         this.mContext=context;

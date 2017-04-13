@@ -79,7 +79,9 @@ public abstract class StepGetTask extends AsyncTask<Void, Void, Boolean> {
     protected abstract void onPostExecute(Boolean success);
 
     @Override
-    protected abstract void onCancelled();
+    protected void onCancelled() {
+
+    }
 
     public List<StepModel> getSteps() { return steps; }
 }

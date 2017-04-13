@@ -305,8 +305,11 @@ public class TicketManager {
 
                 TripModel trip = TripHolder.getTrips().get(tripId);
 
-                tickets.add(new TicketModel(id, UUID.fromString(uuid), depStation, arrStation, ticketDate, price,
-                        purchaseDate, trip, isUsed, 0, null, null));
+                try {
+                    tickets.add(new TicketModel(id, UUID.fromString(uuid), depStation, arrStation, ticketDate, price,
+                            purchaseDate, trip, isUsed, 0, null, null));
+                }
+                catch(IllegalArgumentException ignored) { } // ignore invalid ticket
             }
 
             return tickets;

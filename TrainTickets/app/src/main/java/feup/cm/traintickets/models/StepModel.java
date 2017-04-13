@@ -1,8 +1,5 @@
 package feup.cm.traintickets.models;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.sql.Time;
 
 /**
