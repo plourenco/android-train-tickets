@@ -10,6 +10,7 @@ public class TrainTripModel {
     private Time arrivalTime;
     private int duration;
 
+
     public TrainTripModel(int id,String description,Time departureTime,Time arrivalTime,int duration){
         this.id=id;
         this.description=description;
