@@ -8,17 +8,14 @@
         android:title="Buy Ticket" />
     <item
         android:id="@+id/action_tickets"
-        android:enabled="true"
-        android:icon="@drawable/ic_compare_arrows_black_24dp"
+        android:icon="@drawable/ic_directions_subway_black_24dp"
         android:title="Tickets" />
     <item
         android:id="@+id/action_timetables"
-        android:enabled="true"
-        android:icon="@drawable/ic_directions_subway_black_24dp"
+        android:icon="@drawable/ic_schedule_black_24dp"
         android:title="Timetables" />
     <item
         android:id="@+id/action_settings"
-        android:enabled="true"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="Settings" />
 </menu>

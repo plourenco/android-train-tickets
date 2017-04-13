@@ -12,13 +12,15 @@ import android.widget.TextView;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.adapters.TrainListAdapter;
 import feup.cm.traintickets.models.TrainTripModel;
 
-public class TrainListActivity extends AppCompatActivity {
+public class TrainListActivity extends BaseActivity {
 
 
     public ListView listaComboios;
@@ -40,7 +42,8 @@ public class TrainListActivity extends AppCompatActivity {
                        new TrainTripModel(4,"Night Train",Time.valueOf("20:00:00"),Time.valueOf("22:00:00"),120)
                };
 
-        TrainListAdapter adp= new TrainListAdapter(this,R.layout.content_train_list,data);
+        TrainListAdapter adp= new TrainListAdapter(
+                new ArrayList<TrainTripModel>(Arrays.asList(data)), getApplicationContext());
         listaComboios.setAdapter(adp);
 
 

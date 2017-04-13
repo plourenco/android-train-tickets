@@ -45,9 +45,15 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         bottomNav = (BottomNavigationViewEx) findViewById(R.id.nav_bottom);
-        bottomNav.enableAnimation(false);
-        bottomNav.enableShiftingMode(false);
-        bottomNav.enableItemShiftingMode(true);
+        if(bottomNav != null) {
+            bottomNav.enableAnimation(false);
+            bottomNav.enableShiftingMode(false);
+            bottomNav.enableItemShiftingMode(true);
+            bottomNav.setTextVisibility(false);
+            bottomNav.setIconSize(26, 26);
+            bottomNav.setItemHeight(125);
+            bottomNav.setSelectedItemId(R.id.action_settings);
+        }
     }
 
     protected boolean tokenValid() {

@@ -31,7 +31,7 @@ public class TrainListAdapter extends ArrayAdapter<TrainTripModel>  {
         TextView txtDuration;
     }
 
-    public TrainListAdapter(ArrayList<TrainTripModel> data,Context context){
+    public TrainListAdapter(ArrayList<TrainTripModel> data, Context context){
         super(context,R.layout.row_item,data);
         this.dataSet=data;
         this.mContext=context;
@@ -42,7 +42,7 @@ public class TrainListAdapter extends ArrayAdapter<TrainTripModel>  {
     }
 
     @Override
-    public View getView(int position,View convertView,ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
 
         TrainTripModel dataModel = getItem(position);
         ViewHolder viewHolder;
