@@ -1,5 +1,6 @@
 package feup.cm.traintickets.activities;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,6 +23,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -162,8 +165,10 @@ public class TicketListActivity extends BaseActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             TicketModel dataModel = tickets.get(position);
-                            Snackbar.make(view, "HELLO", Snackbar.LENGTH_LONG)
-                                    .setAction("No action", null).show();
+                            Intent intent = new Intent(getActivity().getApplicationContext(),
+                                    SingleTicketActivity.class);
+                            intent.putExtra("TICKET_MODEL", new Gson().toJson(dataModel));
+                            startActivity(intent);
                         }
                     });
                     progressBar.setVisibility(View.INVISIBLE);

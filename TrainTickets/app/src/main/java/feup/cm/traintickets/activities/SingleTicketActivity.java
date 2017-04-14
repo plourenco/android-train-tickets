@@ -5,50 +5,44 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
-
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
-import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
-import feup.cm.traintickets.models.TripModel;
-import feup.cm.traintickets.runnables.TicketGetTask;
-import feup.cm.traintickets.sqlite.SQLiteManager;
-import feup.cm.traintickets.sqlite.TicketBrowser;
-import feup.cm.traintickets.sqlite.TicketReviserBrowser;
 import feup.cm.traintickets.util.QREncryption;
 import se.simbio.encryption.Encryption;
 
 public class SingleTicketActivity extends BaseActivity {
 
-    ImageView qrCodeImageView;
-    Bitmap bitmap;
-    TicketModel ticket;
+    private TextView originView;
+    private TextView destinationView;
+    private TextView dateView;
+    private TextView timeView;
+    private TextView seatView;
+
+    private ImageView qrCodeImageView;
+    private Bitmap bitmap;
+    private View contentView;
+    private View progressBar;
+
     public final static int QRCODE_WIDTH = 500;
-    public View cardView;
-    public View ticketProgressView;
+    private TicketModel ticket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,26 +50,35 @@ public class SingleTicketActivity extends BaseActivity {
         setContentView(R.layout.activity_ticket_single);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        cardView = findViewById(R.id.card_view);
-        ticketProgressView = findViewById(R.id.ticket_progress);
-        qrCodeImageView = (ImageView)findViewById(R.id.imageView2);
+        originView = (TextView) findViewById(R.id.ticket_origin);
+        destinationView = (TextView) findViewById(R.id.ticket_destination);
+        dateView = (TextView) findViewById(R.id.ticket_date_value);
+        timeView = (TextView) findViewById(R.id.ticket_hour_value);
 
-        /**
+        contentView = findViewById(R.id.card_view);
+        progressBar = findViewById(R.id.ticket_progress);
+        qrCodeImageView = (ImageView) findViewById(R.id.imageView2);
+
+        /*
          * This is yet to be implemented.
          * The code is only here for agility purposes!
          */
-        //Intent ticketIntent = getIntent();
-        //TicketModel ticket1 = (TicketModel) ticketIntent.getSerializableExtra("TICKET");
+        Intent ticketIntent = getIntent();
+        try {
+            ticket = new Gson().fromJson(ticketIntent.getStringExtra("TICKET_MODEL"),
+                    TicketModel.class);
+        }
+        catch(JsonParseException ignored) { }
 
-        /*
-         * For test purposes
-         * Need to add an Intent here!
-         */
-        ticket = new TicketModel(-1, UUID.fromString("2ad4b8eb-f39b-45d7-817d-9ca67c67133d"), new StationModel(3),
-                new StationModel(4), Date.valueOf("2017-12-10"), 1, Date.valueOf("2017-06-12"),
-                new TripModel(1), false);
+        if(ticket == null) {
+            Toast.makeText(this, "Invalid ticket", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        originView.setText(ticket.getDepartureStation().getStationName());
+        destinationView.setText(ticket.getArrivalStation().getStationName());
 
         String textToEncode = ticket.getUniqueId() + ";#" +
                               ticket.getTicketDate().toString() + ";#" +
@@ -86,7 +89,7 @@ public class SingleTicketActivity extends BaseActivity {
 
         String crypt = null;
 
-        if (ticket.getTicketDate().after(Calendar.getInstance().getTime())) {
+        //if (ticket.getTicketDate().after(Calendar.getInstance().getTime())) {
             try {
                 Encryption enc = QREncryption.getInstance();
                 crypt = enc.encryptOrNull(textToEncode);
@@ -97,27 +100,34 @@ public class SingleTicketActivity extends BaseActivity {
                 generateQR(crypt);
             else
                 Toast.makeText(this, "Error generating QR Code", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Ticket has expired QR Code generation", Toast.LENGTH_LONG).show();
-        }
+        //}
+        //else {
+        //    Toast.makeText(this, "Ticket has expired QR Code generation", Toast.LENGTH_LONG).show();
+        //}
     }
 
     private void generateQR(final String textToEncode) {
-        showProgress(true);
-        final Thread runner = new Thread() {
+        final AsyncTask<Void, Void, Boolean> runner = new AsyncTask<Void, Void, Boolean>() {
             @Override
-            public void run() {
+            protected Boolean doInBackground(Void... params) {
                 try {
                     bitmap = textToImageEncode(textToEncode);
-                    qrCodeImageView.setImageBitmap(bitmap);
-                    showProgress(false);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            qrCodeImageView.setImageBitmap(bitmap);
+                            showProgress(false);
+                        }
+                    });
+                    return true;
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return false;
                 }
             }
         };
-
-        runner.run();
+        showProgress(true);
+        runner.execute((Void) null);
     }
 
     private Bitmap textToImageEncode(String editTextValue) throws Exception {
@@ -158,26 +168,23 @@ public class SingleTicketActivity extends BaseActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-        cardView.setVisibility(show ? View.GONE : View.VISIBLE);
-        cardView.animate().setDuration(shortAnimTime).alpha(
+        contentView.setVisibility(show ? View.GONE : View.VISIBLE);
+        contentView.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                cardView.setVisibility(show ? View.GONE : View.VISIBLE);
+                contentView.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
 
-        ticketProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        ticketProgressView.animate().setDuration(shortAnimTime).alpha(
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        progressBar.animate().setDuration(shortAnimTime).alpha(
                 show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                ticketProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
     }
