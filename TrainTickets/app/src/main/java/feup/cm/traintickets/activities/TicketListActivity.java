@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.sql.Time;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import feup.cm.traintickets.BaseActivity;
@@ -116,6 +119,8 @@ public class TicketListActivity extends BaseActivity {
 
         private List<TicketModel> tickets = new ArrayList<TicketModel>();
         private ListView listView;
+        private ProgressBar progressBar;
+        private TextView noTicketsView;
         private TicketListAdapter adapter;
 
         public PlaceholderFragment() {
@@ -141,6 +146,8 @@ public class TicketListActivity extends BaseActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_ticket_list, container, false);
             listView = (ListView) rootView.findViewById(R.id.list);
+            progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+            noTicketsView = (TextView) rootView.findViewById(R.id.no_available_tickets);
             Bundle args = getArguments();
             int userId = args.getInt(ARG_USER_ID, 0);
             String token = args.getString(ARG_USER_TOKEN, "");
@@ -148,7 +155,7 @@ public class TicketListActivity extends BaseActivity {
             TicketUserGetTask task = new TicketUserGetTask(token, userId) {
                 @Override
                 protected void onPostExecute(Boolean success) {
-                    this.tickets = getTickets();
+                    tickets = getTickets();
                     adapter = new TicketListAdapter(tickets, getActivity().getApplicationContext());
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -159,8 +166,14 @@ public class TicketListActivity extends BaseActivity {
                                     .setAction("No action", null).show();
                         }
                     });
+                    progressBar.setVisibility(View.INVISIBLE);
+                    if (tickets == null || tickets.isEmpty()) {
+                        noTicketsView.setVisibility(View.VISIBLE);
+                    }
                 }
             };
+            progressBar.setVisibility(View.VISIBLE);
+            noTicketsView.setVisibility(View.INVISIBLE);
             task.execute((Void) null);
             return rootView;
         }
