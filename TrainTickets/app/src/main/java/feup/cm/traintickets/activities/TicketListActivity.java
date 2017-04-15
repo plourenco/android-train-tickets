@@ -25,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.kogitune.activity_transition.ActivityTransition;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -68,6 +70,9 @@ public class TicketListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_list);
+
+        BottomNavigationViewEx bottomNav = (BottomNavigationViewEx) findViewById(R.id.nav_bottom);
+        bottomNav.setSelectedItemId(R.id.action_tickets);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

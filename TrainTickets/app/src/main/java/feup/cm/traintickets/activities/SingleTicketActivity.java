@@ -20,7 +20,9 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
@@ -77,8 +79,19 @@ public class SingleTicketActivity extends BaseActivity {
             return;
         }
 
-        originView.setText(ticket.getDepartureStation().getStationName());
-        destinationView.setText(ticket.getArrivalStation().getStationName());
+        try {
+            SimpleDateFormat datef = new SimpleDateFormat("MMM dd, yyyy", Locale.UK);
+            SimpleDateFormat timef = new SimpleDateFormat("hh:mm", Locale.UK);
+            originView.setText(ticket.getDepartureStation().getStationName());
+            destinationView.setText(ticket.getArrivalStation().getStationName());
+            dateView.setText(datef.format(ticket.getTicketDate()));
+            timeView.setText(timef.format(ticket.getTrip().getSteps().get(0).getDepartureTime()));
+            //TODO: API fields are null
+        }
+        catch(NullPointerException e) {
+            // Data not available, but try to generate QR code
+            e.printStackTrace();
+        }
 
         String textToEncode = ticket.getUniqueId() + ";#" +
                               ticket.getTicketDate().toString() + ";#" +

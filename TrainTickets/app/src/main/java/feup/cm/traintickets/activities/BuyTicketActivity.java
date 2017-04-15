@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.kogitune.activity_transition.ActivityTransition;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +40,9 @@ public class BuyTicketActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_ticket);
+
+        BottomNavigationViewEx bottomNav = (BottomNavigationViewEx) findViewById(R.id.nav_bottom);
+        bottomNav.setSelectedItemId(R.id.action_buyticket);
 
         origin = (Spinner) findViewById(R.id.origin_station);
         dest = (Spinner) findViewById(R.id.destination_station);

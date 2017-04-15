@@ -53,6 +53,7 @@ import feup.cm.traintickets.models.TripModel;
 import feup.cm.traintickets.runnables.SeatGetTask;
 import feup.cm.traintickets.runnables.StationGetTask;
 import feup.cm.traintickets.runnables.StepGetTask;
+import feup.cm.traintickets.runnables.TokenRefreshTask;
 import feup.cm.traintickets.runnables.TrainGetTask;
 import feup.cm.traintickets.runnables.TripGetTask;
 import feup.cm.traintickets.runnables.UserLoginTask;
@@ -125,6 +126,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
 
         sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPrefs.edit();
+        edit.remove("LOGIN_TOKEN");
+        edit.remove("LOGIN_REFRESH");
+        edit.apply();
         String token = sharedPrefs.getString("LOGIN_TOKEN", "");
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
         int userid = sharedPrefs.getInt("LOGIN_ID", 0);
@@ -132,10 +137,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         cache(token);
 
         if(!token.isEmpty() && expires.after(new Date()) && userid != 0) {
-            Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
+            successRedirect();
+        }
+        else {
+            refreshToken();
         }
     }
 
@@ -263,10 +268,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     editor.putInt("LOGIN_ID", token.getUserId());
                     editor.apply();
 
-                    Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
+                    successRedirect();
                 } else {
                     mPasswordView.setError(getString(R.string.error_incorrect_credentials));
                     mPasswordView.requestFocus();
@@ -392,6 +394,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
+    }
+
+    protected void refreshToken() {
+        String refresh = sharedPrefs.getString("LOGIN_REFRESH", "");
+        TokenRefreshTask task = new TokenRefreshTask(refresh) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if(success) {
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putString("LOGIN_TOKEN", getToken().getToken());
+                    editor.putLong("LOGIN_EXPIRES", getToken().getExpires().getTime());
+                    editor.apply();
+                    
+                    successRedirect();
+                }
+            }
+        };
+        task.execute((Void) null);
+    }
+
+    private void successRedirect() {
+        Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     /**

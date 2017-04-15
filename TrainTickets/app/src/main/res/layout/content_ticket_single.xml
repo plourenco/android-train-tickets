@@ -7,7 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="feup.cm.traintickets.activities.SingleTicketActivity"
     tools:showIn="@layout/activity_ticket_single">
-    
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,9 +17,9 @@
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -31,12 +31,12 @@
         android:layout_gravity="center"
         android:layout_margin="30dp"
         card_view:cardCornerRadius="4dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        card_view:layout_constraintRight_toRightOf="parent"
         card_view:layout_constraintLeft_toLeftOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent">
+        card_view:layout_constraintRight_toRightOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
 
         <!-- Card Content -->
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -85,9 +85,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/display_date"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/text_form_title_sm"
-                    android:textAllCaps="true"
                     android:textStyle="bold" />
 
                 <TextView
@@ -159,11 +159,11 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_marginTop="@dimen/activity_content_padding"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                app:srcCompat="@drawable/qrcode"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/activity_content_padding"
+                app:srcCompat="@drawable/qrcode" />
 
         </LinearLayout>
 
