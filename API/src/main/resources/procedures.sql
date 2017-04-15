@@ -137,13 +137,18 @@ create procedure getUserTickets(IN userId INT)
     select sta.uniqueId,
       sta.id,
       sta.ticketDate,
-      sta.departureTime,
-      stb.arrivalTime,
+      sta.price,
+      sta.purchaseDate,
       sta.fromStation,
+      sta.departureStationId,
+      sta.departureTime,
       stb.toStation,
+      sta.arrivalStationId,
+      stb.arrivalTime,
       sta.seatNumber,
       sta.direction,
-      sta.Idtrip
+      sta.Idtrip,
+      sta.isUsed
     from(select tickets.uniqueId,
            tickets.id,
            tickets.ticketDate,
@@ -152,7 +157,12 @@ create procedure getUserTickets(IN userId INT)
            stations.stationName as fromStation,
            seats.seatNumber,
            trips.direction,
-           tickets.fkTrip as idTrip
+           tickets.fkTrip as idTrip,
+           tickets.isUsed,
+           tickets.price,
+           tickets.purchaseDate,
+           tickets.departureStationId,
+           tickets.arrivalStationId
          from tickets join stations on tickets.departureStationId=stations.id
            join steps on steps.departureStationId=stations.id
            left join bookings on tickets.id=bookings.fkTicket
