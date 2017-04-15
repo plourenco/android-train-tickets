@@ -367,3 +367,53 @@ create procedure getTicketsRevisor(IN direction TEXT,IN Trip TEXT,IN dateTrip DA
     and tickets.ticketDate=dateTrip;
   END //
 DELIMITER ;
+
+DELIMITER //
+create procedure getExpiredTickets(IN userId INT)
+  begin
+    select sta.uniqueId,
+      sta.id,
+      sta.ticketDate,
+      sta.price,
+      sta.purchaseDate,
+      sta.fromStation,
+      sta.departureStationId,
+      sta.departureTime,
+      stb.toStation,
+      sta.arrivalStationId,
+      stb.arrivalTime,
+      sta.seatNumber,
+      sta.direction,
+      sta.Idtrip,
+      sta.isUsed
+    from(select tickets.uniqueId,
+           tickets.id,
+           tickets.ticketDate,
+           stations.id as idDeparture,
+           steps.departureTime,
+           stations.stationName as fromStation,
+           seats.seatNumber,
+           trips.direction,
+           tickets.fkTrip as idTrip,
+           tickets.isUsed,
+           tickets.price,
+           tickets.purchaseDate,
+           tickets.departureStationId,
+           tickets.arrivalStationId
+         from tickets join stations on tickets.departureStationId=stations.id
+           join steps on steps.departureStationId=stations.id
+           left join bookings on tickets.id=bookings.fkTicket
+           left join seats on bookings.fkSeat=seats.id
+           join trips on tickets.fkTrip=trips.id
+         where tickets.fkTrip=steps.fkTrip and tickets.fkUser=userId and tickets.isUsed=true)as sta
+      join(select tickets.uniqueId,
+             tickets.id,
+             stations.id as idArrival,
+             steps.arrivalTime,
+             stations.stationName as toStation
+           from tickets join stations on tickets.arrivalStationId=stations.id
+             join steps on steps.arrivalStationId=stations.id
+           where tickets.fkTrip=steps.fkTrip and tickets.fkUser=userId and tickets.isUsed=true) as stb
+        on sta.id=stb.id order by ticketDate desc LIMIT 10;
+  END //
+DELIMITER ;
