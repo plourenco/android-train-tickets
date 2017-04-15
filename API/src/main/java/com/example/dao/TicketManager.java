@@ -293,6 +293,8 @@ public class TicketManager {
                 int departureStationId = rs.getInt("departureStationId");
                 int arrivalStationId = rs.getInt("arrivalStationId");
                 Date ticketDate = rs.getDate("ticketDate");
+                Time depTime = rs.getTime("departureTime");
+                Time arrTime = rs.getTime("arrivalTime");
                 float price = rs.getFloat("price");
                 Date purchaseDate = rs.getDate("purchaseDate");
                 int tripId = rs.getInt("fkTrip");

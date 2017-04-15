@@ -2,10 +2,15 @@ package feup.cm.traintickets.runnables;
 
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,10 +60,12 @@ public abstract class TripGetTask extends AsyncTask<Void, Void, Boolean> {
                         StepModel step = null;
                         int idStep = obj2.getInt("id");
 
-                        for(int k = 0; k < StepDataManager.getSteps().size(); k++) {
-                            if (StepDataManager.getSteps().get(k).getId() == idStep){
-                                step = StepDataManager.getSteps().get(k);
-                                break;
+                        if (StepDataManager.getSteps() != null) {
+                            for (int k = 0; k < StepDataManager.getSteps().size(); k++) {
+                                if (StepDataManager.getSteps().get(k).getId() == idStep) {
+                                    step = StepDataManager.getSteps().get(k);
+                                    break;
+                                }
                             }
                         }
                         steps.add(step);
@@ -68,10 +75,12 @@ public abstract class TripGetTask extends AsyncTask<Void, Void, Boolean> {
                     int idTrain = trainObj.getInt("id");
                     TrainModel train = null;
 
-                    for (int z = 0; z < TrainDataManager.getTrains().size(); z++) {
-                        if (TrainDataManager.getTrains().get(z).getId() == idTrain){
-                            train = TrainDataManager.getTrains().get(z);
-                            break;
+                    if (TrainDataManager.getTrains() != null) {
+                        for (int z = 0; z < TrainDataManager.getTrains().size(); z++) {
+                            if (TrainDataManager.getTrains().get(z).getId() == idTrain){
+                                train = TrainDataManager.getTrains().get(z);
+                                break;
+                            }
                         }
                     }
 
