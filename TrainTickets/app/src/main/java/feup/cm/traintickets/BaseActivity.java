@@ -4,16 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.kogitune.activity_transition.ActivityTransitionLauncher;
 
 import java.util.Date;
 
+import feup.cm.traintickets.activities.BuyTicketActivity;
 import feup.cm.traintickets.activities.LoginActivity;
+import feup.cm.traintickets.activities.TicketListActivity;
 import feup.cm.traintickets.datamanagers.SeatDataManager;
 import feup.cm.traintickets.datamanagers.StationDataManager;
 import feup.cm.traintickets.datamanagers.StepDataManager;
@@ -53,7 +60,30 @@ public class BaseActivity extends AppCompatActivity {
             bottomNav.setTextVisibility(false);
             bottomNav.setIconSize(26, 26);
             bottomNav.setItemHeight(125);
-            bottomNav.setSelectedItemId(R.id.action_settings);
+            bottomNav.setOnNavigationItemSelectedListener(
+                    new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Intent intent;
+                    switch(item.getItemId()) {
+                        case R.id.action_buyticket:
+                            if(!(BaseActivity.this instanceof BuyTicketActivity)) {
+                                intent = new Intent(getApplicationContext(), BuyTicketActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(0, 0);
+                            }
+                            break;
+                        case R.id.action_tickets:
+                            if(!(BaseActivity.this instanceof TicketListActivity)) {
+                                intent = new Intent(getApplicationContext(), TicketListActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(0, 0);
+                            }
+                            break;
+                    }
+                    return true;
+                }
+            });
         }
     }
 
