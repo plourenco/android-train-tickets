@@ -32,9 +32,9 @@ public class BuyTicketActivity extends BaseActivity {
     private Spinner origin;
     private Spinner dest;
 
-    private EditText departure;
-    private DatePicker depatureDate;
+    private TextView departure;
     private TextView title;
+    private DatePicker depatureDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,25 +47,7 @@ public class BuyTicketActivity extends BaseActivity {
         origin = (Spinner) findViewById(R.id.origin_station);
         dest = (Spinner) findViewById(R.id.destination_station);
         title = (TextView) findViewById(R.id.title_left);
-        departure = (EditText) findViewById(R.id.departure_desc);
-
-        // Set forward button behaviour
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(origin.getSelectedItem().toString()
-                        .equals(dest.getSelectedItem().toString())) {
-                    TextView errorText = (TextView) dest.getSelectedView();
-                    errorText.setError("");
-                    Snackbar.make(view, getString(R.string.error_same_stations),
-                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                    return;
-                }
-                Intent intent = new Intent(getApplicationContext(), TrainListActivity.class);
-                startActivity(intent);
-            }
-        });
+        departure = (TextView) findViewById(R.id.departure_desc);
 
         // Set origin change listener
         AdapterView.OnItemSelectedListener sLis = new AdapterView.OnItemSelectedListener() {
@@ -136,6 +118,19 @@ public class BuyTicketActivity extends BaseActivity {
             }
         };
         task.execute((Void) null);
+    }
+
+    protected void forward() {
+        if(origin.getSelectedItem().toString()
+                .equals(dest.getSelectedItem().toString())) {
+            TextView errorText = (TextView) dest.getSelectedView();
+            errorText.setError("");
+            Snackbar.make(errorText, getString(R.string.error_same_stations),
+                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
+        Intent intent = new Intent(getApplicationContext(), TrainListActivity.class);
+        startActivity(intent);
     }
 
     private void updateLabel(Calendar calendar) {
