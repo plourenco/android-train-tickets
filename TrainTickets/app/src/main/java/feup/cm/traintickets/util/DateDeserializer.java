@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-public class DateDeserializer implements JsonDeserializer<Date> {
+public class DateDeserializer implements JsonDeserializer<java.util.Date> {
 
     private static final String[] DATE_FORMATS = new String[] {
             "yyyy-MM-dd hh:mm:ss",

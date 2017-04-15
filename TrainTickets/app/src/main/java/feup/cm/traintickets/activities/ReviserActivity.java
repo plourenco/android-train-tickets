@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.sql.Date;
 import java.text.DateFormat;
@@ -15,11 +16,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
+import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
+import feup.cm.traintickets.models.TripModel;
 import feup.cm.traintickets.runnables.DownloadGetTask;
+import feup.cm.traintickets.runnables.StationGetTask;
+import feup.cm.traintickets.runnables.TripGetTask;
 import feup.cm.traintickets.sqlite.TicketReviserBrowser;
 
 public class ReviserActivity extends AppCompatActivity {
@@ -31,6 +37,9 @@ public class ReviserActivity extends AppCompatActivity {
 
     String directionToSend;
     String tripToSend;
+
+    List<String> directions = new ArrayList<>();
+    List<String> tripList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,43 +53,32 @@ public class ReviserActivity extends AppCompatActivity {
         dlTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); //format time
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH); //format time
                 String time = df.format(Calendar.getInstance().getTime());
                 downloadTickets(directionToSend, tripToSend, Date.valueOf(time));
             }
         });
 
-        /**
-         * Hardcoded values
-         * TODO populate with data managers
-         * TODO DATE
-         */
-        List<String> directions = new ArrayList<>();
-        directions.add("Porto");
-        directions.add("Pocinho");
+        populateDirections();
+        populateTrips();
+    }
 
-        List<String> trips = new ArrayList<>();
-        trips.add("Morning trip");
-        trips.add("Noon trip");
-        trips.add("After-noon trip");
-        trips.add("Night trip");
-
-        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(ReviserActivity.this, R.layout.spinner_view, directions);
-        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        direction.setAdapter(dataAdapter1);
-        direction.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void populateTrips() {
+        TripGetTask tripGetTask = new TripGetTask("") {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                directionToSend = parent.getItemAtPosition(position).toString();
+            protected void onPostExecute(Boolean success) {
+                if (success){
+                    for (TripModel tm : getTrips())
+                        tripList.add(tm.getDescription());
+                    setTrips();
+                }
             }
+        };
+        tripGetTask.execute((Void) null);
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                directionToSend = parent.getSelectedItem().toString();
-            }
-        });
-
-        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<>(ReviserActivity.this, R.layout.spinner_view, trips);
+    private void setTrips() {
+        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<>(ReviserActivity.this, R.layout.spinner_view, tripList);
         dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         trip.setAdapter(dataAdapter2);
         trip.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -94,7 +92,6 @@ public class ReviserActivity extends AppCompatActivity {
                 tripToSend = parent.getSelectedItem().toString();
             }
         });
-
     }
 
     private void downloadTickets(String direction, String trip, Date date) {
@@ -109,6 +106,7 @@ public class ReviserActivity extends AppCompatActivity {
                     for (TicketModel t : tickets) {
                         ticketReviserBrowser.create(t);
                     }
+                    Toast.makeText(getApplicationContext(), "Downloaded " + tickets.size() + " tickets", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -118,5 +116,36 @@ public class ReviserActivity extends AppCompatActivity {
             }
         };
         downloadGetTask.execute((Void) null);
+    }
+
+    private void populateDirections(){
+        StationGetTask stationGetTask = new StationGetTask("") {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    for (StationModel st : getStations())
+                        directions.add(st.getStationName());
+                    setDirections();
+                }
+            }
+        };
+        stationGetTask.execute((Void) null);
+    }
+
+    private void setDirections() {
+        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(ReviserActivity.this, R.layout.spinner_view, directions);
+        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        direction.setAdapter(dataAdapter1);
+        direction.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                directionToSend = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                directionToSend = parent.getSelectedItem().toString();
+            }
+        });
     }
 }

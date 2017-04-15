@@ -126,10 +126,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
 
         sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = sharedPrefs.edit();
-        edit.remove("LOGIN_TOKEN");
-        edit.remove("LOGIN_REFRESH");
-        edit.apply();
         String token = sharedPrefs.getString("LOGIN_TOKEN", "");
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
         int userid = sharedPrefs.getInt("LOGIN_ID", 0);

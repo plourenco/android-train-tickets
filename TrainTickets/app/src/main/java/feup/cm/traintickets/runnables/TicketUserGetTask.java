@@ -9,8 +9,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.sql.Time;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import feup.cm.traintickets.controllers.TicketController;
@@ -38,12 +38,12 @@ public abstract class TicketUserGetTask extends AsyncTask<Void, Void, Boolean> {
         if (res != null) {
             try {
                 Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(Date.class, new DateDeserializer())
+                        .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
                         .registerTypeAdapter(Time.class, new TimeDeserializer()).create();
                 Type type = new TypeToken<ArrayList<TicketModel>>() {}.getType();
                 this.tickets = gson.fromJson(res, type);
                 return true;
-            } catch (NullPointerException ignored) {
+            } catch (Exception ignored) {
                 ignored.printStackTrace();
             }
         }
@@ -59,6 +59,6 @@ public abstract class TicketUserGetTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     protected List<TicketModel> getTickets() {
-        return tickets;
+        return tickets != null ? tickets : new ArrayList<TicketModel>();
     }
 }
