@@ -34,7 +34,7 @@ public class TicketController {
 
     @GET
     @Path("download/{direction}/{trip}/{date}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
     public List<TicketModel> downloadTickets(@PathParam("direction")String direction,
                                              @PathParam("trip") String trip,
                                              @PathParam("date")String date) {

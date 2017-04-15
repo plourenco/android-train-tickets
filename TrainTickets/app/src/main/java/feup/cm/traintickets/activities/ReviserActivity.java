@@ -1,6 +1,7 @@
 package feup.cm.traintickets.activities;
 
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,10 +9,18 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
+import feup.cm.traintickets.models.TicketModel;
+import feup.cm.traintickets.runnables.DownloadGetTask;
+import feup.cm.traintickets.sqlite.TicketReviserBrowser;
 
 public class ReviserActivity extends AppCompatActivity {
 
@@ -35,7 +44,9 @@ public class ReviserActivity extends AppCompatActivity {
         dlTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadTickets();
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); //format time
+                String time = df.format(Calendar.getInstance().getTime());
+                downloadTickets(directionToSend, tripToSend, Date.valueOf(time));
             }
         });
 
@@ -46,13 +57,13 @@ public class ReviserActivity extends AppCompatActivity {
          */
         List<String> directions = new ArrayList<>();
         directions.add("Porto");
-        directions.add("Pocinha");
+        directions.add("Pocinho");
 
         List<String> trips = new ArrayList<>();
-        trips.add("Morning");
-        trips.add("Noon");
-        trips.add("Afternoon");
-        trips.add("Night");
+        trips.add("Morning trip");
+        trips.add("Noon trip");
+        trips.add("After-noon trip");
+        trips.add("Night trip");
 
         ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(ReviserActivity.this, R.layout.spinner_view, directions);
         dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -86,7 +97,26 @@ public class ReviserActivity extends AppCompatActivity {
 
     }
 
-    private void downloadTickets() {
-        //TODO Call async task to do this.
+    private void downloadTickets(String direction, String trip, Date date) {
+        direction = direction.trim().replace(" ", "%20");
+        trip = trip.trim().replace(" ", "%20");
+        DownloadGetTask downloadGetTask = new DownloadGetTask("", direction, trip, date) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    List<TicketModel> tickets = getTickets();
+                    TicketReviserBrowser ticketReviserBrowser = new TicketReviserBrowser(getApplicationContext());
+                    for (TicketModel t : tickets) {
+                        ticketReviserBrowser.create(t);
+                    }
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        downloadGetTask.execute((Void) null);
     }
 }

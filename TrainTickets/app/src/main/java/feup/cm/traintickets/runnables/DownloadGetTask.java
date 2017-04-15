@@ -2,6 +2,15 @@ package feup.cm.traintickets.runnables;
 
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +44,15 @@ public abstract class DownloadGetTask extends AsyncTask<Void, Void, Boolean> {
         TicketController ticketController = new TicketController();
         String res = ticketController.downloadTickets(direction, trip, date, token);
 
-        if (res != null) {
-
+        if (res != null && !res.isEmpty()) {
+            try {
+                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+                Type type = new TypeToken<List<TicketModel>>() {}.getType();
+                tickets = gson.fromJson(res, type);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -46,4 +62,6 @@ public abstract class DownloadGetTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected abstract void onCancelled();
+
+    public List<TicketModel> getTickets() { return tickets; }
 }
