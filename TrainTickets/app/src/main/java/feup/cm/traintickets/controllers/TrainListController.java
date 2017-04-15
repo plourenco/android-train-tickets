@@ -5,6 +5,7 @@ package feup.cm.traintickets.controllers;
  */
 
 public class TrainListController {
+
     public String getTripList(String token) {
         return ServiceHandler.makeGet("timetable/timetables", token);
     }

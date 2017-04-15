@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import feup.cm.traintickets.BaseActivity;
-import feup.cm.traintickets.MainActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.UserModel;
 import feup.cm.traintickets.runnables.UserRegisterTask;
@@ -154,7 +153,7 @@ public class RegisterActivity extends BaseActivity {
                     mRegisterTask = null;
                     showProgress(false);
                     if (success) {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     } else {

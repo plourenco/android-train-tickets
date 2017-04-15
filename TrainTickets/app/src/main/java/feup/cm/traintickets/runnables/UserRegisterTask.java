@@ -18,7 +18,6 @@ public abstract class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
     protected Boolean doInBackground(Void... params) {
         UserController userController = new UserController();
         String res = userController.createUser(user);
-        Log.d("hello", "InBackground");
 
         if(res != null) {
             try {
@@ -35,5 +34,7 @@ public abstract class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
     protected abstract void onPostExecute(final Boolean success);
 
     @Override
-    protected abstract void onCancelled();
+    protected void onCancelled() {
+
+    }
 }

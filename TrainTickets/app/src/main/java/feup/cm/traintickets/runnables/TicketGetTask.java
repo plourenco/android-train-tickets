@@ -15,7 +15,6 @@ public abstract class TicketGetTask extends AsyncTask<Void, Void, Boolean> {
     private int tripId;
     private int depStationId;
     private int arrStationId;
-    private double price;
 
     protected TicketModel ticket;
 
@@ -34,7 +33,6 @@ public abstract class TicketGetTask extends AsyncTask<Void, Void, Boolean> {
         if (res != null) {
             try {
                 JSONObject obj = new JSONObject(res);
-                price = obj.getDouble("price");
                 return true;
             } catch (JSONException | NullPointerException ignored) {
                 ignored.printStackTrace();
@@ -47,10 +45,11 @@ public abstract class TicketGetTask extends AsyncTask<Void, Void, Boolean> {
     protected abstract void onPostExecute(Boolean success);
 
     @Override
-    protected abstract void onCancelled();
+    protected void onCancelled() {
 
-    protected double getPrice() {
-        return price;
     }
 
+    protected TicketModel getTicket() {
+        return ticket;
+    }
 }

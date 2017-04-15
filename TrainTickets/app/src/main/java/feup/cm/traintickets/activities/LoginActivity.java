@@ -40,12 +40,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import feup.cm.traintickets.MainActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.adapters.TicketListAdapter;
+import feup.cm.traintickets.datamanagers.SeatDataManager;
+import feup.cm.traintickets.datamanagers.StationDataManager;
+import feup.cm.traintickets.datamanagers.StepDataManager;
+import feup.cm.traintickets.datamanagers.TrainDataManager;
+import feup.cm.traintickets.datamanagers.TripDataManager;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.models.TripModel;
+import feup.cm.traintickets.runnables.SeatGetTask;
+import feup.cm.traintickets.runnables.StationGetTask;
+import feup.cm.traintickets.runnables.StepGetTask;
+import feup.cm.traintickets.runnables.TrainGetTask;
+import feup.cm.traintickets.runnables.TripGetTask;
 import feup.cm.traintickets.runnables.UserLoginTask;
 import feup.cm.traintickets.sqlite.SQLiteManager;
 import feup.cm.traintickets.sqlite.TicketBrowser;
@@ -118,8 +127,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
         String token = sharedPrefs.getString("LOGIN_TOKEN", "");
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
+        int userid = sharedPrefs.getInt("LOGIN_ID", 0);
 
-        if(!token.isEmpty() && expires.after(new Date())) {
+        cache(token);
+
+        if(!token.isEmpty() && expires.after(new Date()) && userid != 0) {
             Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -248,9 +260,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     editor.putString("LOGIN_TOKEN", token.getToken());
                     editor.putString("LOGIN_REFRESH", token.getRefresh());
                     editor.putLong("LOGIN_EXPIRES", token.getExpires().getTime());
+                    editor.putInt("LOGIN_ID", token.getUserId());
                     editor.apply();
 
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
@@ -379,5 +392,83 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
+    }
+
+    /**
+     * Cache persistent data
+     */
+    protected void cache(String token) {
+
+        final TripGetTask tripGetTask = new TripGetTask(token) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success)
+                    TripDataManager.setTrips(getTrips());
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        final StepGetTask stepGetTask = new StepGetTask(token) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    StepDataManager.setSteps(getSteps());
+                    tripGetTask.execute((Void) null);
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        final TrainGetTask trainGetTask = new TrainGetTask(token) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    TrainDataManager.setTrains(getTrains());
+                    stepGetTask.execute((Void) null);
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        final SeatGetTask seatGetTask = new SeatGetTask(token) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    SeatDataManager.setSeats(getSeats());
+                    trainGetTask.execute((Void) null);
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        StationGetTask stationGetTask = new StationGetTask(token) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    StationDataManager.setStations(getStations());
+                    seatGetTask.execute((Void) null);
+                }
+
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+
+        stationGetTask.execute((Void) null);
     }
 }

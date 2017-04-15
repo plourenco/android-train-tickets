@@ -29,7 +29,7 @@ public abstract class TokenRefreshTask extends AsyncTask<Void, Void, Boolean> {
                 JSONObject object = new JSONObject(res);
                 if(object.getString("token") != null &&
                         object.getLong("expires") != 0L) {
-                    token = new TokenModel(object.getString("token"), refresh,
+                    token = new TokenModel(0, object.getString("token"), refresh,
                             object.getLong("expires"));
                     return true;
                 }
@@ -43,7 +43,9 @@ public abstract class TokenRefreshTask extends AsyncTask<Void, Void, Boolean> {
     protected abstract void onPostExecute(final Boolean success);
 
     @Override
-    protected abstract void onCancelled();
+    protected void onCancelled() {
+
+    }
 
     protected TokenModel getToken() {
         return token;

@@ -30,7 +30,8 @@ public abstract class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
                 JSONObject object = new JSONObject(res);
                 if(object.getString("token") != null &&
                         object.getLong("expires") != 0L) {
-                    token = new TokenModel(object.getString("token"), object.getString("refresh"),
+                    token = new TokenModel(object.getInt("userId"), object.getString("token"),
+                            object.getString("refresh"),
                             object.getLong("expires"));
                     return true;
                 }
@@ -44,5 +45,7 @@ public abstract class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
     protected abstract void onPostExecute(final Boolean success);
 
     @Override
-    protected abstract void onCancelled();
+    protected void onCancelled() {
+
+    }
 }
