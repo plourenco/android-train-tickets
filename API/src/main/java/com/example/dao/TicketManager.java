@@ -283,7 +283,7 @@ public class TicketManager {
     public List<TicketModel> getAllUserTicket(int userId) {
         List<TicketModel> tickets = new ArrayList<>();
         try {
-            ps = MySQLManager.getConnection().prepareStatement("SELECT * FROM tickets WHERE fkUser=?");
+            ps = MySQLManager.getConnection().prepareStatement("Call getUserTickets(?)");
             ps.setInt(1, userId);
 
             rs = ps.executeQuery();
@@ -293,11 +293,11 @@ public class TicketManager {
                 int departureStationId = rs.getInt("departureStationId");
                 int arrivalStationId = rs.getInt("arrivalStationId");
                 Date ticketDate = rs.getDate("ticketDate");
-                //Time depTime = rs.getTime("departureTime");
-                //Time arrTime = rs.getTime("arrivalTime");
+                Time depTime = rs.getTime("departureTime");
+                Time arrTime = rs.getTime("arrivalTime");
                 float price = rs.getFloat("price");
                 Date purchaseDate = rs.getDate("purchaseDate");
-                int tripId = rs.getInt("fkTrip");
+                int tripId = rs.getInt("idTrip");
                 boolean isUsed = rs.getBoolean("isUsed");
 
                 StationModel depStation = StationHolder.getStations().values().stream()
@@ -309,7 +309,7 @@ public class TicketManager {
 
                 try {
                     tickets.add(new TicketModel(id, UUID.fromString(uuid), depStation, arrStation, ticketDate, price,
-                            purchaseDate, trip, isUsed, 0, null, null));
+                            purchaseDate, trip, isUsed, 0, depTime, arrTime));
                 }
                 catch(IllegalArgumentException ignored) { } // ignore invalid ticket
             }
