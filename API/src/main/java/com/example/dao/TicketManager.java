@@ -162,29 +162,31 @@ public class TicketManager {
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                String uuid = rs.getString("uniqueId");
                 int id = rs.getInt("id");
-                Time departureTime = rs.getTime("departureTime");
-                Time arrivalTime = rs.getTime("arrivalTime");
-                String departureStation = rs.getString("fromStation");
-                String arrivalStation = rs.getString("toStation");
-                int seatNumber = rs.getInt("seatNumber");
-                String direction = rs.getString("direction");
+                String uuid = rs.getString("uniqueId");
+                int departureStationId = rs.getInt("departureStationId");
+                int arrivalStationId = rs.getInt("arrivalStationId");
+                Date ticketDate = rs.getDate("ticketDate");
+                Time depTime = rs.getTime("departureTime");
+                Time arrTime = rs.getTime("arrivalTime");
+                float price = rs.getFloat("price");
+                Date purchaseDate = rs.getDate("purchaseDate");
                 int tripId = rs.getInt("idTrip");
+                boolean isUsed = rs.getBoolean("isUsed");
 
                 StationModel depStation = StationHolder.getStations().values().stream()
-                        .filter(s -> s.getStationName().equals(departureStation)).findFirst().get();
+                        .filter(s -> s.getId() == departureStationId).findFirst().get();
                 StationModel arrStation = StationHolder.getStations().values().stream()
-                        .filter(s -> s.getStationName().equals(arrivalStation)).findFirst().get();
+                        .filter(s -> s.getId() == arrivalStationId).findFirst().get();
 
                 TripModel trip = TripHolder.getTrips().get(tripId);
-                trip.setSteps(null);
-                trip.setTrain(null);
-                trip.setDirection(direction);
 
-                //SeatModel seat = SeatHolder.getSeats().get(seatId);
+                try {
+                    tickets.add(new TicketModel(id, UUID.fromString(uuid), depStation, arrStation, ticketDate, price,
+                            purchaseDate, trip, isUsed, 0, depTime, arrTime));
+                }
+                catch(IllegalArgumentException ignored) { }
 
-                tickets.add(new TicketModel(id, UUID.fromString(uuid), depStation, arrStation, departureTime, arrivalTime, null, trip));
             }
             return tickets;
         } catch (SQLException sql){
@@ -280,10 +282,10 @@ public class TicketManager {
         }
     }
 
-    public List<TicketModel> getAllUserTicket(int userId) {
+    public List<TicketModel> getExpiredUserTickets(int userId) {
         List<TicketModel> tickets = new ArrayList<>();
         try {
-            ps = MySQLManager.getConnection().prepareStatement("Call getUserTickets(?)");
+            ps = MySQLManager.getConnection().prepareStatement("Call getExpiredTickets(?)");
             ps.setInt(1, userId);
 
             rs = ps.executeQuery();

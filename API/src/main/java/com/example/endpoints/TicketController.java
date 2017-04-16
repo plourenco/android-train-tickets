@@ -1,16 +1,13 @@
 package com.example.endpoints;
 
 import com.example.Main;
-import com.example.dataholder.StationHolder;
 import com.example.exceptions.ParseExceptionMapper;
 import com.example.models.AvailableTicketModel;
-import com.example.models.StationModel;
 import com.example.models.TicketModel;
 import com.example.dao.TicketManager;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -26,10 +23,10 @@ public class TicketController {
     private final TicketManager ticketManager = new TicketManager();
 
     @GET
-    @Path("user-tickets/{id}")
+    @Path("user-tickets-exp/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<TicketModel> getAllUserTickets(@PathParam("id")int id) {
-        return ticketManager.getAllUserTicket(id);
+    public List<TicketModel> getExpiredUserTickets(@PathParam("id")int id) {
+        return ticketManager.getExpiredUserTickets(id);
     }
 
     @GET
@@ -114,7 +111,7 @@ public class TicketController {
      * @return List<TicketModel> the active tickets of the user
      */
     @GET
-    @Path("get-user-tickets/{userId}")
+    @Path("user-tickets/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<TicketModel> getUserTickets(@PathParam("userId") int userId){
         return ticketManager.getUserTickets(userId);
