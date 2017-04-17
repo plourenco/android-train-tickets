@@ -45,7 +45,7 @@ public abstract class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
     protected abstract void onPostExecute(final Boolean success);
 
     @Override
-    protected void onCancelled() {
+    protected void onCancelled() {}
 
-    }
+    public TokenModel getToken() { return token; }
 }
