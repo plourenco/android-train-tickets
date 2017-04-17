@@ -75,9 +75,13 @@ public class TrainListAdapter extends ArrayAdapter<TrainTripModel> {
 
             viewHolder.txtTitle.setText(tripModel.getDescription());
             viewHolder.txtId.setText(String.valueOf(tripModel.getId()));
-            viewHolder.txtDeparture.setText(tripModel.getDepartureTime().toString());
-            viewHolder.txtArrival.setText(tripModel.getArrivalTime().toString());
-            viewHolder.txtDuration.setText(String.valueOf(tripModel.getDuration()));
+            viewHolder.txtDeparture.setText(tripModel.getDepartureTime().toString()+"  Hrs");
+            viewHolder.txtArrival.setText(tripModel.getArrivalTime().toString()+"  Hrs");
+            java.sql.Time arr=tripModel.getArrivalTime();
+            java.sql.Time dep=tripModel.getDepartureTime();
+            long diffHrs= (int)Math.abs(arr.getTime() - dep.getTime())/3600000;
+            long  diffMin=Math.abs(diffHrs*60-(Math.abs(arr.getTime()-dep.getTime()))/60000);
+            viewHolder.txtDuration.setText(String.valueOf(diffHrs)+":"+String.valueOf(diffMin)+" Hrs");
         }
 
         return convertView;
