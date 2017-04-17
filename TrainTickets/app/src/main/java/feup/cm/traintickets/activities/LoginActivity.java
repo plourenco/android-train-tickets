@@ -33,6 +33,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,15 +45,18 @@ import feup.cm.traintickets.datamanagers.StationDataManager;
 import feup.cm.traintickets.datamanagers.StepDataManager;
 import feup.cm.traintickets.datamanagers.TrainDataManager;
 import feup.cm.traintickets.datamanagers.TripDataManager;
+import feup.cm.traintickets.models.TokenModel;
 import feup.cm.traintickets.runnables.SeatGetTask;
 import feup.cm.traintickets.runnables.StationGetTask;
 import feup.cm.traintickets.runnables.StepGetTask;
 import feup.cm.traintickets.runnables.TokenRefreshTask;
 import feup.cm.traintickets.runnables.TrainGetTask;
 import feup.cm.traintickets.runnables.TripGetTask;
+import feup.cm.traintickets.runnables.UserGetRoleTask;
 import feup.cm.traintickets.runnables.UserLoginTask;
 import feup.cm.traintickets.util.StringCheck;
 
+import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -70,8 +74,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
+    private int role;
+    private int userid;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Set full screen
@@ -120,35 +127,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
         String token = sharedPrefs.getString("LOGIN_TOKEN", "");
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
-        int userid = sharedPrefs.getInt("LOGIN_ID", 0);
+        userid = sharedPrefs.getInt("LOGIN_ID", 0);
+        String password = sharedPrefs.getString("LOGIN_PASS", null);
+        String email = sharedPrefs.getString("LOGIN_EMAIL", null);
         /**
          * Role is set on user account creation
          */
-        int role = sharedPrefs.getInt("LOGIN_ROLE", -1);
+        role = sharedPrefs.getInt("LOGIN_ROLE", -1);
 
         cache(token);
 
-        if(!token.isEmpty() && expires.after(new Date()) && userid != 0) {
+        if (password != null && email != null) {
+            login(email, password);
+        } else {
+            Toast.makeText(this, "Could not retrieve data. Please login with your own data", Toast.LENGTH_LONG).show();
+        }
+
+        /*if(!token.isEmpty() && expires.after(new Date()) && userid != 0) {
             successRedirect(role);
         }
         else {
             refreshToken();
-        }
-    }
-
-    /**
-     * This needs to be refactored to the proper values!
-     * @param role id of the role
-     */
-    private void successRedirect(int role) {
-        if (role == 2) {
-            successRedirect();
-        } else {
-            Intent intent = new Intent(getApplicationContext(), ReviserActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        }
+        }*/
     }
 
     /**
@@ -422,10 +422,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void successRedirect() {
-        Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
+        UserGetRoleTask userGetRoleTask = new UserGetRoleTask(userid) {
+            @Override
+            protected void onCancelled() {}
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success)
+                    redirectTo(getRole());
+            }
+        };
+        userGetRoleTask.execute((Void) null);
+    }
+
+    //TODO refactor this to the correct values!
+    private void redirectTo(int role) {
+        Intent intent = null;
+        switch (role) {
+            case 1:
+                intent = new Intent(getApplicationContext(), ReviserActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                break;
+            case 2:
+                intent = new Intent(getApplicationContext(), TicketListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                break;
+            default:
+                break;
+        }
+        if (intent != null){
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(this, "Error redirecting", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

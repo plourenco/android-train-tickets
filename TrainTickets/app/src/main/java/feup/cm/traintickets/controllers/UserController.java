@@ -31,4 +31,8 @@ public class UserController {
         Gson gson = new Gson();
         return ServiceHandler.makePost("users/register", gson.toJson(user));
     }
+
+    public String getRole(int id) {
+        return ServiceHandler.makeGet("users/role/" + id);
+    }
 }

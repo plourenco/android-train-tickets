@@ -147,7 +147,7 @@ public class RegisterActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            UserModel model = new UserModel(0, username, email, password,
+            final UserModel model = new UserModel(0, username, email, password,
                     getResources().getInteger(R.integer.role_user));
 
             mRegisterTask = new UserRegisterTask(model) {
@@ -159,7 +159,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                         SharedPreferences sharedPreferences = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt("LOGIN_ROLE", 2);
+                        editor.putInt("LOGIN_ROLE", 1);
+                        editor.putString("LOGIN_PASS", model.getPassword());
+                        editor.putString("LOGIN_EMAIL", model.getEmail());
                         editor.apply();
 
                         Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);

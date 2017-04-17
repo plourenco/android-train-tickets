@@ -20,6 +20,13 @@ public class UserController {
 
     private final UserManager userManager = new UserManager();
 
+    @GET
+    @Path("role/{id}")
+    @Produces("application/json")
+    public int getUserRole(@PathParam("id")int id){
+        return userManager.getUserRole(id);
+    }
+
     /**
      * Authenticates the user and generates a token
      * Expects a non encrypted password (assuming HTTPs)

@@ -118,4 +118,19 @@ public class UserManager {
         }
         return null;
     }
+
+    public int getUserRole(int id) {
+        try {
+            PreparedStatement ps = MySQLManager.getConnection().prepareStatement("SELECT role FROM users WHERE id = ?");
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                return rs.getInt("role");
+            }
+        } catch (SQLException e){
+            Main.getLogger().severe(e.getMessage());
+        }
+        return -1;
+    }
 }
