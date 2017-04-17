@@ -63,8 +63,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_buy_ticket" />
-
     <include layout="@layout/nav_bottom" />
+
+    <include layout="@layout/content_buy_ticket" />
 
 </android.support.design.widget.CoordinatorLayout>

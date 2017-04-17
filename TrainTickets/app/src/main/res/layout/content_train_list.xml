@@ -1,218 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#cbd8cd"
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:background="@color/cardview_shadow_start_color"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_width="fill_parent"
+        android:layout_height="6dp"
+        android:background="#FFFFFF" />
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2">
-
-            <TextView
-                android:id="@+id/train_ticket_title_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/train_ticket_title_tv"
-                android:textStyle="bold"
-                android:textColor="@color/colorDarkText"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/train_list_id_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/train_ticket_id_tv"
-                android:textStyle="bold"
-                android:textColor="@color/colorDarkText"/>
-        </RelativeLayout>
-    </LinearLayout>
+    <TextView
+        android:id="@+id/train_ticket_title_txt"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:background="#70a075"
+        android:ems="10"
+        android:paddingLeft="10dp"
+        android:text="@string/train_ticket_title_txt"
+        android:textStyle="bold"
+        tools:ignore="RtlHardcoded,RtlSymmetry"
+        android:textColor="@color/colorDarkText"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cardview_shadow_start_color"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/train_list_departure_tv"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2">
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="@string/train_list_departure_tv"
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:textColor="@color/colorDarkText"/>
 
-            <TextView
-                android:id="@+id/train_ticket_title_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/train_ticket_title_txt"
-                android:textColor="@color/colorDarkText" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/train_list_arrival_tv"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/train_ticket_id_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/train_list_id_txt"
-                android:textColor="@color/colorDarkText"/>
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:orientation="horizontal"
-        android:weightSum="8"
-        tools:ignore="DisableBaselineAlignment,UselessParent">
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3">
-
-            <TextView
-                android:id="@+id/train_list_departure_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/train_list_ic_departure"
-                android:text="@string/train_list_departure_tv"
-                android:textColor="@color/colorDarkText"
-                android:textStyle="bold"
-                tools:ignore="RtlHardcoded" />
-
-            <ImageView
-                android:id="@+id/train_list_ic_departure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription=""
-                app:srcCompat="@drawable/ic_directions_subway_black_24dp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3">
-
-            <TextView
-                android:id="@+id/train_list_arrival_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/train_list_ic_arrival"
-                android:text="@string/train_list_arrival_tv"
-                android:textColor="@color/colorDarkText"
-                android:textStyle="bold"
-                tools:ignore="RtlHardcoded" />
-
-            <ImageView
-                android:id="@+id/train_list_ic_arrival"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:tint="@color/colorPrimaryDark"
-                app:srcCompat="@drawable/ic_directions_subway_black_24dp"
-                tools:ignore="ContentDescription" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2">
-
-            <TextView
-                android:id="@+id/train_list_duration_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/train_list_ic_duration"
-                android:text="@string/train_list_duration_tv"
-                android:textColor="@color/colorDarkText"
-                android:textStyle="bold"
-                tools:ignore="RtlHardcoded" />
-
-            <ImageView
-                android:id="@+id/train_list_ic_duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_duration_time_24dp"
-                android:tint="@color/colorPrimaryDark" />
-        </RelativeLayout>
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="@string/train_list_arrival_tv"
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:textColor="@color/colorDarkText"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="8">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3">
+        <TextView
+            android:id="@+id/train_list_departure_txt"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="@string/train_list_departure_txt"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:textColor="@color/colorDarkText"/>
 
-            <TextView
-                android:id="@+id/train_list_departure_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="@string/train_list_departure_txt"
-                android:textColor="@color/colorDarkText"/>
 
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/train_list_arrival_txt"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="@string/train_list_arrival_txt"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:textColor="@color/colorDarkText"/>
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3">
-
-            <TextView
-                android:id="@+id/train_list_arrival_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/train_list_arrival_txt"
-                android:textColor="@color/colorDarkText"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2">
-
-            <TextView
-                android:id="@+id/train_list_duration_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/train_list_duration_txt"
-                android:textColor="@color/colorDarkText"/>
-        </RelativeLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="14">
+
+        <TextView
+            android:id="@+id/train_list_duration_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:paddingLeft="10dp"
+            android:text="@string/train_list_duration_tv"
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:textColor="@color/colorDarkText"/>
+
+
+        <TextView
+            android:id="@+id/train_list_duration_txt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:paddingLeft="10dp"
+            android:text="@string/train_list_duration_txt"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:textColor="@color/colorDarkText"/>
+
+        <TextView
+            android:id="@+id/train_list_id_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:paddingLeft="10dp"
+            android:text="@string/train_ticket_id_tv"
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:textColor="@color/colorDarkText"/>
+
+        <TextView
+            android:id="@+id/train_ticket_id_txt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:paddingLeft="10dp"
+            android:text="@string/train_list_id_txt"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:textColor="@color/colorDarkText"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="6dp"
+        android:background="#FFFFFF" />
+
+
 </LinearLayout>

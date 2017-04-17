@@ -43,8 +43,9 @@ public class TimetableManager {
                 int arrStationId = rs.getInt("arrivalStationId");
                 Time depTime = rs.getTime("departureTime");
                 Time arrTime = rs.getTime("arrivalTime");
+                String description=rs.getString("description");
                 schedule.add(new TimetableModel(depStation, arrStation, tripId, depStationId,
-                        arrStationId, depTime, arrTime));
+                        arrStationId, depTime, arrTime,description));
             }
             return schedule;
         } catch (SQLException sql) {

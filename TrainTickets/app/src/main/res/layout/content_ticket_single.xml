@@ -9,8 +9,10 @@
     tools:showIn="@layout/activity_ticket_single">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="14dp"
+        android:layout_height="495dp"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
 
         <ProgressBar
             android:id="@+id/ticket_progress"
@@ -59,7 +61,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/error_select_station"
                     android:textColor="@color/colorDarkText"
-                    android:textSize="@dimen/activity_text_title" />
+                    android:textSize="@dimen/activity_text_title"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
 
                 <TextView
                     android:id="@+id/ticket_destination"

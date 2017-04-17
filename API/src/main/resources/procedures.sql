@@ -12,13 +12,14 @@ DELIMITER //
 create procedure getSchedule(IN depStation INT,IN arrStation INT)
   begin
     if(depStation<arrStation) then
-      select stb.startStation,stb.endStation,sch.id,sch.departureStationId,sch.arrivalStationId,sch.departureTime,sch.arrivalTime
+      select sch.description,stb.startStation,stb.endStation,sch.id,sch.departureStationId,sch.arrivalStationId,sch.departureTime,sch.arrivalTime
       from
         (select tr.id,
            min(departureStationId) as departureStationId,
            max(arrivalStationId)as arrivalStationId,
            max(arrivalTime) as arrivalTime,
-           min(departureTime)as departureTime
+           min(departureTime)as departureTime,
+           tr.description
          from trips tr join steps st on tr.id=st.fkTrip
          where departureStationId=depStation or arrivalStationId=arrStation group by id) as sch
         join
@@ -35,7 +36,8 @@ create procedure getSchedule(IN depStation INT,IN arrStation INT)
            max(departureStationId) as departureStationId,
            min(arrivalStationId)as arrivalStationId,
            max(arrivalTime) as arrivalTime,
-           min(departureTime)as departureTime
+           min(departureTime)as departureTime,
+           tr.description
          from trips tr join steps st on tr.id=st.fkTrip
          where departureStationId=depStation or arrivalStationId=arrStation group by id) as sch
         join

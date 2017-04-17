@@ -18,6 +18,7 @@ public class TimetableModel {
     private int arrivalStationId;
     private Time departureTime;
     private Time arrivalTime;
+    private String description;
 
     /**
      * Getters
@@ -43,14 +44,14 @@ public class TimetableModel {
     public Time getArrivalTime() {
         return arrivalTime;
     }
-
+    public String getDescription() {return description;}
 
     /**
      * Constructors
      */
     public TimetableModel() {
     }
-    public TimetableModel(String startStation, String endStation, int id, int departureStationId, int arrivalStationId, Time departureTime, Time arrivalTime) {
+    public TimetableModel(String startStation, String endStation, int id, int departureStationId, int arrivalStationId, Time departureTime, Time arrivalTime,String description) {
         this.startStation = startStation;
         this.endStation = endStation;
         this.id = id;
@@ -58,5 +59,6 @@ public class TimetableModel {
         this.arrivalStationId = arrivalStationId;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
+        this.description=description;
     }
 }

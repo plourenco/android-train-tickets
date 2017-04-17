@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -35,6 +36,7 @@ public class BuyTicketActivity extends BaseActivity {
     private TextView departure;
     private TextView title;
     private DatePicker depatureDate;
+    private Button buyTicket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class BuyTicketActivity extends BaseActivity {
         dest = (Spinner) findViewById(R.id.destination_station);
         title = (TextView) findViewById(R.id.title_left);
         departure = (TextView) findViewById(R.id.departure_desc);
+        buyTicket=(Button)findViewById(R.id.btnBuyTicket) ;
 
         // Set origin change listener
         AdapterView.OnItemSelectedListener sLis = new AdapterView.OnItemSelectedListener() {
@@ -90,7 +93,18 @@ public class BuyTicketActivity extends BaseActivity {
         });
 
         loadStations();
+
+        buyTicket.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TrainListActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
+
 
     protected void loadStations() {
         final List<String> list = new ArrayList<String>();
@@ -141,3 +155,4 @@ public class BuyTicketActivity extends BaseActivity {
         departure.setText(sdf.format(calendar.getTime()));
     }
 }
+
