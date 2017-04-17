@@ -7,33 +7,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-import com.kogitune.activity_transition.ActivityTransitionLauncher;
 
 import java.util.Date;
 
 import feup.cm.traintickets.activities.BuyTicketActivity;
 import feup.cm.traintickets.activities.LoginActivity;
 import feup.cm.traintickets.activities.TicketListActivity;
-import feup.cm.traintickets.datamanagers.SeatDataManager;
-import feup.cm.traintickets.datamanagers.StationDataManager;
-import feup.cm.traintickets.datamanagers.StepDataManager;
-import feup.cm.traintickets.datamanagers.TrainDataManager;
-import feup.cm.traintickets.datamanagers.TripDataManager;
-import feup.cm.traintickets.runnables.SeatGetTask;
-import feup.cm.traintickets.runnables.StationGetTask;
-import feup.cm.traintickets.runnables.StepGetTask;
 import feup.cm.traintickets.runnables.TokenRefreshTask;
-import feup.cm.traintickets.runnables.TrainGetTask;
-import feup.cm.traintickets.runnables.TripGetTask;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     private BottomNavigationViewEx bottomNav;
     private SharedPreferences sharedPrefs;
@@ -60,6 +47,7 @@ public class BaseActivity extends AppCompatActivity {
             bottomNav.setTextVisibility(false);
             bottomNav.setIconSize(26, 26);
             bottomNav.setItemHeight(125);
+            if(getBottomNavId() != 0) bottomNav.setSelectedItemId(getBottomNavId());
             bottomNav.setOnNavigationItemSelectedListener(
                     new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -70,14 +58,14 @@ public class BaseActivity extends AppCompatActivity {
                             if(!(BaseActivity.this instanceof BuyTicketActivity)) {
                                 intent = new Intent(getApplicationContext(), BuyTicketActivity.class);
                                 startActivity(intent);
-                                overridePendingTransition(0, 0);
+                                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
                             }
                             break;
                         case R.id.action_tickets:
                             if(!(BaseActivity.this instanceof TicketListActivity)) {
                                 intent = new Intent(getApplicationContext(), TicketListActivity.class);
                                 startActivity(intent);
-                                overridePendingTransition(0, 0);
+                                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                             }
                             break;
                     }
@@ -85,6 +73,12 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
     }
 
     protected boolean tokenValid() {
@@ -130,4 +124,9 @@ public class BaseActivity extends AppCompatActivity {
     protected String getToken() { return token; }
 
     protected int getUserId() { return userId; }
+
+    /**
+     * Override with an empty body if the activity has no bottomNavigation
+     */
+    protected abstract int getBottomNavId();
 }

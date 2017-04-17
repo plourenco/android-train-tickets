@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    tools:context="feup.cm.traintickets.activities.TicketSuccessActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/done_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:paddingTop="20dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            android:text="Payment successful"
+            android:textColor="@android:color/white"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/done_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/done_text"
+            android:paddingTop="10dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            android:text="$40.00"
+            android:textColor="@color/colorGrayMedium"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/done_note_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/done_price"
+            android:paddingTop="30dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            android:text="NOTE"
+            android:textColor="@android:color/white"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/done_note_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/done_note_title"
+            android:paddingTop="10dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            android:text="You should receive an invoice of the purchase through your email. You can also check your tickets in the second tab."
+            android:textColor="@color/colorGrayMedium"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/done_image"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_below="@id/done_note_value"
+            android:layout_marginTop="10dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            app:srcCompat="@drawable/ic_done_all_white_24dp" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

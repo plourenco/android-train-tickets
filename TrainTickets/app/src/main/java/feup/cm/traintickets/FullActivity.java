@@ -34,7 +34,7 @@ import feup.cm.traintickets.runnables.TrainGetTask;
 import feup.cm.traintickets.runnables.TripGetTask;
 import feup.cm.traintickets.util.Callback;
 
-public class FullActivity extends BaseActivity {
+public abstract class FullActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

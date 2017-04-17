@@ -32,6 +32,10 @@ import se.simbio.encryption.Encryption;
 
 public class SingleTicketActivity extends BaseActivity {
 
+    /*
+    TODO: Spinner is not on the middle
+     */
+
     private TextView originView;
     private TextView destinationView;
     private TextView dateView;
@@ -117,6 +121,11 @@ public class SingleTicketActivity extends BaseActivity {
         //else {
         //    Toast.makeText(this, "Ticket has expired QR Code generation", Toast.LENGTH_LONG).show();
         //}
+    }
+
+    @Override
+    protected int getBottomNavId() {
+        return R.id.action_tickets;
     }
 
     private void generateQR(final String textToEncode) {

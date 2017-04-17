@@ -32,28 +32,32 @@ public class BuyTicketActivity extends BaseActivity {
 
     private Spinner origin;
     private Spinner dest;
+    private Button forward;
 
     private TextView departure;
     private TextView title;
     private DatePicker depatureDate;
-    private Button buyTicket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_ticket);
 
-        BottomNavigationViewEx bottomNav = (BottomNavigationViewEx) findViewById(R.id.nav_bottom);
-        bottomNav.setSelectedItemId(R.id.action_buyticket);
-
         origin = (Spinner) findViewById(R.id.origin_station);
         dest = (Spinner) findViewById(R.id.destination_station);
         title = (TextView) findViewById(R.id.title_left);
         departure = (TextView) findViewById(R.id.departure_desc);
-        buyTicket=(Button)findViewById(R.id.btnBuyTicket) ;
+        forward = (Button) findViewById(R.id.button);
+
+        forward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forward();
+            }
+        });
 
         // Set origin change listener
-        AdapterView.OnItemSelectedListener sLis = new AdapterView.OnItemSelectedListener() {
+        AdapterView.OnItemSelectedListener oLis = new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -65,7 +69,7 @@ public class BuyTicketActivity extends BaseActivity {
 
             }
         };
-        origin.setOnItemSelectedListener(sLis);
+        origin.setOnItemSelectedListener(oLis);
 
         // Open calendar on click input
         final Calendar calendar = Calendar.getInstance();
@@ -93,18 +97,12 @@ public class BuyTicketActivity extends BaseActivity {
         });
 
         loadStations();
-
-        buyTicket.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), TrainListActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
-
+    @Override
+    protected int getBottomNavId() {
+        return R.id.action_buyticket;
+    }
 
     protected void loadStations() {
         final List<String> list = new ArrayList<String>();
@@ -135,16 +133,18 @@ public class BuyTicketActivity extends BaseActivity {
     }
 
     protected void forward() {
-        if(origin.getSelectedItem().toString()
-                .equals(dest.getSelectedItem().toString())) {
-            TextView errorText = (TextView) dest.getSelectedView();
-            errorText.setError("");
-            Snackbar.make(errorText, getString(R.string.error_same_stations),
-                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            return;
+        if(origin.getSelectedItem() != null && dest.getSelectedItem() != null) {
+            if (origin.getSelectedItem().toString()
+                    .equals(dest.getSelectedItem().toString())) {
+                TextView errorText = (TextView) dest.getSelectedView();
+                errorText.setError("");
+                Snackbar.make(errorText, getString(R.string.error_same_stations),
+                        Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                return;
+            }
+            Intent intent = new Intent(getApplicationContext(), TrainListActivity.class);
+            startActivity(intent);
         }
-        Intent intent = new Intent(getApplicationContext(), TrainListActivity.class);
-        startActivity(intent);
     }
 
     private void updateLabel(Calendar calendar) {
@@ -155,4 +155,3 @@ public class BuyTicketActivity extends BaseActivity {
         departure.setText(sdf.format(calendar.getTime()));
     }
 }
-

@@ -56,4 +56,9 @@ public class TrainListActivity extends BaseActivity {
         task.execute((Void)null);
 
     }
+
+    @Override
+    protected int getBottomNavId() {
+        return R.id.action_buyticket;
+    }
 }

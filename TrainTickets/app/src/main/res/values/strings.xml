@@ -37,6 +37,7 @@
     <string name="display_date">Date</string>
     <string name="display_ticket_active">Active</string>
     <string name="display_ticket_expired">Expired</string>
+    <string name="display_train_pick">Expired</string>
 
     <string name="error_match_password">Passwords do not match</string>
     <string name="error_invalid_register">Unable to complete registration</string>
