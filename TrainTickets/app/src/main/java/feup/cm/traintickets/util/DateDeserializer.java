@@ -23,12 +23,16 @@ public class DateDeserializer implements JsonDeserializer<java.util.Date> {
     @Override
     public Date deserialize(JsonElement jsonElement, Type typeOF,
                             JsonDeserializationContext context) throws JsonParseException {
+        return deserialize(jsonElement.getAsString());
+    }
+
+    public Date deserialize(String date) throws JsonParseException {
         for (String format : DATE_FORMATS) {
             try {
-                return new SimpleDateFormat(format, Locale.UK).parse(jsonElement.getAsString());
+                return new SimpleDateFormat(format, Locale.UK).parse(date);
             } catch (ParseException ignored) { }
         }
-        throw new JsonParseException("Unparseable date: \"" + jsonElement.getAsString()
+        throw new JsonParseException("Unparseable date: \"" + date
                 + "\". Supported formats: " + Arrays.toString(DATE_FORMATS));
     }
 }

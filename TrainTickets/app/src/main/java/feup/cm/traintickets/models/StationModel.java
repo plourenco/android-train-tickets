@@ -30,4 +30,9 @@ public class StationModel {
     public String getStationName() {
         return stationName;
     }
+
+    public String toString()
+    {
+        return stationName;
+    }
 }
