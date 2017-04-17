@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -38,18 +37,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import feup.cm.traintickets.R;
-import feup.cm.traintickets.adapters.TicketListAdapter;
 import feup.cm.traintickets.datamanagers.SeatDataManager;
 import feup.cm.traintickets.datamanagers.StationDataManager;
 import feup.cm.traintickets.datamanagers.StepDataManager;
 import feup.cm.traintickets.datamanagers.TrainDataManager;
 import feup.cm.traintickets.datamanagers.TripDataManager;
-import feup.cm.traintickets.models.StationModel;
-import feup.cm.traintickets.models.TicketModel;
-import feup.cm.traintickets.models.TripModel;
 import feup.cm.traintickets.runnables.SeatGetTask;
 import feup.cm.traintickets.runnables.StationGetTask;
 import feup.cm.traintickets.runnables.StepGetTask;
@@ -57,8 +51,6 @@ import feup.cm.traintickets.runnables.TokenRefreshTask;
 import feup.cm.traintickets.runnables.TrainGetTask;
 import feup.cm.traintickets.runnables.TripGetTask;
 import feup.cm.traintickets.runnables.UserLoginTask;
-import feup.cm.traintickets.sqlite.SQLiteManager;
-import feup.cm.traintickets.sqlite.TicketBrowser;
 import feup.cm.traintickets.util.StringCheck;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -129,14 +121,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String token = sharedPrefs.getString("LOGIN_TOKEN", "");
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
         int userid = sharedPrefs.getInt("LOGIN_ID", 0);
+        /**
+         * Role is set on user account creation
+         */
+        int role = sharedPrefs.getInt("LOGIN_ROLE", -1);
 
         cache(token);
 
         if(!token.isEmpty() && expires.after(new Date()) && userid != 0) {
-            successRedirect();
+            successRedirect(role);
         }
         else {
             refreshToken();
+        }
+    }
+
+    /**
+     * This needs to be refactored to the proper values!
+     * @param role id of the role
+     */
+    private void successRedirect(int role) {
+        if (role == 2) {
+            successRedirect();
+        } else {
+            Intent intent = new Intent(getApplicationContext(), ReviserActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         }
     }
 
