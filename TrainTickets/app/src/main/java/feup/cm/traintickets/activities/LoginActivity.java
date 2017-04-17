@@ -273,6 +273,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     editor.putString("LOGIN_REFRESH", token.getRefresh());
                     editor.putLong("LOGIN_EXPIRES", token.getExpires().getTime());
                     editor.putInt("LOGIN_ID", token.getUserId());
+                    editor.putString("LOGIN_EMAIL", email);
+                    editor.putString("LOGIN_PASSWORD", password);
                     editor.apply();
 
                     successRedirect();
