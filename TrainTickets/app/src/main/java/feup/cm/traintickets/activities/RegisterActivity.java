@@ -159,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         SharedPreferences sharedPreferences = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt("LOGIN_ROLE", 1);
+                        editor.putInt("LOGIN_ROLE", 2);
                         editor.putString("LOGIN_PASS", model.getPassword());
                         editor.putString("LOGIN_EMAIL", model.getEmail());
                         editor.apply();
