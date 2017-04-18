@@ -82,11 +82,22 @@ public class SettingsActivity extends BaseActivity {
         String cc = sharedPrefs.getString("CC_NUMBER", "");
         String cv = sharedPrefs.getString("CVV2", "");
         userId = sharedPrefs.getInt("LOGIN_ID", -1);
-        // TODO: Set date
-        //Date exp = sharedPrefs.getString("CC_DATE", "");
-        if (!cc.isEmpty() && !cv.isEmpty()/* && exp != null*/) {
+        long exp = sharedPrefs.getLong("CC_DATE", -1);
+
+        if (!cc.isEmpty()){
             ccNumber.setText(cc);
+        }
+
+        if (!cv.isEmpty()) {
             cvv2.setText(cv);
+        }
+
+        if (exp != -1) {
+            Date d = new Date(exp);
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.UK);
+            String dateText = sdf.format(d);
+            expDate.setText(dateText);
+            expDate.setTag(dateText);
         }
     }
 
@@ -98,7 +109,7 @@ public class SettingsActivity extends BaseActivity {
         String newDate = sdf.format(calendar.getTime());
 
         if (!expDate.getText().equals(newDate)){
-            expDate.setText("No date has been chosen");
+            expDate.setText(R.string.display_select_date);
         }
 
         expDate.setText(newDate);

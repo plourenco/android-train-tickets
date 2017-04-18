@@ -38,7 +38,7 @@ public class TimetableActivity extends BaseActivity {
         listDataHeader = new ArrayList<TripModel>();
         listDatachild = new ArrayList<ArrayList<StepModel>>();
 
-        new TripGetTask(getToken()) {
+       /* new TripGetTask(getToken()) {
             @Override
             protected void onPostExecute(Boolean success) {
                 listAdapter = new TimetableAdapter(TimetableActivity.this, listDataHeader, listDatachild);
