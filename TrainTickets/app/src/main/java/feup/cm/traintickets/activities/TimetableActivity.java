@@ -9,61 +9,18 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.adapters.TimetableAdapter;
-import feup.cm.traintickets.datamanagers.TripDataManager;
-import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.StepModel;
 import feup.cm.traintickets.models.TripModel;
 import feup.cm.traintickets.runnables.TripGetTask;
 
 public class TimetableActivity extends BaseActivity {
 
-    ExpandableListAdapter expAdapter;
-    ExpandableListView expView;
-    List<TripModel> trips;
-    private HashMap<TripModel, List<StepModel>> steps;
-
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timetable);
-        expView = (ExpandableListView) findViewById(R.id.listViewTimetable);
-
-        trips = TripDataManager.getTrips();
-        steps = new HashMap<>();
-        for (TripModel t : trips) {
-            steps.put(t, t.getSteps());
-
-
-        }
-
-
-
-
-
-
-
-
-
-        expAdapter = new TimetableAdapter(this, trips, steps);
-        expView.setAdapter(expAdapter);
-    }
-
-    @Override
-    protected int getBottomNavId() {
-        return R.id.action_timetables;
-    }
-
-   /* private ArrayList<TripModel> listDataHeader;
+    private ArrayList<TripModel> listDataHeader;
     private ArrayList<ArrayList<StepModel>> listDatachild;
 
     ExpandableListAdapter listAdapter;
@@ -105,10 +62,10 @@ public class TimetableActivity extends BaseActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+        /*expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                /*Toast.makeText(
+                Toast.makeText(
                         getApplicationContext(),
                         listDataHeader.get(groupPosition)
                                 + " : "
@@ -118,8 +75,11 @@ public class TimetableActivity extends BaseActivity {
                         .show();
                 return false;
             }
-        });
-    }*/
+        });*/
+    }
 
-
+    @Override
+    protected int getBottomNavId() {
+        return 0;
+    }
 }

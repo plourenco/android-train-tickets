@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.Main;
 import com.example.exceptions.EncryptionException;
+import com.example.exceptions.InvalidCreditCardException;
 import com.example.exceptions.InvalidUserDataException;
 import com.example.models.CreditCardModel;
 import com.example.models.RawUserModel;
@@ -11,10 +12,7 @@ import com.example.security.PasswordSecurity;
 import com.example.models.UserRole;
 
 import java.security.NoSuchAlgorithmException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class UserManager {
 
@@ -148,6 +146,28 @@ public class UserManager {
         } catch (SQLException sql) {
             Main.getLogger().severe(sql.getMessage());
             return sql.getMessage();
+        }
+    }
+
+    public CreditCardModel getCard(int userId) {
+        try {
+            PreparedStatement ps = MySQLManager.getConnection().prepareStatement("SELECT * FROM creditcards where fkUser=?");
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String number = rs.getString("number");
+                String cvv2 = rs.getString("cvv2");
+                Date expDate = rs.getDate("expiryDate");
+
+                CreditCardModel card = new CreditCardModel(number, expDate, cvv2);
+                return card;
+            } else {
+                throw new InvalidCreditCardException("CC for user does not exist");
+            }
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+            return null;
         }
     }
 }

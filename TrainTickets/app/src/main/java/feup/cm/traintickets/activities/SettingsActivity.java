@@ -1,15 +1,22 @@
 package feup.cm.traintickets.activities;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
@@ -23,7 +30,8 @@ public class SettingsActivity extends BaseActivity {
      */
     EditText ccNumber;
     EditText cvv2;
-    EditText expDate;
+
+    TextView expDate;
 
     Button saveCard;
 
@@ -39,13 +47,34 @@ public class SettingsActivity extends BaseActivity {
 
         ccNumber = (EditText)findViewById(R.id.ccNumber);
         cvv2 = (EditText)findViewById(R.id.cvv2Number);
-        expDate = (EditText)findViewById(R.id.expiryDate);
+        expDate = (TextView)findViewById(R.id.expiryDate);
 
         saveCard = (Button)findViewById(R.id.saveCardBtn);
         saveCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveCreditCard();
+            }
+        });
+
+        final Calendar calendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel(calendar);
+            }
+        };
+        expDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog dialog = new DatePickerDialog(SettingsActivity.this, date, calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                dialog.show();
             }
         });
 
@@ -61,14 +90,47 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
-    private void saveCreditCard() {
+    private void updateLabel(Calendar calendar) {
+        String myFormat = "MMM dd, yyyy";
+        String apiFormat = "yyyy-MM-dd";
 
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
+        String newDate = sdf.format(calendar.getTime());
+
+        if (!expDate.getText().equals(newDate)){
+            expDate.setText("No date has been chosen");
+        }
+
+        expDate.setText(newDate);
+        expDate.setTag(new SimpleDateFormat(apiFormat, Locale.US).format(calendar.getTime()));
+    }
+
+    private void saveCreditCard() {
         if (userId == -1){
             Toast.makeText(this, "User id invalid", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        final CreditCardModel creditCard = new CreditCardModel(ccNumber.getText().toString(), cvv2.getText().toString(), new Date());
+        if (expDate.getTag() == null) {
+            Toast.makeText(this, "Invalid date", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Date date;
+        try {
+            date = sdf.parse(expDate.getTag().toString());
+        } catch (ParseException pe) {
+            Toast.makeText(this, "Invalid date", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (date.before(new Date())){
+            Toast.makeText(this, "Date has to be superior to today", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final CreditCardModel creditCard = new CreditCardModel(ccNumber.getText().toString(), cvv2.getText().toString(), date);
         CreditCardSaveTask creditCardSaveTask = new CreditCardSaveTask(creditCard, getToken(), userId) {
             @Override
             protected void onPostExecute(Boolean success) {
@@ -100,9 +162,9 @@ public class SettingsActivity extends BaseActivity {
 
         editor = sharedPrefs.edit();
 
-        // TODO: Add expiryDate
         editor.putString("CC_NUMBER", creditCard.getCcNumber());
         editor.putString("CVV2", creditCard.getCvv2());
+        editor.putLong("CC_DATE", creditCard.getExpiryDate().getTime());
         editor.apply();
 
         Toast.makeText(this, "Saved to sharedPrefs", Toast.LENGTH_SHORT).show();
