@@ -65,6 +65,6 @@
 
     <include layout="@layout/content_buy_ticket" />
 
-    <!--<include layout="@layout/nav_bottom" />-->
+    <include layout="@layout/nav_bottom" />
 
 </android.support.design.widget.CoordinatorLayout>
