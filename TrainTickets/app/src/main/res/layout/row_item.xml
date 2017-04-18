@@ -15,7 +15,6 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black" />
 
-
     <TextView
         android:id="@+id/type"
         android:layout_width="wrap_content"

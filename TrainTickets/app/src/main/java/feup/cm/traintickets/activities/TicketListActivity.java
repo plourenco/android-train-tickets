@@ -89,6 +89,11 @@ public class TicketListActivity extends BaseActivity {
         tabLayout.setupWithViewPager(mViewPager);
     }
 
+    @Override
+    protected int getBottomNavId() {
+        return R.id.action_tickets;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

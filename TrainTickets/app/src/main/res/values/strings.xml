@@ -37,16 +37,23 @@
     <string name="display_date">Date</string>
     <string name="display_ticket_active">Active</string>
     <string name="display_ticket_expired">Expired</string>
+    <string name="display_train_pick">Train</string>
+
+    <string name="display_select_train">No train selected</string>
+    <string name="display_select_train_tip">Click in any train to select it</string>
+    <string name="display_select_date">No date selected</string>
 
     <string name="error_match_password">Passwords do not match</string>
     <string name="error_invalid_register">Unable to complete registration</string>
     <string name="error_select_station">No Station</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
+    <string name="error_invalid_date">Invalid date</string>
     <string name="error_incorrect_credentials">Incorrect email or password</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_same_stations">The origin and destination stations can\'t be the same</string>
     <string name="error_no_tickets">There are no available tickets</string>
+    <string name="error_no_trains">There are no available trains. Please select a new date or station</string>
 
     <!-- Strings train:list-->
     <string name="train_list_departure_tv">Departure Time</string>

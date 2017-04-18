@@ -11,7 +11,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical">
@@ -38,18 +41,18 @@
                 android:layout_marginTop="@dimen/layout_form_content_top"
                 android:layout_toEndOf="@+id/ic_origin"
                 android:text="@string/display_origin"
-                android:textSize="@dimen/text_form_title_sm"
                 android:textAllCaps="true"
+                android:textSize="@dimen/text_form_title_sm"
                 android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/origin_station"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/origin_desc"
+                android:layout_toEndOf="@+id/ic_origin"
                 android:color="@color/colorDarkText"
-                android:textSize="@dimen/text_form_title"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true" />
+                android:textSize="@dimen/text_form_title" />
 
         </RelativeLayout>
 
@@ -81,8 +84,8 @@
                 android:layout_marginTop="20dp"
                 android:layout_toEndOf="@+id/ic_destination"
                 android:text="@string/display_destination"
-                android:textSize="@dimen/text_form_title_sm"
                 android:textAllCaps="true"
+                android:textSize="@dimen/text_form_title_sm"
                 android:textStyle="bold" />
 
             <Spinner
@@ -121,7 +124,7 @@
                 android:id="@+id/departure_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/ic_departure"
+                android:layout_toEndOf="@id/ic_departure"
                 android:paddingTop="20dp"
                 android:text="@string/display_departure"
                 android:textAllCaps="true"
@@ -132,11 +135,56 @@
                 android:id="@+id/departure_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/departure_title"
+                android:layout_below="@id/departure_title"
                 android:layout_marginTop="6dp"
-                android:layout_toEndOf="@+id/ic_departure"
+                android:layout_toEndOf="@id/ic_departure"
                 android:focusable="false"
-                android:hint="No date selected"
+                android:hint="@string/display_select_date"
+                android:textSize="@dimen/text_form_value" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="16dp"
+            android:background="#29000000" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/ic_train"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/icon_form_margin"
+                android:tint="@color/colorPrimaryDark"
+                app:srcCompat="@drawable/ic_date_range_black_24dp" />
+
+            <TextView
+                android:id="@+id/train_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/ic_train"
+                android:paddingTop="20dp"
+                android:text="@string/display_train_pick"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_form_title_sm"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/train_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/train_title"
+                android:layout_marginTop="6dp"
+                android:layout_toEndOf="@id/ic_train"
+                android:focusable="false"
+                android:hint="@string/display_select_train"
                 android:textSize="@dimen/text_form_value" />
 
         </RelativeLayout>
@@ -187,11 +235,11 @@
                     android:id="@+id/ticket_price_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/ticket_price_title"
+                    android:layout_toEndOf="@id/ic_payment"
                     android:text="$00.00"
                     android:textColor="@color/colorDarkText"
-                    android:textSize="@dimen/text_form_value_big"
-                    android:layout_below="@+id/ticket_price_title"
-                    android:layout_toEndOf="@+id/ic_payment" />
+                    android:textSize="@dimen/text_form_value_big" />
 
             </RelativeLayout>
 
@@ -203,11 +251,9 @@
                 app:layout_columnWeight="1">
 
                 <Button
-                    android:id="@+id/btnBuyTicket"
+                    android:id="@+id/button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
                     android:text="Buy Ticket"
                     android:textColor="@android:color/white"
                     android:theme="@style/Accent.Button" />

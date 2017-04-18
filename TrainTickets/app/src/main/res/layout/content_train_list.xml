@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="6dp"
-        android:background="#FFFFFF" />
+        android:background="#d9dbdd" />
 
     <TextView
         android:id="@+id/train_ticket_title_txt"
@@ -19,15 +19,15 @@
         android:ems="10"
         android:paddingLeft="10dp"
         android:text="@string/train_ticket_title_txt"
-        android:textStyle="bold"
-        tools:ignore="RtlHardcoded,RtlSymmetry"
         android:textColor="@color/QRCodeWhite"
-        android:textSize="@dimen/text_form_title"/>
+        android:textSize="@dimen/text_form_title"
+        android:textStyle="bold"
+        tools:ignore="RtlHardcoded,RtlSymmetry" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#FFFFFF" />
+        android:background="#d9dbdd" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -41,9 +41,9 @@
             android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="@string/train_list_departure_tv"
+            android:textColor="@color/colorDarkText"
             android:textStyle="bold"
-            tools:ignore="RtlHardcoded,RtlSymmetry"
-            android:textColor="@color/colorDarkText"/>
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
         <TextView
             android:id="@+id/train_list_arrival_tv"
@@ -52,9 +52,9 @@
             android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="@string/train_list_arrival_tv"
+            android:textColor="@color/colorDarkText"
             android:textStyle="bold"
-            tools:ignore="RtlHardcoded,RtlSymmetry"
-            android:textColor="@color/colorDarkText"/>
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
     </LinearLayout>
 
@@ -70,8 +70,8 @@
             android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="@string/train_list_departure_txt"
-            tools:ignore="RtlHardcoded,RtlSymmetry"
-            android:textColor="@color/colorDarkText"/>
+            android:textColor="@color/colorDarkText"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
 
         <TextView
@@ -81,15 +81,15 @@
             android:layout_weight="1"
             android:paddingLeft="10dp"
             android:text="@string/train_list_arrival_txt"
-            tools:ignore="RtlHardcoded,RtlSymmetry"
-            android:textColor="@color/colorDarkText"/>
+            android:textColor="@color/colorDarkText"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#FFFFFF" />
+        android:background="#d9dbdd" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -104,9 +104,9 @@
             android:layout_weight="4"
             android:paddingLeft="10dp"
             android:text="@string/train_list_duration_tv"
+            android:textColor="@color/colorDarkText"
             android:textStyle="bold"
-            tools:ignore="RtlHardcoded,RtlSymmetry"
-            android:textColor="@color/colorDarkText"/>
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
 
         <TextView
@@ -116,8 +116,8 @@
             android:layout_weight="3"
             android:paddingLeft="10dp"
             android:text="@string/train_list_duration_txt"
-            tools:ignore="RtlHardcoded,RtlSymmetry"
-            android:textColor="@color/colorDarkText"/>
+            android:textColor="@color/colorDarkText"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
         <TextView
             android:id="@+id/train_list_id_tv"
@@ -126,9 +126,9 @@
             android:layout_weight="5"
             android:paddingLeft="10dp"
             android:text="@string/train_ticket_id_tv"
+            android:textColor="@color/colorDarkText"
             android:textStyle="bold"
-            tools:ignore="RtlHardcoded,RtlSymmetry"
-            android:textColor="@color/colorDarkText"/>
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
         <TextView
             android:id="@+id/train_ticket_id_txt"
@@ -137,9 +137,14 @@
             android:layout_weight="2"
             android:paddingLeft="10dp"
             android:text="@string/train_list_id_txt"
-            tools:ignore="RtlHardcoded,RtlSymmetry"
-            android:textColor="@color/colorDarkText"/>
+            android:textColor="@color/colorDarkText"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="6dp"
+        android:background="#d9dbdd" />
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 package feup.cm.traintickets.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ import feup.cm.traintickets.models.TicketModel;
 public class TicketListAdapter extends ArrayAdapter<TicketModel> implements View.OnClickListener{
 
     private List<TicketModel> dataSet;
-    Context mContext;
+    private Context mContext;
 
     // View lookup cache
     private static class ViewHolder {
@@ -37,7 +38,6 @@ public class TicketListAdapter extends ArrayAdapter<TicketModel> implements View
         super(context, R.layout.row_item, data);
         this.dataSet = data;
         this.mContext=context;
-
     }
 
     @Override
@@ -58,8 +58,9 @@ public class TicketListAdapter extends ArrayAdapter<TicketModel> implements View
 
     private int lastPosition = -1;
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // Get the data item for this position
         TicketModel dataModel = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
