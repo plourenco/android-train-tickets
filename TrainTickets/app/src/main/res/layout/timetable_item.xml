@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="22dip"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="8">
+
+        <TextView
+            android:id="@+id/timetable_station"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@color/colorGray"
+            android:paddingLeft="10dp"
+            android:text="station"
+            android:textColor="@color/colorDarkText"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/timetable_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@color/colorGray"
+            android:paddingLeft="10dp"
+            android:text="time"
+            android:textColor="@color/colorDarkText"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/timetable_waiting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/colorGray"
+            android:paddingLeft="10dp"
+            android:text="waiting"
+            android:textColor="@color/colorDarkText"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        android:background="@color/colorRedSeparator">
+    </LinearLayout>
+
+</LinearLayout>

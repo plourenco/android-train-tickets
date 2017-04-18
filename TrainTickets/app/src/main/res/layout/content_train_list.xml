@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="6dp"
-        android:background="#d9dbdd" />
+        android:background="#FFFFFF" />
 
     <TextView
         android:id="@+id/train_ticket_title_txt"
@@ -27,7 +27,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#d9dbdd" />
+        android:background="#FFFFFF" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -89,7 +89,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#d9dbdd" />
+        android:background="#FFFFFF" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -141,11 +141,5 @@
             android:textColor="@color/colorDarkText"/>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="6dp"
-        android:background="#d9dbdd" />
-
 
 </LinearLayout>

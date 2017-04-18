@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="feup.cm.traintickets.activities.TrainListActivity">
+    tools:context="feup.cm.traintickets.activities.Timetable">
 
-    <ListView
-        android:id="@+id/listViewTrainList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ExpandableListView
+        android:id="@+id/listViewTimetable"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
