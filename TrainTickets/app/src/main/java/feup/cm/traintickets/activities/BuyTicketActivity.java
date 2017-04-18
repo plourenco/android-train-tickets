@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonParseException;
 
@@ -208,6 +209,8 @@ public class BuyTicketActivity extends BaseActivity {
                             Intent intent = new Intent(getApplicationContext(), TicketSuccessActivity.class);
                             intent.putExtra("priceView", priceView.getText());
                             startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Invalid CC?", Toast.LENGTH_SHORT).show();
                         }
                     }
 
