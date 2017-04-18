@@ -20,8 +20,6 @@ public class TimetableAdapter extends BaseExpandableListAdapter {
     private Context _context;
     private ArrayList<TripModel> trips;
     private ArrayList<ArrayList<StepModel>> steps;
-    private ArrayList<String> counterList;
-    private int totalValueOfCounter = 0;
 
     private static class ViewHolder {
         TextView txtStation;
@@ -30,8 +28,6 @@ public class TimetableAdapter extends BaseExpandableListAdapter {
         TextView txtDescription;
         TextView txtTrain;
         TextView txtDirection;
-
-
     }
 
     public TimetableAdapter(Context _context, ArrayList<TripModel> trips, ArrayList<ArrayList<StepModel>> steps) {
@@ -66,7 +62,6 @@ public class TimetableAdapter extends BaseExpandableListAdapter {
             LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.timetable_item, parent, false);
 
-            totalValueOfCounter += totalValueOfCounter;
             holder = new ViewHolder();
             holder.txtStation = (TextView) convertView.findViewById(R.id.timetable_station);
             holder.txtTime = (TextView) convertView.findViewById(R.id.timetable_time);
@@ -76,9 +71,8 @@ public class TimetableAdapter extends BaseExpandableListAdapter {
             holder.txtWaiting.setText("Test Wait");
             holder.txtTime.setText("test time");
             convertView.setTag(holder);
-        }
-        else{
-            holder=(ViewHolder)view.getTag();
+        } else {
+            holder = (ViewHolder) view.getTag();
         }
         return convertView;
     }
@@ -105,16 +99,16 @@ public class TimetableAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        TripModel tripModel=(TripModel)getGroup(groupPosition);
-        ViewHolder holder=null;
-        if(convertView==null){
-            LayoutInflater inflater=(LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView=inflater.inflate(R.layout.timetable_group,parent,false);
+        TripModel tripModel = (TripModel) getGroup(groupPosition);
+        ViewHolder holder = null;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.timetable_group, parent, false);
 
-            holder= new ViewHolder();
-            holder.txtDescription=(TextView)convertView.findViewById(R.id.timetable_description);
-            holder.txtTrain=(TextView)convertView.findViewById(R.id.timetable_train);
-            holder.txtDirection=(TextView)convertView.findViewById(R.id.timetable_direction);
+            holder = new ViewHolder();
+            holder.txtDescription = (TextView) convertView.findViewById(R.id.timetable_description);
+            holder.txtTrain = (TextView) convertView.findViewById(R.id.timetable_train);
+            holder.txtDirection = (TextView) convertView.findViewById(R.id.timetable_direction);
 
             holder.txtDescription.setText("Test Description");
             holder.txtTrain.setText("Test Train");
@@ -122,9 +116,8 @@ public class TimetableAdapter extends BaseExpandableListAdapter {
 
             convertView.setTag(holder);
 
-        }
-        else{
-            holder=(ViewHolder)convertView.getTag();
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
         return convertView;
     }
@@ -138,18 +131,6 @@ public class TimetableAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int arg0, int arg1) {
         return true;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

@@ -19,6 +19,7 @@ import feup.cm.traintickets.activities.BuyTicketActivity;
 import feup.cm.traintickets.activities.LoginActivity;
 import feup.cm.traintickets.activities.SettingsActivity;
 import feup.cm.traintickets.activities.TicketListActivity;
+import feup.cm.traintickets.activities.TimetableActivity;
 import feup.cm.traintickets.runnables.TokenRefreshTask;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -72,6 +73,13 @@ public abstract class BaseActivity extends AppCompatActivity {
                         case R.id.action_settings:
                             if (!(BaseActivity.this instanceof SettingsActivity)) {
                                 intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+                            }
+                            break;
+                        case R.id.action_timetables:
+                            if (!(BaseActivity.this instanceof SettingsActivity)) {
+                                intent = new Intent(getApplicationContext(), TimetableActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                             }
