@@ -61,6 +61,7 @@
             android:name=".activities.TicketSuccessActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity android:name=".activities.SettingsActivity"></activity>
+        <activity android:name=".activities.TimetableActivity"></activity>
     </application>
 
 </manifest>

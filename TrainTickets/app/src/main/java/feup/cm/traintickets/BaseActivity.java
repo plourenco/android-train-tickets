@@ -78,7 +78,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                             }
                             break;
                         case R.id.action_timetables:
-                            if (!(BaseActivity.this instanceof SettingsActivity)) {
+                            if (!(BaseActivity.this instanceof TimetableActivity)) {
                                 intent = new Intent(getApplicationContext(), TimetableActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
