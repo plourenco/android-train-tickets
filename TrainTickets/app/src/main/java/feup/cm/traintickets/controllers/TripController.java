@@ -8,4 +8,8 @@ public class TripController {
     public String getTrips(String token) {
         return ServiceHandler.makeGet("trip/trips", token);
     }
+
+    public String getDirections(String token) {
+        return ServiceHandler.makeGet("trip/direction", token);
+    }
 }
