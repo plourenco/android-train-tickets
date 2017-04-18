@@ -8,8 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -55,26 +53,40 @@ public abstract class BaseActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Intent intent;
+                    Class[] nav = {
+                            BuyTicketActivity.class, TicketListActivity.class,
+                            TimetableActivity.class, SettingsActivity.class
+                    };
+
                     switch(item.getItemId()) {
                         case R.id.action_buyticket:
-                            if(!(BaseActivity.this instanceof BuyTicketActivity)) {
+                            if(!(nav[0].isInstance(BaseActivity.this))) {
                                 intent = new Intent(getApplicationContext(), BuyTicketActivity.class);
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+                                overrideTransition(nav, 0);
                             }
                             break;
                         case R.id.action_tickets:
-                            if(!(BaseActivity.this instanceof TicketListActivity)) {
+                            if(!(nav[1].isInstance(BaseActivity.this))) {
                                 intent = new Intent(getApplicationContext(), TicketListActivity.class);
                                 startActivity(intent);
+                                overrideTransition(nav, 1);
+                            }
+                            break;
+                        case R.id.action_timetables:
+                            if(!(nav[2].isInstance(BaseActivity.this))) {
+                                intent = new Intent(getApplicationContext(), TimetableActivity.class);
+                                startActivity(intent);
                                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+                                overrideTransition(nav, 2);
                             }
                             break;
                         case R.id.action_settings:
-                            if (!(BaseActivity.this instanceof SettingsActivity)) {
+                            if (!(nav[3].isInstance(BaseActivity.this))) {
                                 intent = new Intent(getApplicationContext(), SettingsActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+                                overrideTransition(nav, 3);
                             }
                             break;
                         case R.id.action_timetables:
@@ -95,6 +107,26 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+    }
+
+    /**
+     * This method calculates either the animation should go left or right
+     * @param nav Class[]
+     * @param dest int
+     */
+    private void overrideTransition(Class[] nav, int dest) {
+        int current = 0;
+        for(int i=0; i<nav.length; i++) {
+            if(nav[i].isInstance(BaseActivity.this)) {
+                current = i;
+            }
+        }
+        if(current < dest) {
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+        }
+        else {
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+        }
     }
 
     protected boolean tokenValid() {

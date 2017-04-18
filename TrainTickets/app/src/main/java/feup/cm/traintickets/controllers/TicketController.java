@@ -7,9 +7,16 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.util.List;
 
+import feup.cm.traintickets.models.CreditCardModel;
 import feup.cm.traintickets.models.TicketModel;
 
 public class TicketController {
+
+    public String payment(CreditCardModel model) {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd").create();
+        return ServiceHandler.makeGet("payment/buy-ticket", gson.toJson(model));
+    }
 
     public String getUserTickets(String token, int userid) {
         return ServiceHandler.makeGet("tickets/user-tickets/" + userid, token);

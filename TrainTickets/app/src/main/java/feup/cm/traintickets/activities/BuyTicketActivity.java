@@ -180,6 +180,7 @@ public class BuyTicketActivity extends BaseActivity {
     protected void forward() {
         // Finish error checking
         if(!errorProne()) {
+            forward.setText(String.format("%s...", getString(R.string.display_loading)));
             Intent intent = new Intent(getApplicationContext(), TicketSuccessActivity.class);
             intent.putExtra("price", price.getText());
             startActivity(intent);
