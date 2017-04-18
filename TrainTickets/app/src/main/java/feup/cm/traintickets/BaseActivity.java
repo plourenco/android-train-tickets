@@ -17,6 +17,7 @@ import java.util.Date;
 
 import feup.cm.traintickets.activities.BuyTicketActivity;
 import feup.cm.traintickets.activities.LoginActivity;
+import feup.cm.traintickets.activities.SettingsActivity;
 import feup.cm.traintickets.activities.TicketListActivity;
 import feup.cm.traintickets.runnables.TokenRefreshTask;
 
@@ -64,6 +65,13 @@ public abstract class BaseActivity extends AppCompatActivity {
                         case R.id.action_tickets:
                             if(!(BaseActivity.this instanceof TicketListActivity)) {
                                 intent = new Intent(getApplicationContext(), TicketListActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+                            }
+                            break;
+                        case R.id.action_settings:
+                            if (!(BaseActivity.this instanceof SettingsActivity)) {
+                                intent = new Intent(getApplicationContext(), SettingsActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                             }

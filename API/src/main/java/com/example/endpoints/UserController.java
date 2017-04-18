@@ -1,13 +1,10 @@
 package com.example.endpoints;
 
 import com.example.exceptions.InvalidUserDataException;
+import com.example.models.*;
 import com.example.security.PasswordSecurity;
 import com.example.util.TokenHelper;
-import com.example.models.TokenModel;
-import com.example.models.RawUserModel;
 import com.example.dao.UserManager;
-import com.example.models.UserModel;
-import com.example.models.UserRole;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +16,14 @@ import java.util.Objects;
 public class UserController {
 
     private final UserManager userManager = new UserManager();
+
+
+    @POST
+    @Path("cc/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String saveCC(CreditCardModel cc, @PathParam("id") int id) {
+        return userManager.saveCard(cc, id);
+    }
 
     @GET
     @Path("role/{id}")

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="feup.cm.traintickets.activities.SettingsActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/ccnText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/credit_card_number"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"/>
+
+            <EditText
+                android:id="@+id/ccNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ccnText"
+                android:layout_margin="10dp"
+                android:inputType="numberSigned" />
+
+            <TextView
+                android:id="@+id/cvv2Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cvv2"
+                android:layout_below="@+id/ccNumber"
+                android:layout_marginStart="10dp" />
+
+            <EditText
+                android:id="@+id/cvv2Number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cvv2Text"
+                android:layout_margin="10dp"
+                android:inputType="numberSigned" />
+
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/expiry_date"
+                android:layout_below="@+id/cvv2Number"
+                android:layout_marginStart="10dp" />
+
+            <EditText
+                android:id="@+id/expiryDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dateText"
+                android:layout_margin="10dp"
+                android:inputType="date" />
+
+            <Button
+                android:id="@+id/saveCardBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/expiryDate"
+                android:text="@string/save_card"/>
+
+        </RelativeLayout>
+    </ScrollView>
+    <include layout="@layout/nav_bottom" />
+</android.support.design.widget.CoordinatorLayout>

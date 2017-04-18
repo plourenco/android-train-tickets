@@ -88,7 +88,7 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `tickets` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `uniqueId` TEXT NOT NULL,
+  `uniqueId` VARCHAR(255) NOT NULL UNIQUE,
   `departureStationId` INT NOT NULL,
   `arrivalStationId` INT NOT NULL,
   `ticketDate` DATE NOT NULL,
@@ -126,6 +126,16 @@ insert ignore into `config` VALUES( 'db_version', '{version}');
 INSERT INTO `roles` VALUES(1, 'inspector') ON DUPLICATE KEY UPDATE name = VALUES(name);
 INSERT INTO `roles` VALUES(2, 'user') ON DUPLICATE KEY UPDATE name = VALUES(name);
 
+DROP TABLE IF EXISTS creditcards;
+CREATE TABLE IF NOT EXISTS `creditcards` (
+  `expiryDate` DATE NOT NULL,
+  `number` BIGINT NOT NULL,
+  `cvv2` INT NOT NULL,
+  `fkUser` INT NOT NULL,
+PRIMARY KEY (`number`),
+FOREIGN KEY (`fkUser`) REFERENCES users(`id`))
+ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
 /*
 Delete procedures, this IMPLIES they get re-added
  */
@@ -148,3 +158,4 @@ DROP PROCEDURE IF EXISTS setStateToUsed;
 DROP PROCEDURE IF EXISTS getTimeTable;
 DROP PROCEDURE IF EXISTS getTicketsRevisor;
 DROP PROCEDURE IF EXISTS getExpiredTickets;
+DROP PROCEDURE IF EXISTS saveCard;

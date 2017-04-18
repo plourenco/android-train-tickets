@@ -419,3 +419,15 @@ create procedure getExpiredTickets(IN userId INT)
         on sta.id=stb.id order by ticketDate desc LIMIT 10;
   END //
 DELIMITER ;
+
+# Saves the credit card. If number is the same update!
+DELIMITER //
+create procedure saveCard(IN expiryDate DATE,IN number BIGINT,IN cvv2 INT, IN fkUser INT)
+  begin
+    insert into creditcards (expiryDate, number, cvv2, fkUser) VALUES (expiryDate, number, cvv2, fkUser) ON DUPLICATE KEY UPDATE
+      expiryDate = VALUES(expiryDate),
+      number = VALUES(number),
+      cvv2 = VALUES(cvv2),
+      fkUser = VALUES(fkUser);
+  END //
+DELIMITER ;

@@ -1,7 +1,9 @@
 package com.example.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Created by mercurius on 15/03/17.
@@ -13,12 +15,14 @@ import java.util.Date;
 @XmlRootElement
 public class CreditCardModel {
 
+    @JsonProperty(value = "ccNumber")
     private String creditCardNumber;
+    @JsonProperty(value = "expiryDate")
     private Date expiryDate;
+    @JsonProperty(value = "cvv2")
     private String cvv2;
 
-    public CreditCardModel() {
-    }
+    public CreditCardModel() {}
     public CreditCardModel(String creditCardNumber, Date expiryDate, String cvv2) {
         this.creditCardNumber = creditCardNumber;
         this.expiryDate = expiryDate;
@@ -35,5 +39,4 @@ public class CreditCardModel {
     public String getCvv2() {
         return cvv2;
     }
-
 }

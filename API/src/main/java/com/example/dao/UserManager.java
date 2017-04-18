@@ -3,6 +3,7 @@ package com.example.dao;
 import com.example.Main;
 import com.example.exceptions.EncryptionException;
 import com.example.exceptions.InvalidUserDataException;
+import com.example.models.CreditCardModel;
 import com.example.models.RawUserModel;
 import com.example.models.UserModel;
 import com.example.mysql.MySQLManager;
@@ -132,5 +133,21 @@ public class UserManager {
             Main.getLogger().severe(e.getMessage());
         }
         return -1;
+    }
+
+    public String saveCard(CreditCardModel cardModel, int userId) {
+        try {
+            PreparedStatement ps = MySQLManager.getConnection().prepareStatement("Call saveCard(?,?,?,?)");
+            ps.setDate(1, cardModel.getExpiryDate());
+            ps.setInt(2, Integer.valueOf(cardModel.getCreditCardNumber()));
+            ps.setInt(3, Integer.valueOf(cardModel.getCvv2()));
+            ps.setInt(4, userId);
+
+            int row = ps.executeUpdate();
+            return "success;"+row;
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+            return sql.getMessage();
+        }
     }
 }
