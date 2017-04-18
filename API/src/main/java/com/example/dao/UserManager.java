@@ -137,7 +137,7 @@ public class UserManager {
         try {
             PreparedStatement ps = MySQLManager.getConnection().prepareStatement("Call saveCard(?,?,?,?)");
             ps.setDate(1, cardModel.getExpiryDate());
-            ps.setInt(2, Integer.valueOf(cardModel.getCreditCardNumber()));
+            ps.setLong(2, Long.valueOf(cardModel.getCreditCardNumber()));
             ps.setInt(3, Integer.valueOf(cardModel.getCvv2()));
             ps.setInt(4, userId);
 

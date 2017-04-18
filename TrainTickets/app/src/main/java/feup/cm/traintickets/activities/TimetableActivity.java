@@ -10,8 +10,6 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
