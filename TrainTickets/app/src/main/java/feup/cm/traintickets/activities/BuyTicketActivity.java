@@ -3,7 +3,6 @@ package feup.cm.traintickets.activities;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
@@ -11,25 +10,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.JsonParseException;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-import com.kogitune.activity_transition.ActivityTransition;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.StationModel;
+import feup.cm.traintickets.runnables.TicketBuyTask;
 import feup.cm.traintickets.runnables.StationGetTask;
 import feup.cm.traintickets.util.DateDeserializer;
 
@@ -41,10 +38,10 @@ public class BuyTicketActivity extends BaseActivity {
     private Spinner dest;
     private Button forward;
 
-    private TextView departure;
-    private TextView train;
-    private TextView title;
-    private TextView price;
+    private TextView departureView;
+    private TextView trainView;
+    private TextView titleView;
+    private TextView priceView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +50,10 @@ public class BuyTicketActivity extends BaseActivity {
 
         origin = (Spinner) findViewById(R.id.origin_station);
         dest = (Spinner) findViewById(R.id.destination_station);
-        title = (TextView) findViewById(R.id.title_left);
-        departure = (TextView) findViewById(R.id.departure_desc);
-        train = (TextView) findViewById(R.id.train_desc);
-        price = (TextView) findViewById(R.id.ticket_price_value);
+        titleView = (TextView) findViewById(R.id.title_left);
+        departureView = (TextView) findViewById(R.id.departure_desc);
+        trainView = (TextView) findViewById(R.id.train_desc);
+        priceView = (TextView) findViewById(R.id.ticket_price_value);
         forward = (Button) findViewById(R.id.button);
 
         forward.setOnClickListener(new View.OnClickListener() {
@@ -72,9 +69,9 @@ public class BuyTicketActivity extends BaseActivity {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                title.setText(parent.getItemAtPosition(position).toString());
+                titleView.setText(parent.getItemAtPosition(position).toString());
                 if(!first) {
-                    train.setText(getString(R.string.display_select_train));
+                    trainView.setText(getString(R.string.display_select_train));
                 }
             }
 
@@ -89,7 +86,7 @@ public class BuyTicketActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(!first) {
-                    train.setText(getString(R.string.display_select_train));
+                    trainView.setText(getString(R.string.display_select_train));
                 }
             }
 
@@ -112,7 +109,7 @@ public class BuyTicketActivity extends BaseActivity {
                 updateLabel(calendar);
             }
         };
-        departure.setOnClickListener(new View.OnClickListener() {
+        departureView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -123,8 +120,8 @@ public class BuyTicketActivity extends BaseActivity {
                 dialog.show();
             }
         });
-        // Open train list on click input
-        train.setOnClickListener(new View.OnClickListener() {
+        // Open trainView list on click input
+        trainView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -157,7 +154,7 @@ public class BuyTicketActivity extends BaseActivity {
                     for(StationModel station : getStations()) {
                         list.add(station);
                     }
-                    title.setText(list.size() > 0 ? list.get(0).toString() :
+                    titleView.setText(list.size() > 0 ? list.get(0).toString() :
                             getString(R.string.error_select_station));
                     ArrayAdapter<StationModel> dataAdapter = new ArrayAdapter<StationModel>(
                             BuyTicketActivity.this, R.layout.spinner_view, list);
@@ -180,18 +177,49 @@ public class BuyTicketActivity extends BaseActivity {
     protected void forward() {
         // Finish error checking
         if(!errorProne()) {
-            Intent intent = new Intent(getApplicationContext(), TicketSuccessActivity.class);
-            intent.putExtra("price", price.getText());
-            startActivity(intent);
+            forward.setText(String.format("%s...", getString(R.string.display_loading)));
+
+            try {
+                StationModel org = (StationModel) origin.getSelectedItem();
+                StationModel ds = (StationModel) dest.getSelectedItem();
+                String dateStr = (String) departureView.getTag();
+                int price = (Integer) priceView.getTag();
+                int train = (Integer) trainView.getTag();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
+                TicketBuyTask task = new TicketBuyTask(getUserId(), org, ds,
+                        sdf.parse(dateStr), price, train) {
+                    @Override
+                    protected void onPostExecute(Boolean success) {
+                        if(success) {
+                            Intent intent = new Intent(getApplicationContext(), TicketSuccessActivity.class);
+                            intent.putExtra("priceView", priceView.getText());
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    protected void onCancelled() {
+                        forwardError();
+                    }
+                };
+                task.execute((Void) null);
+            }
+            catch(ParseException | ClassCastException e) {
+                forwardError();
+            }
         }
+    }
+
+    protected void forwardError() {
+
     }
 
     protected void forwardTrain(StationModel org, StationModel ds) {
         Intent intent = new Intent(getApplicationContext(), TrainListActivity.class);
         intent.putExtra("origin", org.getId());
         intent.putExtra("destination", ds.getId());
-        intent.putExtra("departure", departure.getText());
-        intent.putExtra("date", (String) departure.getTag());
+        intent.putExtra("departureView", departureView.getText());
+        intent.putExtra("date", (String) departureView.getTag());
         startActivity(intent);
     }
 
@@ -224,11 +252,11 @@ public class BuyTicketActivity extends BaseActivity {
                 Calendar calendar = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                 calendar.setTime(sdf.parse(date));
-                this.departure.setText(dateFormat.format(calendar.getTime()));
-                this.departure.setTag(date);
-                // Restore train
-                this.train.setText(description);
-                this.train.setTag(train);
+                this.departureView.setText(dateFormat.format(calendar.getTime()));
+                this.departureView.setTag(date);
+                // Restore trainView
+                this.trainView.setText(description);
+                this.trainView.setTag(train);
             } catch (Exception ignored) { // do not restore anything
 
             }
@@ -242,11 +270,11 @@ public class BuyTicketActivity extends BaseActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
         String newDate = sdf.format(calendar.getTime());
 
-        if(!departure.getText().equals(newDate)) {
-            train.setText(getString(R.string.display_select_train));
+        if(!departureView.getText().equals(newDate)) {
+            trainView.setText(getString(R.string.display_select_train));
         }
-        departure.setText(newDate);
-        departure.setTag(new SimpleDateFormat(apiFormat, Locale.US).format(calendar.getTime()));
+        departureView.setText(newDate);
+        departureView.setTag(new SimpleDateFormat(apiFormat, Locale.US).format(calendar.getTime()));
     }
 
     private boolean errorProne() {
@@ -263,17 +291,17 @@ public class BuyTicketActivity extends BaseActivity {
             errorView = (TextView) dest.getSelectedView();
             error = getString(R.string.error_same_stations);
         }
-        else if(departure.getTag() == null) {
-            errorView = departure;
+        else if(departureView.getTag() == null) {
+            errorView = departureView;
             error = getString(R.string.error_field_required);
         }
         else {
             try {
                 DateDeserializer parser = new DateDeserializer();
-                parser.deserialize((String) departure.getTag());
+                parser.deserialize((String) departureView.getTag());
             }
             catch(JsonParseException | ClassCastException e) {
-                errorView = departure;
+                errorView = departureView;
                 error = getString(R.string.error_invalid_date);
             }
         }
@@ -286,7 +314,7 @@ public class BuyTicketActivity extends BaseActivity {
         else {
             ((TextView) origin.getSelectedView()).setError(null);
             ((TextView) dest.getSelectedView()).setError(null);
-            departure.setError(null);
+            departureView.setError(null);
             return false;
         }
     }

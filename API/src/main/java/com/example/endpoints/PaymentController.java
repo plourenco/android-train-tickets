@@ -32,6 +32,4 @@ public class PaymentController {
         PaymentControllerValidator.setCreditCard(creditCard);
         return PaymentControllerValidator.validateCardNumber();
     }
-
-
 }

@@ -4,71 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="feup.cm.traintickets.activities.SettingsActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
-            <TextView
-                android:id="@+id/ccnText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/credit_card_number"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"/>
-
-            <EditText
-                android:id="@+id/ccNumber"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ccnText"
-                android:layout_margin="10dp"
-                android:inputType="numberSigned" />
+                android:layout_margin="@dimen/activity_content_padding"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
-            <TextView
-                android:id="@+id/cvv2Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cvv2"
-                android:layout_below="@+id/ccNumber"
-                android:layout_marginStart="10dp" />
+                <TextView
+                    android:id="@+id/ccnText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/credit_card_number" />
 
-            <EditText
-                android:id="@+id/cvv2Number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/cvv2Text"
-                android:layout_margin="10dp"
-                android:inputType="numberSigned" />
+                <EditText
+                    android:id="@+id/ccNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ccnText"
+                    android:layout_margin="10dp"
+                    android:inputType="numberSigned" />
 
-            <TextView
-                android:id="@+id/dateText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/expiry_date"
-                android:layout_below="@+id/cvv2Number"
-                android:layout_marginStart="10dp" />
+                <TextView
+                    android:id="@+id/cvv2Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ccNumber"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/cvv2" />
 
-            <TextView
-                android:id="@+id/expiryDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/dateText"
-                android:layout_margin="10dp"
-                android:hint="@string/display_select_date"/>
+                <EditText
+                    android:id="@+id/cvv2Number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cvv2Text"
+                    android:layout_margin="10dp"
+                    android:inputType="numberSigned" />
 
-            <Button
-                android:id="@+id/saveCardBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/expiryDate"
-                android:text="@string/save_card"/>
+                <TextView
+                    android:id="@+id/dateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cvv2Number"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/expiry_date" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/expiryDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dateText"
+                    android:layout_margin="10dp"
+                    android:hint="@string/display_select_date" />
+
+                <Button
+                    android:id="@+id/saveCardBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/expiryDate"
+                    android:text="@string/save_card"
+                    android:textColor="@android:color/white"
+                    android:theme="@style/Accent.Button" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
     </ScrollView>
+
     <include layout="@layout/nav_bottom" />
+
 </android.support.design.widget.CoordinatorLayout>

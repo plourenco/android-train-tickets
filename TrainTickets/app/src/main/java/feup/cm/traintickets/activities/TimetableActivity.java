@@ -80,6 +80,6 @@ public class TimetableActivity extends BaseActivity {
 
     @Override
     protected int getBottomNavId() {
-        return 0;
+        return 3;
     }
 }
