@@ -14,10 +14,10 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin">
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -66,20 +66,13 @@
                     android:layout_marginStart="10dp"
                     android:text="@string/expiry_date" />
 
-                <EditText
+                <TextView
                     android:id="@+id/expiryDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/dateText"
                     android:layout_margin="10dp"
-                    android:inputType="date" />
-            <TextView
-                android:id="@+id/expiryDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/dateText"
-                android:layout_margin="10dp"
-                android:hint="@string/display_select_date"/>
+                    android:hint="@string/display_select_date" />
 
                 <Button
                     android:id="@+id/saveCardBtn"
@@ -88,7 +81,7 @@
                     android:layout_below="@id/expiryDate"
                     android:text="@string/save_card"
                     android:textColor="@android:color/white"
-                    android:theme="@style/Accent.Button"/>
+                    android:theme="@style/Accent.Button" />
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>

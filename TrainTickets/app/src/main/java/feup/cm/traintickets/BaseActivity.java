@@ -77,7 +77,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                             if(!(nav[2].isInstance(BaseActivity.this))) {
                                 intent = new Intent(getApplicationContext(), TimetableActivity.class);
                                 startActivity(intent);
-                                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                                 overrideTransition(nav, 2);
                             }
                             break;
@@ -87,13 +86,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                                 overrideTransition(nav, 3);
-                            }
-                            break;
-                        case R.id.action_timetables:
-                            if (!(BaseActivity.this instanceof SettingsActivity)) {
-                                intent = new Intent(getApplicationContext(), TimetableActivity.class);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                             }
                             break;
                     }
