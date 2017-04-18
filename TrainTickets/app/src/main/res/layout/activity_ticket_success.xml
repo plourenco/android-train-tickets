@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
@@ -31,7 +32,7 @@
             android:paddingTop="10dp"
             android:paddingStart="50dp"
             android:paddingEnd="50dp"
-            android:text="$40.00"
+            android:text="$00.00"
             android:textColor="@color/colorGrayMedium"
             android:textSize="30dp" />
 

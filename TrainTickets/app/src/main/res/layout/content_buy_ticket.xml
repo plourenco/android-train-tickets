@@ -11,7 +11,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical">
@@ -136,7 +139,7 @@
                 android:layout_marginTop="6dp"
                 android:layout_toEndOf="@id/ic_departure"
                 android:focusable="false"
-                android:hint="No date selected"
+                android:hint="@string/display_select_date"
                 android:textSize="@dimen/text_form_value" />
 
         </RelativeLayout>
@@ -181,7 +184,7 @@
                 android:layout_marginTop="6dp"
                 android:layout_toEndOf="@id/ic_train"
                 android:focusable="false"
-                android:hint="No train selected"
+                android:hint="@string/display_select_train"
                 android:textSize="@dimen/text_form_value" />
 
         </RelativeLayout>
