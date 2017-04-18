@@ -41,7 +41,7 @@ public class TimetableActivity extends BaseActivity {
         new TripGetTask(getToken()) {
             @Override
             protected void onPostExecute(Boolean success) {
-                listAdapter = new TimetableAdapter(TimetableActivity.this, listDataHeader, listDatachild);
+                //listAdapter = new TimetableAdapter(TimetableActivity.this, listDataHeader, listDatachild);
 
                 expandableListView.setAdapter(listAdapter);
 

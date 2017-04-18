@@ -32,6 +32,10 @@ import feup.cm.traintickets.util.DateDeserializer;
 
 public class BuyTicketActivity extends BaseActivity {
 
+    /*
+    TODO: Changing stations, also resets train
+     */
+
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.UK);
 
     private Spinner origin;
@@ -72,7 +76,9 @@ public class BuyTicketActivity extends BaseActivity {
                 titleView.setText(parent.getItemAtPosition(position).toString());
                 if(!first) {
                     trainView.setText(getString(R.string.display_select_train));
+                    trainView.setTag(null);
                 }
+                else first = false;
             }
 
             @Override
@@ -87,7 +93,9 @@ public class BuyTicketActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(!first) {
                     trainView.setText(getString(R.string.display_select_train));
+                    trainView.setTag(null);
                 }
+                else first = false;
             }
 
             @Override
@@ -180,11 +188,17 @@ public class BuyTicketActivity extends BaseActivity {
             forward.setText(String.format("%s...", getString(R.string.display_loading)));
 
             try {
+                // final error pruning
+                if(trainView.getTag() == null) {
+                    trainView.setError("");
+                    Snackbar.make(trainView, getString(R.string.display_select_train),
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }
                 StationModel org = (StationModel) origin.getSelectedItem();
                 StationModel ds = (StationModel) dest.getSelectedItem();
                 String dateStr = (String) departureView.getTag();
-                int price = (Integer) priceView.getTag();
                 int train = (Integer) trainView.getTag();
+                double price = 0;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
                 TicketBuyTask task = new TicketBuyTask(getUserId(), org, ds,
                         sdf.parse(dateStr), price, train) {
@@ -204,7 +218,7 @@ public class BuyTicketActivity extends BaseActivity {
                 };
                 task.execute((Void) null);
             }
-            catch(ParseException | ClassCastException e) {
+            catch(Exception e) {
                 forwardError();
             }
         }

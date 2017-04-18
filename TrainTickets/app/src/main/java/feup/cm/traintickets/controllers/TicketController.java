@@ -32,7 +32,7 @@ public class TicketController {
         model.put("trip", new TripModel(tripid));
         Log.d("json", gson.toJson(model));
 
-        return ServiceHandler.makeGet("tickets/buy-ticket" + userid, gson.toJson(model));
+        return ServiceHandler.makePost("tickets/buy-ticket/" + userid, gson.toJson(model));
     }
 
     public String getUserTickets(String token, int userid) {

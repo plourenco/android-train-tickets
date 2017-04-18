@@ -1,6 +1,7 @@
 package feup.cm.traintickets.runnables;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,12 +10,15 @@ import com.google.gson.JsonParseException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Time;
 import java.util.Date;
 
 import feup.cm.traintickets.controllers.TicketController;
 import feup.cm.traintickets.models.CreditCardModel;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
+import feup.cm.traintickets.util.DateDeserializer;
+import feup.cm.traintickets.util.TimeDeserializer;
 
 public abstract class TicketBuyTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -52,7 +56,9 @@ public abstract class TicketBuyTask extends AsyncTask<Void, Void, Boolean> {
         if (res != null) {
             try {
                 Gson gson = new GsonBuilder()
-                        .setDateFormat("yyyy-MM-dd").create();
+                        .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
+                        .registerTypeAdapter(Time.class, new TimeDeserializer()).create();
+                Log.d("asd", res);
                 this.result = gson.fromJson(res, TicketModel.class);
                 return true;
             } catch (JsonParseException ignored) {
