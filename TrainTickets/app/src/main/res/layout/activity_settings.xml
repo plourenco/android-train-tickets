@@ -53,13 +53,13 @@
                 android:layout_below="@+id/cvv2Number"
                 android:layout_marginStart="10dp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/expiryDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/dateText"
                 android:layout_margin="10dp"
-                android:inputType="date" />
+                android:hint="@string/display_select_date"/>
 
             <Button
                 android:id="@+id/saveCardBtn"

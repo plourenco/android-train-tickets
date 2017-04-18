@@ -62,7 +62,7 @@ public class TimetableActivity extends BaseActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+        /*expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Toast.makeText(
@@ -75,7 +75,7 @@ public class TimetableActivity extends BaseActivity {
                         .show();
                 return false;
             }
-        });
+        });*/
     }
 
     @Override

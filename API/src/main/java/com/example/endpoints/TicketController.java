@@ -1,13 +1,17 @@
 package com.example.endpoints;
 
 import com.example.Main;
+import com.example.dao.UserManager;
 import com.example.exceptions.ParseExceptionMapper;
 import com.example.models.AvailableTicketModel;
+import com.example.models.CreditCardModel;
 import com.example.models.TicketModel;
 import com.example.dao.TicketManager;
+import com.example.util.PaymentControllerValidator;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -119,14 +123,24 @@ public class TicketController {
 
     /**
      * Method allowing and end user to buy a ticket exposed at /tickets/buy-ticket
-     *
      * @return Json string stating the information about the ticket buyout
      */
     @POST
-    @Path("buy-ticket")
+    @Path("buy-ticket/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String buyTicket() {
-        return "Not implemented exception!";
+    public Response buyTicket(TicketModel ticket, @PathParam("id") int id) {
+        UserManager userManager = new UserManager();
+        CreditCardModel card = userManager.getCard(id);
+
+        PaymentControllerValidator.setCreditCard(card);
+        boolean valid = PaymentControllerValidator.validateCardNumber();
+
+        if (valid) {
+            TicketModel ticketToRetrieve = ticketManager.buyTicket(ticket, id);
+            return Response.ok(ticketToRetrieve).build();
+        } else {
+            return Response.serverError().entity("Credit card is not valid").build();
+        }
     }
 
     /**

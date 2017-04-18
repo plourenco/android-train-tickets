@@ -228,9 +228,17 @@ public class TicketManager {
                 int tripId = rs.getInt("fkTrip");
                 boolean used = rs.getBoolean("isUsed");
 
-                // TODO TICKET
-            }
+                StationModel depStation = StationHolder.getStations().values().stream()
+                        .filter(p -> p.getId() == depStationId).findFirst().get();
+                StationModel arrStation = StationHolder.getStations().values().stream()
+                        .filter(p -> p.getId() == arrStationId).findFirst().get();
+                TripModel trip = TripHolder.getTrips().values().stream()
+                        .filter(p -> p.getId() == tripId).findAny().get();
 
+                ticketToRetrieve = new TicketModel(ticketId, UUID.fromString(uniqueId), depStation, arrStation,
+                        ticketDate, price, purchaseDate, trip, used);
+                return ticketToRetrieve;
+            }
         } catch (SQLException sql) {
             Main.getLogger().severe(sql.getMessage());
             throw new SQLExceptionMapper(sql.getMessage());

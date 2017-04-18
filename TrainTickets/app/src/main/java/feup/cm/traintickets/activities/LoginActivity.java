@@ -78,7 +78,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
-    private int role;
     private int userid;
 
     @Override
@@ -134,10 +133,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         userid = sharedPrefs.getInt("LOGIN_ID", 0);
         String password = sharedPrefs.getString("LOGIN_PASS", null);
         String email = sharedPrefs.getString("LOGIN_EMAIL", null);
-        /**
-         * Role is set on user account creation
-         */
-        role = sharedPrefs.getInt("LOGIN_ROLE", -1);
 
         cache(token);
 
@@ -441,7 +436,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         userGetRoleTask.execute((Void) null);
     }
 
-    //TODO refactor this to the correct values!
     private void redirectTo(int role) {
         Intent intent = null;
         switch (role) {
