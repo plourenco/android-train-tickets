@@ -58,6 +58,7 @@ public class SingleTicketActivity extends BaseActivity {
         destinationView = (TextView) findViewById(R.id.ticket_destination);
         dateView = (TextView) findViewById(R.id.ticket_date_value);
         timeView = (TextView) findViewById(R.id.ticket_hour_value);
+        seatView = (TextView) findViewById(R.id.ticket_seat_value);
 
         contentView = findViewById(R.id.card_view);
         progressBar = findViewById(R.id.ticket_progress);

@@ -8,7 +8,6 @@ import com.example.security.SecurityContextAuthorizer;
 import com.example.util.ResourceHelper;
 import com.example.util.TokenHelper;
 import com.example.dao.UserManager;
-import sun.misc.ObjectInputFilter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.container.ContainerRequestContext;

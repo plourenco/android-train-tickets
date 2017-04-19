@@ -169,6 +169,7 @@ public class TicketManager {
                 Date purchaseDate = rs.getDate("purchaseDate");
                 int tripId = rs.getInt("idTrip");
                 boolean isUsed = rs.getBoolean("isUsed");
+                String seat = rs.getString("seatNumber");
 
                 StationModel depStation = StationHolder.getStations().values().stream()
                         .filter(s -> s.getId() == departureStationId).findFirst().get();
@@ -179,7 +180,7 @@ public class TicketManager {
 
                 try {
                     tickets.add(new TicketModel(id, UUID.fromString(uuid), depStation, arrStation, ticketDate, price,
-                            purchaseDate, trip, isUsed, 0, depTime, arrTime));
+                            purchaseDate, trip, isUsed, depTime, arrTime, new SeatModel(seat)));
                 }
                 catch(IllegalArgumentException ignored) { }
 
@@ -306,6 +307,7 @@ public class TicketManager {
                 Date purchaseDate = rs.getDate("purchaseDate");
                 int tripId = rs.getInt("idTrip");
                 boolean isUsed = rs.getBoolean("isUsed");
+                String seat = rs.getString("seatNumber");
 
                 StationModel depStation = StationHolder.getStations().values().stream()
                         .filter(s -> s.getId() == departureStationId).findFirst().get();
@@ -316,7 +318,7 @@ public class TicketManager {
 
                 try {
                     tickets.add(new TicketModel(id, UUID.fromString(uuid), depStation, arrStation, ticketDate, price,
-                            purchaseDate, trip, isUsed, 0, depTime, arrTime));
+                            purchaseDate, trip, isUsed, depTime, arrTime, new SeatModel(seat)));
                 }
                 catch(IllegalArgumentException ignored) { } // ignore invalid ticket
             }

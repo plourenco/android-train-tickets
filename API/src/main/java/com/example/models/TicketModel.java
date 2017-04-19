@@ -37,8 +37,6 @@ public class TicketModel {
     private TripModel trip;
     private SeatModel seat;
 
-
-
     public StationModel getDepartureStation() {
         return departureStation;
     }
@@ -158,5 +156,21 @@ public class TicketModel {
         this.duration = duration;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
+    }
+    public TicketModel(int id, UUID uuid, StationModel depStation, StationModel arrStation, Date ticketDate,
+                      float price, Date purchaseDate, TripModel trip, boolean isUsed, Time depTime,
+                      Time arrTime, SeatModel seatModel) {
+        this.id = id;
+        this.uniqueId = uuid;
+        this.departureStation = depStation;
+        this.arrivalStation = arrStation;
+        this.ticketDate = ticketDate;
+        this.price = price;
+        this.purchaseDate = purchaseDate;
+        this.trip = trip;
+        this.isUsed = isUsed;
+        this.departureTime = depTime;
+        this.arrivalTime = arrTime;
+        this.seat = seatModel;
     }
 }
