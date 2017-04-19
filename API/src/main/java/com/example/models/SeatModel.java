@@ -8,6 +8,10 @@ public class SeatModel {
     private String seatNumber;
     private int trainId;
 
+    public SeatModel(String seat) {
+        this.seatNumber = seat;
+    }
+
     public int getId() {
         return id;
     }

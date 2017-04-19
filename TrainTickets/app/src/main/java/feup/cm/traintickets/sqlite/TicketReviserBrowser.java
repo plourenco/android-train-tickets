@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import feup.cm.traintickets.controllers.TicketController;
@@ -70,11 +72,14 @@ public class TicketReviserBrowser implements IOperation<TicketModel> {
     @Override
     public void create(TicketModel ticketModel) {
         ContentValues values = new ContentValues();
+        SimpleDateFormat datef = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
+        SimpleDateFormat timef = new SimpleDateFormat("hh:mm", Locale.UK);
+        String ticketDate = datef.format(ticketModel.getTicketDate());
         try {
             values.put("uniqueId", ticketModel.getUniqueId().toString());
             values.put("departureStationId", ticketModel.getDepartureStation().getId());
             values.put("arrivalStationId", ticketModel.getArrivalStation().getId());
-            values.put("ticketDate", ticketModel.getTicketDate().toString());
+            values.put("ticketDate", ticketDate);
             values.put("isUsed", ticketModel.getIsUsed() ? 1 : 0);
             values.put("tripId", ticketModel.getTrip().getId());
         } catch (NullPointerException npe) {

@@ -9,8 +9,10 @@ import android.util.Log;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import feup.cm.traintickets.models.SeatModel;
