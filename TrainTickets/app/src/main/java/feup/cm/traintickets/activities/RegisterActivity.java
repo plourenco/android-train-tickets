@@ -17,11 +17,14 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.UserModel;
+import feup.cm.traintickets.runnables.UserLoginTask;
 import feup.cm.traintickets.runnables.UserRegisterTask;
+import feup.cm.traintickets.util.ActivityHelper;
 import feup.cm.traintickets.util.StringCheck;
 
 /**
@@ -30,6 +33,7 @@ import feup.cm.traintickets.util.StringCheck;
 public class RegisterActivity extends AppCompatActivity {
 
     private UserRegisterTask mRegisterTask;
+    private UserLoginTask mAuthTask;
 
     private EditText mUsernameView;
     private EditText mEmailView;
@@ -100,10 +104,13 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
-        String confirmPassword = mConfirmPasswordView.getText().toString();
+        final String username = mUsernameView.getText().toString();
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
+        final String confirmPassword = mConfirmPasswordView.getText().toString();
+
+        final SharedPreferences sharedPrefs =
+                getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
 
         boolean cancel = false;
         View focusView = null;
@@ -150,24 +157,49 @@ public class RegisterActivity extends AppCompatActivity {
             final UserModel model = new UserModel(0, username, email, password,
                     getResources().getInteger(R.integer.role_user));
 
+            if(mRegisterTask != null) {
+                // Already registering
+                return;
+            }
+
             mRegisterTask = new UserRegisterTask(model) {
                 @Override
                 protected void onPostExecute(Boolean success) {
                     mRegisterTask = null;
                     showProgress(false);
                     if (success) {
+                        // Login after register
+                        final UserLoginTask mAuthTask = new UserLoginTask(email, password) {
+                            @Override
+                            protected void onPostExecute(Boolean success) {
+                                RegisterActivity.this.mAuthTask = null;
+                                showProgress(false);
+                                if (success) {
+                                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                                    editor.putString("LOGIN_TOKEN", token.getToken());
+                                    editor.putString("LOGIN_REFRESH", token.getRefresh());
+                                    editor.putLong("LOGIN_EXPIRES", token.getExpires().getTime());
+                                    editor.putInt("LOGIN_ID", token.getUserId());
+                                    editor.putInt("LOGIN_ROLE", token.getRole());
+                                    editor.apply();
 
-                        SharedPreferences sharedPreferences = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt("LOGIN_ROLE", 2);
-                        editor.putString("LOGIN_PASS", model.getPassword());
-                        editor.putString("LOGIN_EMAIL", model.getEmail());
-                        editor.apply();
-
-                        Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    } else {
+                                    ActivityHelper.cache(token.getToken());
+                                    successRedirect(token.getRole());
+                                }
+                                else {
+                                    forwardError();
+                                }
+                            }
+                            @Override
+                            protected void onCancelled() {
+                                RegisterActivity.this.mAuthTask = null;
+                                showProgress(true);
+                                forwardError();
+                            }
+                        };
+                        mAuthTask.execute((Void) null);
+                    }
+                    else {
                         mPasswordView.setError(getString(R.string.error_invalid_register));
                         mPasswordView.requestFocus();
                     }
@@ -184,6 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     /**
      * Shows the progress UI and hides the login form.
+     * @param show boolean
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
@@ -209,5 +242,36 @@ public class RegisterActivity extends AppCompatActivity {
                 mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
+    }
+
+    private void forwardError() {
+        // Something unexpected happened
+        Toast.makeText(getApplicationContext(), "Something unexpected happened. Login manually",
+                Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void successRedirect(int role) {
+        Intent intent = null;
+        switch (role) {
+            case 1:
+                intent = new Intent(getApplicationContext(), ReviserActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                break;
+            case 2:
+                intent = new Intent(getApplicationContext(), TicketListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                break;
+            default:
+                break;
+        }
+        if (intent != null){
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(this, "Internal account error", Toast.LENGTH_SHORT).show();
+        }
     }
 }

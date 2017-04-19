@@ -82,9 +82,9 @@ public class SettingsActivity extends BaseActivity {
 
         sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
         String cc = sharedPrefs.getString("CC_NUMBER", "");
+        long exp = sharedPrefs.getLong("CC_DATE", -1);
         String cv = sharedPrefs.getString("CVV2", "");
         userId = sharedPrefs.getInt("LOGIN_ID", -1);
-        long exp = sharedPrefs.getLong("CC_DATE", -1);
 
         if (!cc.isEmpty()){
             ccNumber.setText(cc);

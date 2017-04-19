@@ -4,9 +4,11 @@ import com.example.annotations.Secured;
 import com.example.exceptions.InvalidUserDataException;
 import com.example.models.*;
 import com.example.security.PasswordSecurity;
+import com.example.security.SecurityContextAuthorizer;
 import com.example.util.ResourceHelper;
 import com.example.util.TokenHelper;
 import com.example.dao.UserManager;
+import sun.misc.ObjectInputFilter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -16,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 @Path("users")
@@ -60,7 +63,7 @@ public class UserController {
     @Path("auth")
     @Produces("application/json")
     @Consumes("application/json")
-    public TokenModel authenticate(RawUserModel credentials) {
+    public RawTokenModel authenticate(RawUserModel credentials) {
         if(credentials.getEmail().isEmpty()) {
             throw new InvalidUserDataException("Invalid user data");
         }
@@ -68,19 +71,38 @@ public class UserController {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR, 24);
 
-        if(!credentials.getPassword().isEmpty()) {
-            try {
-                if(PasswordSecurity.compareHashes(user.getHash(), credentials.getPassword())) {
-                    return new TokenModel(
-                            TokenHelper.getJWTString(user.getEmail(), user.getRoleUser(), calendar.getTime()),
-                            TokenHelper.getJWTRefresh(user.getEmail(), user.getRoleUser()),
-                                    calendar.getTime(), user.getId());
+        if(user != null) {
+            if (!credentials.getPassword().isEmpty()) {
+                try {
+                    if (PasswordSecurity.compareHashes(user.getHash(), credentials.getPassword())) {
+                        return new RawTokenModel(
+                                TokenHelper.getJWTString(user.getEmail(), user.getRoleUser(), calendar.getTime()),
+                                TokenHelper.getJWTRefresh(user.getEmail(), user.getRoleUser()),
+                                calendar.getTime(), user.getId(), user.getRoleUser());
+                    }
+                } catch (NoSuchAlgorithmException ignored) {
+
                 }
             }
-            catch(NoSuchAlgorithmException ignored) { }
         }
         // if we get here, throw invalid auth
         throw new InvalidUserDataException("Unauthorized");
+    }
+
+    /**
+     * Checks if the token is valid and actually belongs to an user
+     * @param tokenModel TokenModel
+     */
+    @POST
+    @Path("check")
+    @Produces("application/json")
+    @Consumes("application/json")
+    public Response valid(TokenModel tokenModel) {
+        String token = tokenModel.getToken();
+        if(TokenHelper.isTrustworthy("TrainTickets-Security", token)) {
+            return Response.ok().build();
+        }
+        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
     }
 
     /**
@@ -93,8 +115,7 @@ public class UserController {
     @Consumes("application/json")
     public TokenModel refresh(TokenModel refresh) {
         String token = refresh.getToken();
-        if(TokenHelper.isValid(token)) {
-            if(Objects.equals(TokenHelper.getIssuer(token), "TrainTickets-Refresh")) {
+        if(TokenHelper.isTrustworthy("TrainTickets-Refresh", token)) {
                 String email = TokenHelper.getEmail(token);
                 int role = TokenHelper.getRole(token);
                 Calendar calendar = Calendar.getInstance();
@@ -106,7 +127,6 @@ public class UserController {
                             token,
                             calendar.getTime());
                 }
-            }
         }
         throw new InvalidUserDataException("Unauthorized");
     }
