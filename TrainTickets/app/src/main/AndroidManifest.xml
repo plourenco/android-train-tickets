@@ -65,12 +65,17 @@
             android:name=".activities.TicketSuccessActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
-        <activity android:name=".activities.SettingsActivity"
+        <activity
+            android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.TimetableActivity"
-            android:label="@string/title_activity_settings"
+        <activity
+            android:name=".activities.TimetableActivity"
+            android:label="@string/title_activity_timetables"
             android:theme="@style/AppTheme" />
+        <activity android:name=".activities.TicketFailureActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

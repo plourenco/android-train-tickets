@@ -84,7 +84,7 @@ public class SingleTicketActivity extends BaseActivity {
         }
 
         try {
-            SimpleDateFormat datef = new SimpleDateFormat("MMM dd, yyyy", Locale.UK);
+            SimpleDateFormat datef = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
             SimpleDateFormat timef = new SimpleDateFormat("hh:mm", Locale.UK);
             originView.setText(ticket.getDepartureStation().getStationName());
             destinationView.setText(ticket.getArrivalStation().getStationName());

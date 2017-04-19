@@ -226,7 +226,7 @@ public class MySQLManager {
             while (rs.next()){
                 int id = rs.getInt("id");
                 String seatNumber = rs.getString("seatNumber");
-                int trainId = rs.getInt("fkTrain");
+                int trainId = rs.getInt("trainId");
                 seats.put(id, new SeatModel(id, seatNumber, trainId));
             }
             SeatHolder.setSeats(seats);

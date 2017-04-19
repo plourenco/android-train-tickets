@@ -18,7 +18,7 @@ import feup.cm.traintickets.models.TripModel;
 
 public class TicketController {
 
-    public String payment(int userid, StationModel departure, StationModel arrival,
+    public String payment(String token, int userid, StationModel departure, StationModel arrival,
                           Date ticketDate, double price, int tripid) {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd").create();
@@ -32,7 +32,7 @@ public class TicketController {
         model.put("trip", new TripModel(tripid));
         Log.d("json", gson.toJson(model));
 
-        return ServiceHandler.makePost("tickets/buy-ticket/" + userid, gson.toJson(model));
+        return ServiceHandler.makePost("tickets/buy-ticket/" + userid, gson.toJson(model), token);
     }
 
     public String getUserTickets(String token, int userid) {

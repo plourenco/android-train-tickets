@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +23,7 @@ import feup.cm.traintickets.util.TimeDeserializer;
 
 public abstract class TicketBuyTask extends AsyncTask<Void, Void, Boolean> {
 
+    private String token;
     private int userId;
     private StationModel departure;
     private StationModel arrival;
@@ -31,8 +33,9 @@ public abstract class TicketBuyTask extends AsyncTask<Void, Void, Boolean> {
 
     private TicketModel result;
 
-    public TicketBuyTask(int userId, StationModel departure, StationModel arrival,
+    public TicketBuyTask(String token, int userId, StationModel departure, StationModel arrival,
                          Date ticketDate, double price, int trip) {
+        this.token = token;
         this.userId = userId;
         this.departure = departure;
         this.arrival = arrival;
@@ -50,7 +53,7 @@ public abstract class TicketBuyTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         TicketController ticketController = new TicketController();
-        String res = ticketController.payment(userId, departure, arrival, ticketDate,
+        String res = ticketController.payment(token, userId, departure, arrival, ticketDate,
                 price, trip);
 
         if (res != null) {
@@ -58,10 +61,10 @@ public abstract class TicketBuyTask extends AsyncTask<Void, Void, Boolean> {
                 Gson gson = new GsonBuilder()
                         .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
                         .registerTypeAdapter(Time.class, new TimeDeserializer()).create();
-                Log.d("asd", res);
+                Log.d("api", res);
                 this.result = gson.fromJson(res, TicketModel.class);
                 return true;
-            } catch (JsonParseException ignored) {
+            } catch (Exception ignored) {
                 ignored.printStackTrace();
             }
         }

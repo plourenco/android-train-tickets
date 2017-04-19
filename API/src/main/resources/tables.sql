@@ -126,7 +126,6 @@ insert ignore into `config` VALUES( 'db_version', '{version}');
 INSERT INTO `roles` VALUES(1, 'inspector') ON DUPLICATE KEY UPDATE name = VALUES(name);
 INSERT INTO `roles` VALUES(2, 'user') ON DUPLICATE KEY UPDATE name = VALUES(name);
 
-DROP TABLE IF EXISTS creditcards;
 CREATE TABLE IF NOT EXISTS `creditcards` (
   `expiryDate` DATE NOT NULL,
   `number` BIGINT NOT NULL,

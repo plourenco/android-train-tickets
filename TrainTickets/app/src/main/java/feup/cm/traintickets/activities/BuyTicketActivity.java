@@ -26,8 +26,10 @@ import java.util.Locale;
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.StationModel;
+import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.runnables.TicketBuyTask;
 import feup.cm.traintickets.runnables.StationGetTask;
+import feup.cm.traintickets.runnables.TicketGetPriceTask;
 import feup.cm.traintickets.util.DateDeserializer;
 
 public class BuyTicketActivity extends BaseActivity {
@@ -194,21 +196,30 @@ public class BuyTicketActivity extends BaseActivity {
                     Snackbar.make(trainView, getString(R.string.display_select_train),
                             Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
+                else if(!(priceView.getTag() instanceof Float) ||
+                        ((Float) priceView.getTag()) == 0f) {
+                    priceView.setError("");
+                    Snackbar.make(trainView, getString(R.string.error_invalid_price),
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }
                 StationModel org = (StationModel) origin.getSelectedItem();
                 StationModel ds = (StationModel) dest.getSelectedItem();
                 String dateStr = (String) departureView.getTag();
                 int train = (Integer) trainView.getTag();
                 double price = 0;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
-                TicketBuyTask task = new TicketBuyTask(getUserId(), org, ds,
+                TicketBuyTask task = new TicketBuyTask(getToken(), getUserId(), org, ds,
                         sdf.parse(dateStr), price, train) {
                     @Override
                     protected void onPostExecute(Boolean success) {
                         if(success) {
                             Intent intent = new Intent(getApplicationContext(), TicketSuccessActivity.class);
-                            intent.putExtra("priceView", priceView.getText());
+                            if(priceView.getTag() instanceof Float) {
+                                intent.putExtra("price", ((Float) priceView.getTag()));
+                            }
                             startActivity(intent);
                         }
+                        else forwardError();
                     }
 
                     @Override
@@ -225,7 +236,11 @@ public class BuyTicketActivity extends BaseActivity {
     }
 
     protected void forwardError() {
-
+        Intent intent = new Intent(getApplicationContext(), TicketFailureActivity.class);
+        if(priceView.getTag() instanceof Float) {
+            intent.putExtra("price", ((Float) priceView.getTag()));
+        }
+        startActivity(intent);
     }
 
     protected void forwardTrain(StationModel org, StationModel ds) {
@@ -271,9 +286,40 @@ public class BuyTicketActivity extends BaseActivity {
                 // Restore trainView
                 this.trainView.setText(description);
                 this.trainView.setTag(train);
+                // Calculate price if applicable
+                calculatePrice();
             } catch (Exception ignored) { // do not restore anything
 
             }
+        }
+    }
+
+    protected void calculatePrice() {
+        try {
+            StationModel org = (StationModel) origin.getSelectedItem();
+            StationModel ds = (StationModel) dest.getSelectedItem();
+            int train = (Integer) trainView.getTag();
+
+            TicketGetPriceTask task = new TicketGetPriceTask(getToken(), train,
+                    org.getStationNumber(), ds.getStationNumber()) {
+                @Override
+                protected void onPostExecute(Boolean success) {
+                    if (success) {
+                        TicketModel model = getResult();
+                        priceView.setText(String.format("$%s", model.getPrice()));
+                        priceView.setTag(model.getPrice());
+                    }
+                }
+
+                @Override
+                protected void onCancelled() {
+
+                }
+            };
+            task.execute((Void) null);
+        }
+        catch(Exception ignored) {
+            // Failed to generate price
         }
     }
 
@@ -329,6 +375,7 @@ public class BuyTicketActivity extends BaseActivity {
             ((TextView) origin.getSelectedView()).setError(null);
             ((TextView) dest.getSelectedView()).setError(null);
             departureView.setError(null);
+            priceView.setError(null);
             return false;
         }
     }

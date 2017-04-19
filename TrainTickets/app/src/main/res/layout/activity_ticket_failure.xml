@@ -5,8 +5,8 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    tools:context="feup.cm.traintickets.activities.TicketSuccessActivity">
+    android:background="@color/colorRed"
+    tools:context="feup.cm.traintickets.activities.TicketFailureActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:paddingTop="20dp"
             android:paddingStart="50dp"
             android:paddingEnd="50dp"
-            android:text="Payment successful"
+            android:text="Transaction failed"
             android:textColor="@android:color/white"
             android:textSize="30dp" />
 
@@ -58,7 +58,7 @@
             android:paddingTop="10dp"
             android:paddingStart="50dp"
             android:paddingEnd="50dp"
-            android:text="@string/display_payment_success"
+            android:text="@string/display_payment_failed"
             android:textColor="@color/colorGrayMedium"
             android:textSize="14dp" />
 
@@ -70,7 +70,7 @@
             android:layout_marginTop="10dp"
             android:paddingStart="50dp"
             android:paddingEnd="50dp"
-            app:srcCompat="@drawable/ic_check_circle_white_24dp" />
+            app:srcCompat="@drawable/ic_cancel_white_24dp" />
 
     </RelativeLayout>
 

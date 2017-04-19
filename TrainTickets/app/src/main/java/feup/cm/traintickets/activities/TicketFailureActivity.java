@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import feup.cm.traintickets.FullActivity;
+import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 
-public class TicketSuccessActivity extends FullActivity {
+public class TicketFailureActivity extends BaseActivity {
 
     private TextView priceView;
     private CoordinatorLayout layout;
@@ -18,7 +18,7 @@ public class TicketSuccessActivity extends FullActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ticket_success);
+        setContentView(R.layout.activity_ticket_failure);
 
         priceView = (TextView) findViewById(R.id.done_price);
         layout = (CoordinatorLayout) findViewById(R.id.main_layout);

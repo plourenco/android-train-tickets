@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
@@ -21,6 +24,8 @@ import feup.cm.traintickets.runnables.TripGetTask;
 
 public class TimetableActivity extends BaseActivity {
 
+    private TextView noTrainsView;
+
     ExpandableListAdapter expAdapter;
     ExpandableListView expView;
     List<TripModel> trips;
@@ -31,8 +36,12 @@ public class TimetableActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
         expView = (ExpandableListView) findViewById(R.id.listViewTimetable);
+        noTrainsView = (TextView) findViewById(R.id.no_available_trains);
 
         trips = TripDataManager.getTrips();
+        if(trips != null && !trips.isEmpty()) {
+            noTrainsView.setVisibility(View.GONE);
+        }
         steps = new HashMap<>();
         for (TripModel t : trips) {
             steps.put(t, t.getSteps());
@@ -45,8 +54,6 @@ public class TimetableActivity extends BaseActivity {
 
     @Override
     protected int getBottomNavId() {
-
         return R.id.action_timetables;
-
     }
 }

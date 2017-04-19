@@ -2,11 +2,18 @@ package feup.cm.traintickets.runnables;
 
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Time;
+
 import feup.cm.traintickets.controllers.TicketController;
 import feup.cm.traintickets.models.TicketModel;
+import feup.cm.traintickets.util.DateDeserializer;
+import feup.cm.traintickets.util.TimeDeserializer;
 
 public abstract class TicketGetPriceTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -15,7 +22,7 @@ public abstract class TicketGetPriceTask extends AsyncTask<Void, Void, Boolean> 
     private int depStationId;
     private int arrStationId;
 
-    protected TicketModel ticket;
+    private TicketModel result;
 
     public TicketGetPriceTask(String token, int tripId, int depStationId, int arrStationId) {
         this.token = token;
@@ -31,9 +38,12 @@ public abstract class TicketGetPriceTask extends AsyncTask<Void, Void, Boolean> 
 
         if (res != null) {
             try {
-                JSONObject obj = new JSONObject(res);
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
+                        .registerTypeAdapter(Time.class, new TimeDeserializer()).create();
+                this.result = gson.fromJson(res, TicketModel.class);
                 return true;
-            } catch (JSONException | NullPointerException ignored) {
+            } catch (Exception ignored) {
                 ignored.printStackTrace();
             }
         }
@@ -48,7 +58,5 @@ public abstract class TicketGetPriceTask extends AsyncTask<Void, Void, Boolean> 
 
     }
 
-    protected TicketModel getTicket() {
-        return ticket;
-    }
+    protected TicketModel getResult() { return result; }
 }

@@ -27,6 +27,7 @@
     <string name="title_activity_train_list">List of Available Trains</string>
     <string name="title_activity_ticket_list">Tickets You Own</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_timetables">Timetables</string>
 
     <string name="display_station">Station</string>
     <string name="display_ticket_price">Ticket Price</string>
@@ -40,7 +41,10 @@
     <string name="display_ticket_expired">Expired</string>
     <string name="display_train_pick">Train</string>
     <string name="display_loading">Loading</string>
+    <string name="display_price_base">$00.00</string>
 
+    <string name="display_payment_failed">Something went wrong. Please check if your credit card settings are valid or contact an operator</string>
+    <string name="display_payment_success">You should receive an invoice of the purchase through your email. You can also check your tickets in the second tab</string>
     <string name="display_select_train">No train selected</string>
     <string name="display_select_train_tip">Click in any train to select it</string>
     <string name="display_select_date">No date selected</string>
@@ -56,6 +60,7 @@
     <string name="error_same_stations">The origin and destination stations can\'t be the same</string>
     <string name="error_no_tickets">There are no available tickets</string>
     <string name="error_no_trains">There are no available trains. Please select a new date or station</string>
+    <string name="error_invalid_price">Unable to generate price and complete purchase</string>
 
     <!-- Strings train:list-->
     <string name="train_list_departure_tv">Departure Time</string>
