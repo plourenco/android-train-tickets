@@ -16,6 +16,9 @@ import feup.cm.traintickets.models.TripModel;
 
 public class TimetableAdapter extends BaseExpandableListAdapter {
 
+    public String arrival="";
+    public String arrivalTime="";
+
     /*private static class ViewHolder {
         TextView txtStation;
         TextView txtTime;
@@ -61,12 +64,32 @@ public class TimetableAdapter extends BaseExpandableListAdapter {
         }
 
         if(childStep != null) {
-            TextView station = (TextView) convertView.findViewById(R.id.timetable_station);
-            station.setText(childStep.getDepartureStation().getStationName());
-            TextView time = (TextView) convertView.findViewById(R.id.timetable_time);
-            time.setText(childStep.getDepartureTime().toString());
-            TextView waiting = (TextView) convertView.findViewById(R.id.timetable_waiting);
-            waiting.setText(String.format("%s mn", String.valueOf(childStep.getWaitingTime())));
+            if(childPosition==0) {
+                TextView station = (TextView) convertView.findViewById(R.id.timetable_station);
+                station.setText(childStep.getDepartureStation().getStationName());
+                TextView time = (TextView) convertView.findViewById(R.id.timetable_time);
+                time.setText(childStep.getDepartureTime().toString()+" Hrs");
+                TextView waiting = (TextView) convertView.findViewById(R.id.timetable_waiting);
+                waiting.setText("     -------");
+            }
+            else if( childPosition>0 &&childPosition<4){
+                TextView station = (TextView) convertView.findViewById(R.id.timetable_station);
+                station.setText(childStep.getDepartureStation().getStationName());
+                TextView time = (TextView) convertView.findViewById(R.id.timetable_time);
+                time.setText(childStep.getDepartureTime().toString());
+                TextView waiting = (TextView) convertView.findViewById(R.id.timetable_waiting);
+                waiting.setText(String.format("%s mn Stop", String.valueOf(childStep.getWaitingTime())));
+                arrival=childStep.getArrivalStation().getStationName();
+                arrivalTime=childStep.getArrivalTime().toString();
+            }
+            else{
+                TextView station = (TextView) convertView.findViewById(R.id.timetable_station);
+                station.setText(arrival);
+                TextView time = (TextView) convertView.findViewById(R.id.timetable_time);
+                time.setText(arrivalTime);
+                TextView waiting = (TextView) convertView.findViewById(R.id.timetable_waiting);
+                waiting.setText("     -------");
+            }
         }
 
         return convertView;

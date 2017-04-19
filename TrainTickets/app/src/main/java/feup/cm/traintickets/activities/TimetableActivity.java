@@ -33,6 +33,7 @@ public class TimetableActivity extends BaseActivity {
     ExpandableListView expView;
     List<TripModel> trips;
     private HashMap<TripModel, List<StepModel>> steps;
+    int a=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,10 @@ public class TimetableActivity extends BaseActivity {
                     }
                     steps = new HashMap<>();
                     for (TripModel t : trips) {
-                        //t.getSteps().add(new StepModel(-1));
+                            int a=t.getSteps().size();
+                        if(a<5) {
+                            t.getSteps().add(new StepModel(5));
+                        }
                         steps.put(t, t.getSteps());
                     }
 

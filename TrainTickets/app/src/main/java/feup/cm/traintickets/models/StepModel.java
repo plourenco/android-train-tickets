@@ -36,7 +36,20 @@ public class StepModel {
     }
 
     public StepModel(int i) {
-        this.id = id;
+        Time a=Time.valueOf("8:00:00");
+        StationModel b=new StationModel(6,6,"b");
+        this.id = i;
+        this.stepNumber=1;
+        this.distance=10;
+        this.price=5.5;
+        this.waitingTime=5;
+        this.duration=30;
+        this.departureTime=a;
+        this.arrivalTime=a;
+        this.departureStation=b;
+        this.arrivalStation=b;
+        this.tripId=1;
+
     }
 
     public int getId() {
