@@ -1,12 +1,19 @@
 package com.example.util;
 
+import com.example.dao.UserManager;
 import com.example.exceptions.InvalidUserDataException;
+import com.example.models.TokenModel;
+import com.example.models.UserModel;
+import com.example.models.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import javax.ws.rs.core.Response;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class TokenHelper {
 
@@ -32,6 +39,30 @@ public class TokenHelper {
                 .setIssuedAt(new Date())
                 .signWith(signatureAlgorithm, secret)
                 .compact();
+    }
+
+    public static boolean isTrustworthy(String issuer, String token) {
+        if (TokenHelper.isValid(token)) { // check if token is valid
+            if(Objects.equals(TokenHelper.getIssuer(token), issuer)) {
+                String email = TokenHelper.getEmail(token);
+                UserRole role = UserRole.idToRole(TokenHelper.getRole(token));
+                UserManager manager = new UserManager();
+
+                if (email != null && role != null) {
+                    // check if token identifies a user
+                    UserModel model = manager.getUserByEmail(email);
+                    // check if user exists
+                    if (model != null) {
+                        // check if token role corresponds to user role
+                        if (role.id() == model.getRoleUser()) {
+                            // if role changes, generate a new token
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**

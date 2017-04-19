@@ -29,6 +29,7 @@ import feup.cm.traintickets.activities.SettingsActivity;
 import feup.cm.traintickets.activities.TicketListActivity;
 import feup.cm.traintickets.activities.TimetableActivity;
 import feup.cm.traintickets.runnables.TokenRefreshTask;
+import feup.cm.traintickets.util.ActivityHelper;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -202,14 +203,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void logout() {
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        editor.remove("LOGIN_TOKEN");
-        editor.remove("LOGIN_REFRESH");
-        editor.remove("LOGIN_EXPIRES");
-        editor.remove("LOGIN_ID");
-        editor.remove("LOGIN_EMAIL");
-        editor.remove("LOGIN_PASSWORD");
-        editor.apply();
+        ActivityHelper.cleanPrefs(sharedPrefs);
 
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -54,6 +54,7 @@ import feup.cm.traintickets.runnables.TrainGetTask;
 import feup.cm.traintickets.runnables.TripGetTask;
 import feup.cm.traintickets.runnables.UserGetRoleTask;
 import feup.cm.traintickets.runnables.UserLoginTask;
+import feup.cm.traintickets.util.ActivityHelper;
 import feup.cm.traintickets.util.StringCheck;
 
 import static android.Manifest.permission.INTERNET;
@@ -64,10 +65,6 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    /*
-     * TODO: LOGOUT
-     */
-
     private static final int REQUEST_READ_CONTACTS = 0;
     private UserLoginTask mAuthTask = null;
     private SharedPreferences sharedPrefs;
@@ -77,8 +74,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
-    private int userid;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -129,23 +124,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
         String token = sharedPrefs.getString("LOGIN_TOKEN", "");
+        int role = sharedPrefs.getInt("LOGIN_ROLE", 0);
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
-        userid = sharedPrefs.getInt("LOGIN_ID", 0);
-        String password = sharedPrefs.getString("LOGIN_PASS", null);
-        String email = sharedPrefs.getString("LOGIN_EMAIL", null);
+        int userid = sharedPrefs.getInt("LOGIN_ID", 0);
 
-        if (password != null && email != null) {
-            login(email, password);
-        } else {
-            Toast.makeText(this, "Could not retrieve data. Please login with your own data", Toast.LENGTH_LONG).show();
+        if (!token.isEmpty() && role != 0 && userid != 0) {
+            if(expires.after(new Date())) {
+                ActivityHelper.cache(token);
+                successRedirect(role);
+            }
+            else {
+                refreshToken(role);
+            }
+            return;
         }
 
-        /*if(!token.isEmpty() && expires.after(new Date()) && userid != 0) {
-            successRedirect(role);
-        }
-        else {
-            refreshToken();
-        }*/
+        Toast.makeText(getApplicationContext(), "No credentials were found",
+                Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -270,12 +265,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     editor.putString("LOGIN_REFRESH", token.getRefresh());
                     editor.putLong("LOGIN_EXPIRES", token.getExpires().getTime());
                     editor.putInt("LOGIN_ID", token.getUserId());
-                    editor.putString("LOGIN_EMAIL", email);
-                    editor.putString("LOGIN_PASS", password);
+                    editor.putInt("LOGIN_ROLE", token.getRole());
                     editor.apply();
 
-                    cache(token.getToken());
-                    successRedirect();
+                    ActivityHelper.cache(token.getToken());
+                    successRedirect(token.getRole());
                 } else {
                     mPasswordView.setError(getString(R.string.error_incorrect_credentials));
                     mPasswordView.requestFocus();
@@ -403,7 +397,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
-    protected void refreshToken() {
+    protected void refreshToken(final int role) {
         String refresh = sharedPrefs.getString("LOGIN_REFRESH", "");
         TokenRefreshTask task = new TokenRefreshTask(refresh) {
             @Override
@@ -414,28 +408,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     editor.putLong("LOGIN_EXPIRES", getToken().getExpires().getTime());
                     editor.apply();
                     
-                    successRedirect();
+                    successRedirect(role);
                 }
             }
         };
         task.execute((Void) null);
     }
 
-    private void successRedirect() {
-        UserGetRoleTask userGetRoleTask = new UserGetRoleTask(userid) {
-            @Override
-            protected void onCancelled() {}
-
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success)
-                    redirectTo(getRole());
-            }
-        };
-        userGetRoleTask.execute((Void) null);
-    }
-
-    private void redirectTo(int role) {
+    private void successRedirect(int role) {
         Intent intent = null;
         switch (role) {
             case 1:
@@ -453,85 +433,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             startActivity(intent);
             finish();
         } else {
-            Toast.makeText(this, "Error redirecting", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Internal account error", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    /**
-     * Cache persistent data
-     */
-    protected void cache(String token) {
-
-        final TripGetTask tripGetTask = new TripGetTask(token) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success)
-                    TripDataManager.setTrips(getTrips());
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-        final StepGetTask stepGetTask = new StepGetTask(token) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success) {
-                    StepDataManager.setSteps(getSteps());
-                    tripGetTask.execute((Void) null);
-                }
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-        final TrainGetTask trainGetTask = new TrainGetTask(token) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success) {
-                    TrainDataManager.setTrains(getTrains());
-                    stepGetTask.execute((Void) null);
-                }
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-        final SeatGetTask seatGetTask = new SeatGetTask(token) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success) {
-                    SeatDataManager.setSeats(getSeats());
-                    trainGetTask.execute((Void) null);
-                }
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-        StationGetTask stationGetTask = new StationGetTask(token) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if (success) {
-                    StationDataManager.setStations(getStations());
-                    seatGetTask.execute((Void) null);
-                }
-
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-
-        stationGetTask.execute((Void) null);
     }
 }

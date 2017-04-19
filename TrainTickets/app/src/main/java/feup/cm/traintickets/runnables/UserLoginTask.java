@@ -32,7 +32,7 @@ public abstract class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
                         object.getLong("expires") != 0L) {
                     token = new TokenModel(object.getInt("userId"), object.getString("token"),
                             object.getString("refresh"),
-                            object.getLong("expires"));
+                            object.getLong("expires"), object.getInt("role"));
                     return true;
                 }
             }
