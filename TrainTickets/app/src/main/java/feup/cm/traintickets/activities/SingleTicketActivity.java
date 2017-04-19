@@ -89,8 +89,9 @@ public class SingleTicketActivity extends BaseActivity {
             originView.setText(ticket.getDepartureStation().getStationName());
             destinationView.setText(ticket.getArrivalStation().getStationName());
             dateView.setText(datef.format(ticket.getTicketDate()));
-            timeView.setText(timef.format(ticket.getTrip().getSteps().get(0).getDepartureTime()));
-            //TODO: API fields are null
+            if(ticket.getTrip().getSteps().size() > 0) {
+                timeView.setText(timef.format(ticket.getTrip().getSteps().get(0).getDepartureTime()));
+            }
         }
         catch(NullPointerException e) {
             // Data not available, but try to generate QR code

@@ -3,20 +3,18 @@ package feup.cm.traintickets;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Date;
 
 import feup.cm.traintickets.activities.BuyTicketActivity;
@@ -52,8 +50,18 @@ public abstract class BaseActivity extends AppCompatActivity {
             bottomNav.enableItemShiftingMode(true);
             bottomNav.setTextVisibility(false);
             bottomNav.setIconSize(26, 26);
-            bottomNav.setItemHeight(125);
+            int size = (int) (getResources().getDimension(R.dimen.bottom_bar_height) /
+                    getResources().getDisplayMetrics().density);
+            bottomNav.setItemHeight(size);
             if(getBottomNavId() != 0) bottomNav.setSelectedItemId(getBottomNavId());
+            // Fix bottom Navigation top margin
+            ViewGroup main = getMainLayout();
+            if(main != null) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)
+                        main.getLayoutParams();
+                params.setMargins(0, 0, 0, bottomNav.getItemHeight());
+                main.requestLayout();
+            }
             bottomNav.setOnNavigationItemSelectedListener(
                     new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -176,34 +184,11 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected abstract int getBottomNavId();
 
-
     /**
-     * Helper method to check whether there is connection
-     * @param context
-     * @return
+     * Get the main layout in order to apply a margin to prevent bottom nav overlap
+     * Return null if you don't need it
      */
-    protected boolean hasActiveInternetConnection(Context context) {
-        if (isNetworkAvailable(context)) {
-            try {
-                HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
-                urlc.setRequestProperty("User-Agent", "Test");
-                urlc.setRequestProperty("Connection", "close");
-                urlc.setConnectTimeout(1500);
-                urlc.connect();
-                return (urlc.getResponseCode() == 200);
-            } catch (IOException e) {
-                Log.e("INTERNET", "Error checking internet connection", e);
-            }
-        } else {
-            Log.d("INTERNET", "No network available!");
-        }
-        return false;
-    }
-
-    protected boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null;
+    protected ViewGroup getMainLayout() {
+        return null;
     }
 }

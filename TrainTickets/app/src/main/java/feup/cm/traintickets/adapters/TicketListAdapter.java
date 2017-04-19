@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,13 +47,19 @@ public class TicketListAdapter extends ArrayAdapter<TicketModel> implements View
         int position = (Integer) v.getTag();
         Object object = getItem(position);
         TicketModel dataModel = (TicketModel) object;
+        SimpleDateFormat timef = new SimpleDateFormat("hh:mm", Locale.UK);
 
-        switch (v.getId())
-        {
-            case R.id.item_info:
-                Snackbar.make(v, "THIS IS THE INFO", Snackbar.LENGTH_LONG)
-                        .setAction("No action", null).show();
-                break;
+        if(dataModel != null) {
+            switch (v.getId()) {
+                case R.id.item_info:
+                    String time = timef.format(dataModel.getTrip().getSteps()
+                            .get(0).getDepartureTime());
+                    if (dataModel.getTrip().getSteps().size() > 0) {
+                        Snackbar.make(v, String.format("Departure Time: %s", time),
+                                Snackbar.LENGTH_LONG).setAction("No action", null).show();
+                    }
+                    break;
+            }
         }
     }
 

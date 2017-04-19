@@ -17,6 +17,7 @@
 
     <ListView
         android:id="@+id/list"
+        android:layout_marginBottom="@dimen/bottom_bar_height"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

@@ -9,16 +9,15 @@
     tools:showIn="@layout/activity_ticket_single">
 
     <RelativeLayout
-        android:layout_width="14dp"
-        android:layout_height="495dp"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <ProgressBar
             android:id="@+id/ticket_progress"
             style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:visibility="gone" />
@@ -127,7 +126,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/activity_element_padding"
-                    android:text="08:30"
+                    android:text="00:00"
                     android:textColor="@color/colorDarkText"
                     android:textSize="30sp" />
 

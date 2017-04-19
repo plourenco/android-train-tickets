@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,7 +39,7 @@ import feup.cm.traintickets.util.DateDeserializer;
 public class BuyTicketActivity extends BaseActivity {
 
     /*
-    TODO: Changing stations, also resets train
+    TODO: Changing stations, also resets price
      */
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.UK);
@@ -155,6 +156,11 @@ public class BuyTicketActivity extends BaseActivity {
     @Override
     protected int getBottomNavId() {
         return R.id.action_buyticket;
+    }
+
+    @Override
+    protected ViewGroup getMainLayout() {
+        return (ViewGroup) findViewById(R.id.buy_ticket_main_layout);
     }
 
     protected void loadStations() {
