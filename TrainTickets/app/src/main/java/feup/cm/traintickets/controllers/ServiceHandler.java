@@ -1,5 +1,8 @@
 package feup.cm.traintickets.controllers;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -120,4 +123,5 @@ public class ServiceHandler {
         }
         return builder.toString();
     }
+
 }

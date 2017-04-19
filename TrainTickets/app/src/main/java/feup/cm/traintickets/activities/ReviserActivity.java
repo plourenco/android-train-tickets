@@ -1,5 +1,6 @@
 package feup.cm.traintickets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -31,6 +32,7 @@ public class ReviserActivity extends AppCompatActivity {
     Spinner trip;
 
     Button dlTicket;
+    Button scan;
 
     String directionToSend;
     String tripToSend;
@@ -46,6 +48,7 @@ public class ReviserActivity extends AppCompatActivity {
         direction = (Spinner)findViewById(R.id.spDirection);
         trip = (Spinner)findViewById(R.id.spTrip);
         dlTicket = (Button)findViewById(R.id.dlTickets);
+        scan = (Button)findViewById(R.id.scan);
 
         dlTicket.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +56,14 @@ public class ReviserActivity extends AppCompatActivity {
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH); //format time
                 String time = df.format(Calendar.getInstance().getTime());
                 downloadTickets(directionToSend, tripToSend, Date.valueOf(time));
+            }
+        });
+
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), QRCodeReaderActivity.class);
+                startActivity(intent);
             }
         });
 

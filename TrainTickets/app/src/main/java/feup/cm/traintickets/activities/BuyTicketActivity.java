@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonParseException;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.runnables.TicketBuyTask;
 import feup.cm.traintickets.runnables.StationGetTask;
 import feup.cm.traintickets.runnables.TicketGetPriceTask;
+import feup.cm.traintickets.sqlite.TicketBrowser;
 import feup.cm.traintickets.util.DateDeserializer;
 
 public class BuyTicketActivity extends BaseActivity {
@@ -224,6 +226,7 @@ public class BuyTicketActivity extends BaseActivity {
                             if(priceView.getTag() instanceof Float) {
                                 intent.putExtra("price", ((Float) priceView.getTag()));
                             }
+                            saveToSQLite(getResult());
                             startActivity(intent);
                         } else {
                             forwardError();
@@ -240,6 +243,19 @@ public class BuyTicketActivity extends BaseActivity {
             catch(Exception e) {
                 forwardError();
             }
+        }
+    }
+
+    private void saveToSQLite(TicketModel result) {
+        TicketBrowser ticketBrowser = new TicketBrowser(this);
+        try {
+            ticketBrowser.create(result);
+        } catch (NullPointerException | android.database.SQLException ex) {
+            Toast.makeText(this, "Error trying to save to local database", Toast.LENGTH_SHORT).show();
+            if (ex.getMessage() != null)
+                Log.d("SQLiteSave", ex.getMessage());
+        } finally {
+            ticketBrowser.close();
         }
     }
 

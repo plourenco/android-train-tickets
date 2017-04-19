@@ -77,4 +77,6 @@
     <string name="cvv2">CVV2</string>
     <string name="expiry_date">Expiry Date</string>
     <string name="save_card">Save Card</string>
+    <string name="download_tickets">Download Tickets</string>
+    <string name="scan_tickets">Scan Tickets</string>
 </resources>
