@@ -228,7 +228,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return false;
     }
 
-    protected boolean isNetworkAvailable(Context context) {
+    private boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

@@ -32,10 +32,6 @@ import se.simbio.encryption.Encryption;
 
 public class SingleTicketActivity extends BaseActivity {
 
-    /*
-    TODO: Spinner is not on the middle
-     */
-
     private TextView originView;
     private TextView destinationView;
     private TextView dateView;
@@ -67,10 +63,6 @@ public class SingleTicketActivity extends BaseActivity {
         progressBar = findViewById(R.id.ticket_progress);
         qrCodeImageView = (ImageView) findViewById(R.id.imageView2);
 
-        /*
-         * This is yet to be implemented.
-         * The code is only here for agility purposes!
-         */
         Intent ticketIntent = getIntent();
         try {
             ticket = new Gson().fromJson(ticketIntent.getStringExtra("TICKET_MODEL"),
@@ -93,6 +85,7 @@ public class SingleTicketActivity extends BaseActivity {
             if(ticket.getTrip().getSteps().size() > 0) {
                 timeView.setText(timef.format(ticket.getTrip().getSteps().get(0).getDepartureTime()));
             }
+            seatView.setText(ticket.getSeatModel().getSeatNumber());
         }
         catch(NullPointerException e) {
             // Data not available, but try to generate QR code
