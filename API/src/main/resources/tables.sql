@@ -97,6 +97,7 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `fkUser` INT NOT NULL,
   `fkTrip` INT NOT NULL,
   `isUsed` tinyint,
+  `seatNumber` VARCHAR(45),
 PRIMARY KEY(`id`),
 FOREIGN KEY(`departureStationId`) REFERENCES stations(`id`),
 FOREIGN KEY(`arrivalStationId`) REFERENCES stations(`id`),

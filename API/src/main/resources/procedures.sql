@@ -291,7 +291,7 @@ CREATE PROCEDURE buyTicket(IN uniqueUUID   TEXT, IN depStation INT, IN arrStatio
               trips.id AS idTrip,
               seats.id AS seatId
             FROM seats
-              JOIN trains ON seats.fkTrain = trains.id
+              JOIN trains ON seats.trainId = trains.id
               JOIN trips ON trains.id = trips.skTrain
             WHERE trips.id = 4) AS sta LEFT JOIN
         (SELECT
@@ -310,7 +310,7 @@ CREATE PROCEDURE buyTicket(IN uniqueUUID   TEXT, IN depStation INT, IN arrStatio
       SELECT seats.id
       INTO INSEATID
       FROM seats
-        JOIN trains ON seats.fkTrain = trains.id
+        JOIN trains ON seats.trainId = trains.id
         JOIN trips ON trains.id = trips.skTrain
       WHERE seats.seatNumber = seat AND trips.id = tripId;
     END IF;
@@ -370,7 +370,7 @@ CREATE PROCEDURE getFirstSeat(IN trip INT, IN tripDate DATE)
             trips.id AS idTrip,
             seats.id AS seatId
           FROM seats
-            JOIN trains ON seats.fkTrain = trains.id
+            JOIN trains ON seats.trainId = trains.id
             JOIN trips ON trains.id = trips.skTrain
           WHERE trips.id = 4) AS sta LEFT JOIN
       (SELECT
@@ -403,7 +403,7 @@ CREATE PROCEDURE getAvailableSeatS(IN trip INT, IN checkDate DATE)
             trips.id AS idTrip,
             seats.id AS seatId
           FROM seats
-            JOIN trains ON seats.fkTrain = trains.id
+            JOIN trains ON seats.trainId = trains.id
             JOIN trips ON trains.id = trips.skTrain
           WHERE trips.id = 4) AS sta LEFT JOIN
       (SELECT

@@ -76,6 +76,7 @@ public class TicketModel {
     public Time getArrivalTime() {
         return arrivalTime;
     }
+    @JsonProperty(value = "seatModel")
     public SeatModel getSeat() {
         return seat;
     }
