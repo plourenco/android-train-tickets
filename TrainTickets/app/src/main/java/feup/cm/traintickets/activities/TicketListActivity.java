@@ -103,7 +103,7 @@ public class TicketListActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_ticket_list, menu);
+        getMenuInflater().inflate(R.menu.menu_options_main, menu);
         return true;
     }
 
@@ -115,7 +115,7 @@ public class TicketListActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
             logout();
             return true;
         }

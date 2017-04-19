@@ -12,6 +12,7 @@
     <string name="action_register">Register</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
 
     <!-- Strings related to objects -->
     <string name="transition_icon">AppIcon</string>
