@@ -8,7 +8,6 @@
 
     <dimen name="layout_form_content_bottom">4dp</dimen>
     <dimen name="layout_form_content_top">20dp</dimen>
-    <dimen name="layout_bottom_margin">50dp</dimen>
 
     <dimen name="card_vertical_margin">27dp</dimen>
     <dimen name="card_horizontal_margin">50dp</dimen>

@@ -36,7 +36,7 @@ import feup.cm.traintickets.util.DateDeserializer;
 public class BuyTicketActivity extends BaseActivity {
 
     /*
-    TODO: Changing stations, also resets train
+    TODO: Changing stations, also resets price
      */
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.UK);
@@ -220,9 +220,8 @@ public class BuyTicketActivity extends BaseActivity {
                             }
                             startActivity(intent);
                         } else {
-                            Toast.makeText(getApplicationContext(), "Invalid CC?", Toast.LENGTH_SHORT).show();
+                            forwardError();
                         }
-                        else forwardError();
                     }
 
                     @Override
