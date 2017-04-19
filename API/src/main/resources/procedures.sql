@@ -50,7 +50,7 @@ CREATE PROCEDURE getSchedule(IN depStation INT, IN arrStation INT)
       ORDER BY departureTime;
     ELSE
       SELECT
-        stb.description,
+        sch.description,
         stb.startStation,
         stb.endStation,
         sch.id,
