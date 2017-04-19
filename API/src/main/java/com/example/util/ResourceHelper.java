@@ -16,7 +16,7 @@ public class ResourceHelper {
             if (requestContext.getProperty("user_id") instanceof Integer) {
                 int id = (Integer) requestContext.getProperty("user_id");
                 if (id == userId) {
-                    return false;
+                    return true;
                 }
             }
             return false;
