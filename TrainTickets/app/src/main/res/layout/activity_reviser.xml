@@ -51,7 +51,13 @@
             android:id="@+id/dlTickets"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Download Tickets" />
+            android:text="@string/download_tickets" />
+
+        <Button
+            android:id="@+id/scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scan_tickets" />
 
     </LinearLayout>
 

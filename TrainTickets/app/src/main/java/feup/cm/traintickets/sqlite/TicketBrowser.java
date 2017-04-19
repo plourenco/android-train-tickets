@@ -76,8 +76,10 @@ public class TicketBrowser implements IOperation<TicketModel> {
         try {
             values.put("uniqueId", ticketModel.getUniqueId().toString());
             values.put("duration", ticketModel.getDuration());
-            values.put("departureTime", ticketModel.getDepartureTime().toString());
-            values.put("arrivalTime", ticketModel.getArrivalTime().toString());
+            //values.put("departureTime", ticketModel.getDepartureTime().toString());
+            values.put("departureTime", "08:00:00");
+            //values.put("arrivalTime", ticketModel.getArrivalTime().toString());
+            values.put("arrivalTime", "10:00:00");
             values.put("price", ticketModel.getPrice());
             values.put("ticketDate", ticketModel.getTicketDate().toString());
             values.put("purchaseDate", ticketModel.getPurchaseDate().toString());
@@ -85,14 +87,15 @@ public class TicketBrowser implements IOperation<TicketModel> {
             values.put("departureStation", ticketModel.getDepartureStation().getId());
             values.put("arrivalStation", ticketModel.getArrivalStation().getId());
             values.put("trip", ticketModel.getTrip().getId());
-            values.put("seat", ticketModel.getSeatModel().getId());
+            //values.put("seat", ticketModel.getSeatModel().getId());
         } catch (NullPointerException npe) {
             throw new NullPointerException(npe.getMessage());
         }
         try {
             sqLiteWritableDatabase.insertOrThrow("tickets", null, values);
         } catch (SQLException e) {
-            Log.e("SQL", e.getMessage());
+            Log.d("SQL", e.getMessage());
+            throw new SQLException(e.getMessage());
         }
     }
 
@@ -104,5 +107,10 @@ public class TicketBrowser implements IOperation<TicketModel> {
     @Override
     public int delete(int id) {
         return sqLiteWritableDatabase.delete("tickets", "id = ?", new String[]{""+id});
+    }
+
+    public void close() {
+        sqLiteWritableDatabase.close();
+        sqLiteReadableDatabase.close();
     }
 }
