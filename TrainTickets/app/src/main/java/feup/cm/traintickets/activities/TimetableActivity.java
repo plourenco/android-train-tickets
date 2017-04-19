@@ -41,18 +41,26 @@ public class TimetableActivity extends BaseActivity {
         expView = (ExpandableListView) findViewById(R.id.listViewTimetable);
         noTrainsView = (TextView) findViewById(R.id.no_available_trains);
 
-        trips = TripDataManager.getTrips();
-        if(trips != null && !trips.isEmpty()) {
-            noTrainsView.setVisibility(View.GONE);
-        }
-        steps = new HashMap<>();
-        for (TripModel t : trips) {
-            t.getSteps().add(new StepModel(-1));
-            steps.put(t, t.getSteps());
-        }
+        TripGetTask task = new TripGetTask(getToken()) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if(success) {
+                    TimetableActivity.this.trips = getTrips();
+                    if(trips != null && !trips.isEmpty()) {
+                        noTrainsView.setVisibility(View.GONE);
+                    }
+                    steps = new HashMap<>();
+                    for (TripModel t : trips) {
+                        //t.getSteps().add(new StepModel(-1));
+                        steps.put(t, t.getSteps());
+                    }
 
-        expAdapter = new TimetableAdapter(this, trips, steps);
-        expView.setAdapter(expAdapter);
+                    expAdapter = new TimetableAdapter(TimetableActivity.this, trips, steps);
+                    expView.setAdapter(expAdapter);
+                }
+            }
+        };
+        task.execute((Void) null);
     }
 
     @Override

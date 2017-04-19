@@ -10,13 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import feup.cm.traintickets.controllers.StationController;
+import feup.cm.traintickets.datamanagers.SeatDataManager;
+import feup.cm.traintickets.datamanagers.StationDataManager;
 import feup.cm.traintickets.models.StationModel;
 
 public abstract class StationGetTask extends AsyncTask<Void, Void, Boolean> {
 
     private String token;
 
-    protected List<StationModel> stations;
+    private List<StationModel> stations;
 
     public StationGetTask(String token) {
         this.token = token;
@@ -25,6 +27,11 @@ public abstract class StationGetTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
+        List<StationModel> cached = StationDataManager.getStations();
+        if(cached != null && !cached.isEmpty()) {
+            this.stations = cached;
+            return true;
+        }
         StationController stationController = new StationController();
         String res = stationController.getStations(token);
 

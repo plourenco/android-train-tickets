@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -11,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,17 +22,17 @@ import feup.cm.traintickets.datamanagers.StepDataManager;
 import feup.cm.traintickets.datamanagers.TrainDataManager;
 import feup.cm.traintickets.datamanagers.TripDataManager;
 import feup.cm.traintickets.models.StepModel;
+import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.models.TrainModel;
 import feup.cm.traintickets.models.TripModel;
-
-/**
- * Created by mercurius on 11/04/17.
- */
+import feup.cm.traintickets.util.DateDeserializer;
+import feup.cm.traintickets.util.TimeDeserializer;
 
 public abstract class TripGetTask extends AsyncTask<Void, Void, Boolean> {
+
     private String token;
 
-    protected List<TripModel> trips;
+    private List<TripModel> trips;
 
     public TripGetTask(String token) {
         this.token = token;
@@ -39,56 +41,24 @@ public abstract class TripGetTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
+        List<TripModel> cached = TripDataManager.getTrips();
+        if(cached != null && !cached.isEmpty()) {
+            this.trips = cached;
+            return true;
+        }
         TripController tripController = new TripController();
         String res = tripController.getTrips(token);
 
         if(res != null) {
             try {
-                JSONArray array = new JSONArray(res);
-                for(int i=0; i<array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    int id = obj.getInt("id");
-                    String desc = obj.getString("description");
-                    String direction = obj.getString("direction");
-                    String increment = obj.getString("increment");
-                    JSONArray stepObj = obj.getJSONArray("steps");
-                    List<StepModel> steps = new ArrayList<>();
-                    for (int j = 0; j < stepObj.length(); j++) {
-
-                        JSONObject obj2 = stepObj.getJSONObject(j);
-
-                        StepModel step = null;
-                        int idStep = obj2.getInt("id");
-
-                        if (StepDataManager.getSteps() != null) {
-                            for (int k = 0; k < StepDataManager.getSteps().size(); k++) {
-                                if (StepDataManager.getSteps().get(k).getId() == idStep) {
-                                    step = StepDataManager.getSteps().get(k);
-                                    break;
-                                }
-                            }
-                        }
-                        steps.add(step);
-                    }
-
-                    JSONObject trainObj = obj.getJSONObject("train");
-                    int idTrain = trainObj.getInt("id");
-                    TrainModel train = null;
-
-                    if (TrainDataManager.getTrains() != null) {
-                        for (int z = 0; z < TrainDataManager.getTrains().size(); z++) {
-                            if (TrainDataManager.getTrains().get(z).getId() == idTrain){
-                                train = TrainDataManager.getTrains().get(z);
-                                break;
-                            }
-                        }
-                    }
-
-                    trips.add(new TripModel(id, desc, direction, increment, train, steps));
-                }
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
+                        .registerTypeAdapter(Time.class, new TimeDeserializer()).create();
+                Type type = new TypeToken<ArrayList<TripModel>>() {}.getType();
+                this.trips = gson.fromJson(res, type);
                 return true;
             }
-            catch (JSONException | NullPointerException ignored) {
+            catch (JsonParseException | NullPointerException ignored) {
                 ignored.printStackTrace();
             }
         }

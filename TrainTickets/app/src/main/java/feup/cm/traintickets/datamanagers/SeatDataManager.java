@@ -5,10 +5,6 @@ import java.util.List;
 import feup.cm.traintickets.models.SeatModel;
 import feup.cm.traintickets.models.StepModel;
 
-/**
- * Created by mercurius on 11/04/17.
- */
-
 public class SeatDataManager {
 
     private static List<SeatModel> seats;

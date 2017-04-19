@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import feup.cm.traintickets.controllers.TrainController;
+import feup.cm.traintickets.datamanagers.TrainDataManager;
 import feup.cm.traintickets.models.SeatModel;
 import feup.cm.traintickets.models.TrainModel;
 
@@ -21,7 +22,7 @@ public abstract class TrainGetTask extends AsyncTask<Void, Void, Boolean> {
 
     private String token;
 
-    protected List<TrainModel> trains;
+    private List<TrainModel> trains;
 
     public TrainGetTask(String token) {
         this.token = token;
@@ -30,6 +31,11 @@ public abstract class TrainGetTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
+        List<TrainModel> cached = TrainDataManager.getTrains();
+        if(cached != null && !cached.isEmpty()) {
+            this.trains = cached;
+            return true;
+        }
         TrainController trainController = new TrainController();
         String res = trainController.getTrains(token);
 

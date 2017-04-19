@@ -52,7 +52,6 @@ import feup.cm.traintickets.runnables.StepGetTask;
 import feup.cm.traintickets.runnables.TokenRefreshTask;
 import feup.cm.traintickets.runnables.TrainGetTask;
 import feup.cm.traintickets.runnables.TripGetTask;
-import feup.cm.traintickets.runnables.UserGetRoleTask;
 import feup.cm.traintickets.runnables.UserLoginTask;
 import feup.cm.traintickets.util.ActivityHelper;
 import feup.cm.traintickets.util.StringCheck;
