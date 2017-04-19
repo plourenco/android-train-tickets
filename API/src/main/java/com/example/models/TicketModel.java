@@ -38,6 +38,7 @@ public class TicketModel {
     private SeatModel seat;
 
 
+
     public StationModel getDepartureStation() {
         return departureStation;
     }
@@ -87,6 +88,19 @@ public class TicketModel {
 
     public TicketModel() {
 
+    }
+    public TicketModel(int ticketId, UUID uuid, StationModel depStation, StationModel arrStation, Date ticketDate,
+                       float price, Date purchaseDate, TripModel trip, boolean used, SeatModel seatModel) {
+        this.id = ticketId;
+        this.uniqueId = uuid;
+        this.departureStation = depStation;
+        this.arrivalStation = arrStation;
+        this.ticketDate = ticketDate;
+        this.price = price;
+        this.purchaseDate = purchaseDate;
+        this.trip = trip;
+        this.isUsed = used;
+        this.seat = seatModel;
     }
     public TicketModel(int ticketId, UUID uuid, StationModel depStation, StationModel arrStation, Date ticketDate,
                        float price, Date purchaseDate, TripModel trip, boolean used) {

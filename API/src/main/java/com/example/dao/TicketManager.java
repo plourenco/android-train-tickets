@@ -5,12 +5,8 @@ import com.example.dataholder.StationHolder;
 import com.example.dataholder.TripHolder;
 import com.example.exceptions.IllegalArgumentExceptionMapper;
 import com.example.exceptions.SQLExceptionMapper;
-import com.example.models.AvailableTicketModel;
-import com.example.models.TicketModel;
+import com.example.models.*;
 import com.example.mysql.MySQLManager;
-import com.example.models.StationModel;
-import com.example.models.StepModel;
-import com.example.models.TripModel;
 import sun.security.krb5.internal.Ticket;
 
 import java.sql.*;
@@ -204,7 +200,7 @@ public class TicketManager {
     public TicketModel buyTicket(TicketModel ticket, int userId) {
         try {
             ticket.setUniqueId(UUID.randomUUID());
-            ps = MySQLManager.getConnection().prepareStatement("Call buyTicket(?,?,?,?,?,?,?,?)");
+            ps = MySQLManager.getConnection().prepareStatement("Call buyTicket(?,?,?,?,?,?,?,?,NULL)");
             ps.setString(1, ticket.getUniqueId().toString());
             ps.setInt(2, ticket.getDepartureStation().getId());
             ps.setInt(3, ticket.getArrivalStation().getId());
@@ -227,6 +223,7 @@ public class TicketManager {
                 int idUser = rs.getInt("fkUser");
                 int tripId = rs.getInt("fkTrip");
                 boolean used = rs.getBoolean("isUsed");
+                String seat = rs.getString("seatNumber");
 
                 StationModel depStation = StationHolder.getStations().values().stream()
                         .filter(p -> p.getId() == depStationId).findFirst().get();
@@ -236,7 +233,7 @@ public class TicketManager {
                         .filter(p -> p.getId() == tripId).findAny().get();
 
                 ticketToRetrieve = new TicketModel(ticketId, UUID.fromString(uniqueId), depStation, arrStation,
-                        ticketDate, price, purchaseDate, trip, used);
+                        ticketDate, price, purchaseDate, trip, used, new SeatModel(seat));
                 return ticketToRetrieve;
             }
         } catch (SQLException sql) {

@@ -47,6 +47,7 @@ public class TimetableActivity extends BaseActivity {
         }
         steps = new HashMap<>();
         for (TripModel t : trips) {
+            t.getSteps().add(new StepModel(-1));
             steps.put(t, t.getSteps());
         }
 
