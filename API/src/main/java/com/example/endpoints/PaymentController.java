@@ -4,7 +4,9 @@ package com.example.endpoints;
  * Created by mercurius on 15/03/17.
  */
 
+import com.example.annotations.Secured;
 import com.example.models.CreditCardModel;
+import com.example.models.UserRole;
 import com.example.util.PaymentControllerValidator;
 
 import javax.ws.rs.Consumes;
@@ -25,6 +27,7 @@ public class PaymentController {
      * @return true if success false if no success
      */
     @POST
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("buy-ticket")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

@@ -1,58 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="feup.cm.traintickets.activities.ReviserActivity">
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="8dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        
-        <TextView
-            android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ic_direction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/icon_form_margin"
+                android:tint="@color/colorPrimaryDark"
+                app:srcCompat="@drawable/ic_compare_arrows_black_24dp" />
+
+            <TextView
+                android:id="@+id/direction_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_form_content_bottom"
+                android:layout_marginTop="@dimen/layout_form_content_top"
+                android:layout_toEndOf="@id/ic_direction"
+                android:text="@string/display_direction"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_form_title_sm"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/direction_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/direction_title"
+                android:layout_toEndOf="@+id/ic_direction"
+                android:color="@color/colorDarkText"
+                android:textSize="@dimen/text_form_title" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="16dp"
+            android:background="#29000000" />
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ic_trip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/icon_form_margin"
+                android:tint="@color/colorPrimaryDark"
+                app:srcCompat="@drawable/ic_compare_arrows_black_24dp" />
+
+            <TextView
+                android:id="@+id/trip_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_form_content_bottom"
+                android:layout_marginTop="@dimen/layout_form_content_top"
+                android:layout_toEndOf="@id/ic_trip"
+                android:text="@string/display_trip"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_form_title_sm"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/trip_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/trip_title"
+                android:layout_toEndOf="@+id/ic_trip"
+                android:color="@color/colorDarkText"
+                android:textSize="@dimen/text_form_title" />
+
+        </RelativeLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Direction"/>
+            android:paddingTop="50dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
 
-        <Spinner
-            android:layout_marginTop="10dp"
-            android:id="@+id/spDirection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/dlTickets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/display_download_tickets" />
 
-        <TextView
-            android:layout_marginTop="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Trip"/>
+            <Button
+                android:id="@+id/scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/display_scan_tickets"
+                android:textColor="@android:color/white"
+                android:theme="@style/Accent.Button"/>
 
-        <Spinner
-            android:layout_marginTop="10dp"
-            android:id="@+id/spTrip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/dlTickets"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Download Tickets" />
+        </LinearLayout>
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

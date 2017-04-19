@@ -1,17 +1,24 @@
 package com.example.endpoints;
 
 import com.example.Main;
+import com.example.annotations.Secured;
 import com.example.dao.UserManager;
 import com.example.exceptions.ParseExceptionMapper;
 import com.example.models.AvailableTicketModel;
 import com.example.models.CreditCardModel;
 import com.example.models.TicketModel;
 import com.example.dao.TicketManager;
+import com.example.models.UserRole;
+import com.example.security.SecurityContextAuthorizer;
 import com.example.util.PaymentControllerValidator;
+import com.example.util.ResourceHelper;
 
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -24,16 +31,28 @@ import java.util.List;
 @Path("tickets")
 public class TicketController {
 
+    @Context
+    protected SecurityContext securityContext;
+
+    @Context
+    protected ContainerRequestContext requestContext;
+
     private final TicketManager ticketManager = new TicketManager();
 
     @GET
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("user-tickets-exp/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<TicketModel> getExpiredUserTickets(@PathParam("id")int id) {
+    public List<TicketModel> getExpiredUserTickets(@PathParam("id") int id) {
+        // Check resource permissions
+        if(!ResourceHelper.canAccess(securityContext, requestContext, id)) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
         return ticketManager.getExpiredUserTickets(id);
     }
 
     @GET
+    @Secured({ UserRole.INSPECTOR })
     @Path("download/{direction}/{trip}/{date}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
     public List<TicketModel> downloadTickets(@PathParam("direction")String direction,
@@ -45,6 +64,7 @@ public class TicketController {
     }
 
     @POST
+    @Secured({ UserRole.INSPECTOR })
     @Path("sync")
     @Produces(MediaType.APPLICATION_JSON)
     public String updateUsedTicket(List<TicketModel> tickets) {
@@ -65,6 +85,7 @@ public class TicketController {
      * @return
      */
     @GET
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("available-tickets/{dateToCheck}/{depStation}/{arrStation}/{trip}")
     @Produces(MediaType.APPLICATION_JSON)
     public AvailableTicketModel getAvailableTickets(@PathParam("dateToCheck") String dateToCheck,
@@ -85,6 +106,7 @@ public class TicketController {
      * @return TicketModel the ticket, with id 0, no uniqueId, no ticketDate nor purchaseDate and also no isUsed flag
      */
     @GET
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("gen-ticket-price/{tripId}/{startStationId}/{arrivalStationId}")
     @Produces(MediaType.APPLICATION_JSON)
     public TicketModel generateTicketPrice(@PathParam("tripId") int tripId,
@@ -101,6 +123,7 @@ public class TicketController {
      * @return List<TicketModel> the list of the tickets
      */
     @GET
+    @Secured({ UserRole.INSPECTOR })
     @Path("get-reviser-tickets/{dateToCheck}/{tripId}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<TicketModel> getAllTickets(@PathParam("dateToCheck") String dateToCheck,
@@ -115,9 +138,14 @@ public class TicketController {
      * @return List<TicketModel> the active tickets of the user
      */
     @GET
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("user-tickets/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<TicketModel> getUserTickets(@PathParam("userId") int userId){
+    public List<TicketModel> getUserTickets(@PathParam("userId") int userId) {
+        // Check resource permissions
+        if(!ResourceHelper.canAccess(securityContext, requestContext, userId)) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
         return ticketManager.getUserTickets(userId);
     }
 
@@ -126,11 +154,17 @@ public class TicketController {
      * @return Json string stating the information about the ticket buyout
      */
     @POST
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("buy-ticket/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response buyTicket(TicketModel ticket, @PathParam("id") int id) {
         UserManager userManager = new UserManager();
         CreditCardModel card = userManager.getCard(id);
+
+        // Check resource permissions
+        if(!ResourceHelper.canAccess(securityContext, requestContext, id)) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
 
         PaymentControllerValidator.setCreditCard(card);
         boolean valid = PaymentControllerValidator.validateCardNumber();

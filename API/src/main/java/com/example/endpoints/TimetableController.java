@@ -4,9 +4,11 @@ package com.example.endpoints;
  * Created by mercurius on 15/03/17.
  */
 
+import com.example.annotations.Secured;
 import com.example.models.TimetableCompleteModel;
 import com.example.models.TimetableModel;
 import com.example.dao.TimetableManager;
+import com.example.models.UserRole;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -25,6 +27,7 @@ public class TimetableController {
     private final TimetableManager timetableManager = new TimetableManager();
 
     @GET
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("full")
     @Produces(MediaType.APPLICATION_JSON)
     public List<TimetableCompleteModel> getTimetables(){
@@ -38,6 +41,7 @@ public class TimetableController {
      * @return list of StepModel
      */
     @GET
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("timetables/{depStation}/{arrStation}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<TimetableModel> getSchedulesByStation(@PathParam("depStation") int depStation,

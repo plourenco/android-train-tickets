@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="feup.cm.traintickets.activities.QRCodeReaderActivity">
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn"
-        android:text="Scan" />
     
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/activity_content_padding"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/ic_camera"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:tint="@color/colorPrimaryDark"
+            app:srcCompat="@drawable/ic_camera_black_24dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:layout_below="@id/ic_camera"
+            android:id="@+id/btn"
+            android:text="@string/open_camera"
+            android:textColor="@android:color/white"
+            android:theme="@style/Accent.Button.Dark"/>
+
+    </RelativeLayout>
+    
+</android.support.design.widget.CoordinatorLayout>

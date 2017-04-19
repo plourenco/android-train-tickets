@@ -33,10 +33,12 @@ public class SecurityContextAuthorizer implements SecurityContext {
         this.role = role;
     }
 
+    @Override
     public Principal getUserPrincipal() {
         return this.principal;
     }
 
+    @Override
     public boolean isUserInRole(String role) {
         if(role != null) {
             try {

@@ -83,12 +83,13 @@ public class SingleTicketActivity extends BaseActivity {
             return;
         }
 
+        SimpleDateFormat datef = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
+        SimpleDateFormat timef = new SimpleDateFormat("hh:mm", Locale.UK);
+        String ticketDate = datef.format(ticket.getTicketDate());
         try {
-            SimpleDateFormat datef = new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
-            SimpleDateFormat timef = new SimpleDateFormat("hh:mm", Locale.UK);
             originView.setText(ticket.getDepartureStation().getStationName());
             destinationView.setText(ticket.getArrivalStation().getStationName());
-            dateView.setText(datef.format(ticket.getTicketDate()));
+            dateView.setText(ticketDate);
             if(ticket.getTrip().getSteps().size() > 0) {
                 timeView.setText(timef.format(ticket.getTrip().getSteps().get(0).getDepartureTime()));
             }
@@ -99,7 +100,7 @@ public class SingleTicketActivity extends BaseActivity {
         }
 
         String textToEncode = ticket.getUniqueId() + ";#" +
-                              ticket.getTicketDate().toString() + ";#" +
+                              ticketDate + ";#" +
                               ticket.getArrivalStation().getId() + ";#" +
                               ticket.getDepartureStation().getId() + ";#" +
                               ticket.getIsUsed() + ";#" +

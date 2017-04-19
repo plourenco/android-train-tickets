@@ -1,8 +1,10 @@
 package com.example.endpoints;
 
+import com.example.annotations.Secured;
 import com.example.dao.StationManager;
 import com.example.dataholder.TripHolder;
 import com.example.models.TripModel;
+import com.example.models.UserRole;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 public class TripController {
 
     @GET
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("trips")
     @Produces(MediaType.APPLICATION_JSON)
     public List<TripModel> getTrips() {
@@ -23,6 +26,7 @@ public class TripController {
     }
 
     @GET
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("direction")
     @Produces(MediaType.APPLICATION_JSON)
     public List<String> getDirections() {
