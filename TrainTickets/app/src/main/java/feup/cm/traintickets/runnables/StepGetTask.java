@@ -2,18 +2,28 @@ package feup.cm.traintickets.runnables;
 
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
 import feup.cm.traintickets.controllers.StepController;
 import feup.cm.traintickets.datamanagers.StationDataManager;
+import feup.cm.traintickets.datamanagers.StepDataManager;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.StepModel;
+import feup.cm.traintickets.models.TicketModel;
+import feup.cm.traintickets.util.DateDeserializer;
+import feup.cm.traintickets.util.TimeDeserializer;
 
 /**
  * Created by mercurius on 11/04/17.
@@ -23,7 +33,7 @@ public abstract class StepGetTask extends AsyncTask<Void, Void, Boolean> {
 
     private String token;
 
-    protected List<StepModel> steps;
+    private List<StepModel> steps;
 
     public StepGetTask(String token) {
         this.token = token;
@@ -32,43 +42,24 @@ public abstract class StepGetTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
+        List<StepModel> cached = StepDataManager.getSteps();
+        if(cached != null && !cached.isEmpty()) {
+            this.steps = cached;
+            return true;
+        }
         StepController stepController = new StepController();
         String res = stepController.getSteps(token);
 
         if(res != null) {
             try {
-                JSONArray array = new JSONArray(res);
-                for(int i=0; i<array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    int id = obj.getInt("id");
-                    int stepNumber = obj.getInt("stepNumber");
-                    int distance = obj.getInt("distance");
-                    double price = obj.getDouble("price");
-                    int waitingTime = obj.getInt("waitingTime");
-                    int duration = obj.getInt("duration");
-                    Time depTime = Time.valueOf(obj.getString("departureTime"));
-                    Time arrTime = Time.valueOf(obj.getString("arrivalTime"));
-                    int tripId = obj.getInt("tripId");
-
-                    int depStationId = obj.getJSONObject("departureStation").getInt("id");
-                    int arrStationId = obj.getJSONObject("arrivalStation").getInt("id");
-                    StationModel depStation = null;
-                    StationModel arrStation = null;
-
-                    for (int j = 0; j < StationDataManager.getStations().size(); j++) {
-                        if (StationDataManager.getStations().get(j).getId() == depStationId)
-                            depStation = StationDataManager.getStations().get(j);
-
-                        if (StationDataManager.getStations().get(j).getId() == arrStationId)
-                            arrStation = StationDataManager.getStations().get(j);
-                    }
-
-                    steps.add(new StepModel(id, stepNumber, distance, price, waitingTime, duration,
-                            depTime, arrTime, depStation, arrStation, tripId));
-                }
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
+                        .registerTypeAdapter(Time.class, new TimeDeserializer()).create();
+                Type type = new TypeToken<ArrayList<StepModel>>() {}.getType();
+                this.steps = gson.fromJson(res, type);
                 return true;
             }
-            catch (JSONException | NullPointerException ignored) {
+            catch (JsonParseException | NullPointerException ignored) {
                 ignored.printStackTrace();
             }
         }

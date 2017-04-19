@@ -10,11 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import feup.cm.traintickets.controllers.SeatController;
+import feup.cm.traintickets.datamanagers.SeatDataManager;
 import feup.cm.traintickets.models.SeatModel;
-
-/**
- * Created by mercurius on 11/04/17.
- */
 
 public abstract class SeatGetTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -29,6 +26,12 @@ public abstract class SeatGetTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
+        List<SeatModel> cached = SeatDataManager.getSeats();
+        if(cached != null && !cached.isEmpty()) {
+            this.seats = SeatDataManager.getSeats();
+            return true;
+        }
+
         SeatController seatController = new SeatController();
         String res = seatController.getSeats(token);
 
@@ -59,7 +62,7 @@ public abstract class SeatGetTask extends AsyncTask<Void, Void, Boolean> {
 
     }
 
-    public List<SeatModel> getSeats() {
+    protected List<SeatModel> getSeats() {
         return seats;
     }
 }

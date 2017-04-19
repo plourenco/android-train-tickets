@@ -60,24 +60,15 @@ public class TimetableAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.timetable_item, null);
         }
 
-        if(childPosition==0){
+        if(childStep != null) {
             TextView station = (TextView) convertView.findViewById(R.id.timetable_station);
             station.setText(childStep.getDepartureStation().getStationName());
             TextView time = (TextView) convertView.findViewById(R.id.timetable_time);
             time.setText(childStep.getDepartureTime().toString());
             TextView waiting = (TextView) convertView.findViewById(R.id.timetable_waiting);
-            waiting.setText(String.valueOf(childStep.getWaitingTime())+" mn");
+            waiting.setText(String.format("%s mn", String.valueOf(childStep.getWaitingTime())));
+        }
 
-        }
-        else{
-            TextView station = (TextView) convertView.findViewById(R.id.timetable_station);
-            station.setText(childStep.getDepartureStation().getStationName());
-            TextView time = (TextView) convertView.findViewById(R.id.timetable_time);
-            time.setText(childStep.getDepartureTime().toString());
-            TextView waiting = (TextView) convertView.findViewById(R.id.timetable_waiting);
-            waiting.setText(String.valueOf(childStep.getWaitingTime())+" mn");
-        }
-      ;
         return convertView;
     }
 
