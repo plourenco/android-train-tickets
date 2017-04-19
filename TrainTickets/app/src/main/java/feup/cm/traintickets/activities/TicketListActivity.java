@@ -116,6 +116,7 @@ public class TicketListActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            logout();
             return true;
         }
 

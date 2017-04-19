@@ -24,6 +24,7 @@ import java.util.Date;
 
 import feup.cm.traintickets.activities.BuyTicketActivity;
 import feup.cm.traintickets.activities.LoginActivity;
+import feup.cm.traintickets.activities.ReviserActivity;
 import feup.cm.traintickets.activities.SettingsActivity;
 import feup.cm.traintickets.activities.TicketListActivity;
 import feup.cm.traintickets.activities.TimetableActivity;
@@ -200,6 +201,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         return null;
     }
 
+    protected void logout() {
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.remove("LOGIN_TOKEN");
+        editor.remove("LOGIN_REFRESH");
+        editor.remove("LOGIN_EXPIRES");
+        editor.remove("LOGIN_ID");
+        editor.remove("LOGIN_EMAIL");
+        editor.remove("LOGIN_PASSWORD");
+        editor.apply();
+
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     protected boolean hasActiveInternetConnection(Context context) {
         if (isNetworkAvailable(context)) {
             try {
@@ -223,6 +239,5 @@ public abstract class BaseActivity extends AppCompatActivity {
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null;
-
     }
 }

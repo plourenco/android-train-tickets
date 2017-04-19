@@ -134,8 +134,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String password = sharedPrefs.getString("LOGIN_PASS", null);
         String email = sharedPrefs.getString("LOGIN_EMAIL", null);
 
-        cache(token);
-
         if (password != null && email != null) {
             login(email, password);
         } else {
@@ -276,6 +274,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     editor.putString("LOGIN_PASS", password);
                     editor.apply();
 
+                    cache(token.getToken());
                     successRedirect();
                 } else {
                     mPasswordView.setError(getString(R.string.error_incorrect_credentials));

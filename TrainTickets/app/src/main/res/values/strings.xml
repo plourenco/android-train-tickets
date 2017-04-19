@@ -28,6 +28,8 @@
     <string name="title_activity_ticket_list">Tickets You Own</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_timetables">Timetables</string>
+    <string name="title_activity_reviser">Revision</string>
+    <string name="title_activity_qrcode">Read QR Code</string>
 
     <string name="display_station">Station</string>
     <string name="display_ticket_price">Ticket Price</string>
@@ -35,6 +37,8 @@
     <string name="display_departure">Departure Date</string>
     <string name="display_departure_time">Departure Time</string>
     <string name="display_destination">Destination</string>
+    <string name="display_direction">Direction</string>
+    <string name="display_trip">Trip</string>
     <string name="display_arrival">Arrival</string>
     <string name="display_date">Date</string>
     <string name="display_ticket_active">Active</string>
@@ -48,6 +52,8 @@
     <string name="display_select_train">No train selected</string>
     <string name="display_select_train_tip">Click in any train to select it</string>
     <string name="display_select_date">No date selected</string>
+    <string name="display_download_tickets">Download Tickets</string>
+    <string name="display_scan_tickets">Proceed to scanning</string>
 
     <string name="error_match_password">Passwords do not match</string>
     <string name="error_invalid_register">Unable to complete registration</string>
@@ -77,6 +83,5 @@
     <string name="cvv2">CVV2</string>
     <string name="expiry_date">Expiry Date</string>
     <string name="save_card">Save Card</string>
-    <string name="download_tickets">Download Tickets</string>
-    <string name="scan_tickets">Scan Tickets</string>
+    <string name="open_camera">Open Camera</string>
 </resources>

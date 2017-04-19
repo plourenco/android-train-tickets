@@ -1,10 +1,12 @@
 package feup.cm.traintickets.activities;
 
+import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -42,6 +44,9 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
                 scannerView.startCamera();
             }
         });
+
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -49,6 +54,16 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
         super.onPause();
         if (scannerView != null)
             scannerView.stopCamera();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

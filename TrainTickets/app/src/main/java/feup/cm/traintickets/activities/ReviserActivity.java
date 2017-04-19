@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.models.TripModel;
@@ -26,7 +27,7 @@ import feup.cm.traintickets.runnables.DownloadGetTask;
 import feup.cm.traintickets.runnables.TripGetTask;
 import feup.cm.traintickets.sqlite.TicketReviserBrowser;
 
-public class ReviserActivity extends AppCompatActivity {
+public class ReviserActivity extends BaseActivity {
 
     Spinner direction;
     Spinner trip;
@@ -45,8 +46,8 @@ public class ReviserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviser);
 
-        direction = (Spinner)findViewById(R.id.spDirection);
-        trip = (Spinner)findViewById(R.id.spTrip);
+        direction = (Spinner)findViewById(R.id.direction_desc);
+        trip = (Spinner)findViewById(R.id.trip_desc);
         dlTicket = (Button)findViewById(R.id.dlTickets);
         scan = (Button)findViewById(R.id.scan);
 
@@ -71,8 +72,13 @@ public class ReviserActivity extends AppCompatActivity {
         populateTrips();
     }
 
+    @Override
+    protected int getBottomNavId() {
+        return 0;
+    }
+
     private void populateTrips() {
-        TripGetTask tripGetTask = new TripGetTask("") {
+        TripGetTask tripGetTask = new TripGetTask(getToken()) {
             @Override
             protected void onPostExecute(Boolean success) {
                 if (success){
@@ -108,7 +114,7 @@ public class ReviserActivity extends AppCompatActivity {
     private void downloadTickets(String direction, String trip, Date date) {
         direction = direction.trim().replace(" ", "%20");
         trip = trip.trim().replace(" ", "%20");
-        DownloadGetTask downloadGetTask = new DownloadGetTask("", direction, trip, date) {
+        DownloadGetTask downloadGetTask = new DownloadGetTask(getToken(), direction, trip, date) {
             @Override
             protected void onPostExecute(Boolean success) {
                 if (success) {
@@ -130,7 +136,7 @@ public class ReviserActivity extends AppCompatActivity {
     }
 
     private void populateDirections(){
-        final DirectionGetTask directionGetTask = new DirectionGetTask("") {
+        final DirectionGetTask directionGetTask = new DirectionGetTask(getToken()) {
             @Override
             protected void onPostExecute(Boolean success) {
                 if (success){
