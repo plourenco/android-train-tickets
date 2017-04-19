@@ -17,8 +17,8 @@ public class StationController {
     private final StationManager stationManager = new StationManager();
 
     @GET
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("stations")
-    //@Secured
     @Produces(MediaType.APPLICATION_JSON)
     public List<StationModel> getStations() {
         return stationManager.getStations();

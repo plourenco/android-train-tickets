@@ -48,7 +48,8 @@ public class SecurityFilter implements ContainerRequestFilter {
 
         if (("get".equals(method) && ("application.wadl".equals(path) || "application.wadl/xsd0.xsd".equals(path)))
                 || ("post".equals(method) && "authentication".equals(path))) {
-            // pass through the filter.
+            // pass through the filter
+            requestContext.setProperty("user_id", 0);
             requestContext.setSecurityContext(new SecurityContextAuthorizer(uriInfo, () -> "anonymous", UserRole.ANONYMOUS));
             return;
         }
@@ -78,6 +79,7 @@ public class SecurityFilter implements ContainerRequestFilter {
                             // check if user has permission
                             if (classRoles.isEmpty() || methodRoles.isEmpty() ||
                                     classRoles.contains(role) || methodRoles.contains(role)) {
+                                requestContext.setProperty("user_id", model.getId());
                                 requestContext.setSecurityContext(
                                         new SecurityContextAuthorizer(uriInfo, () -> email, role));
                                 return;

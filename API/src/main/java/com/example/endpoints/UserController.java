@@ -1,13 +1,19 @@
 package com.example.endpoints;
 
+import com.example.annotations.Secured;
 import com.example.exceptions.InvalidUserDataException;
 import com.example.models.*;
 import com.example.security.PasswordSecurity;
+import com.example.util.ResourceHelper;
 import com.example.util.TokenHelper;
 import com.example.dao.UserManager;
 
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Objects;
@@ -15,20 +21,34 @@ import java.util.Objects;
 @Path("users")
 public class UserController {
 
+    @Context
+    protected SecurityContext securityContext;
+
+    @Context
+    protected ContainerRequestContext requestContext;
+
     private final UserManager userManager = new UserManager();
 
-
     @POST
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("cc/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String saveCC(CreditCardModel cc, @PathParam("id") int id) {
+        // Check resource permissions
+        if(!ResourceHelper.canAccess(securityContext, requestContext, id)) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
         return userManager.saveCard(cc, id);
     }
 
     @GET
     @Path("role/{id}")
     @Produces("application/json")
-    public int getUserRole(@PathParam("id")int id){
+    public int getUserRole(@PathParam("id")int id) {
+        // Check resource permissions
+        if(!ResourceHelper.canAccess(securityContext, requestContext, id)) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
         return userManager.getUserRole(id);
     }
 

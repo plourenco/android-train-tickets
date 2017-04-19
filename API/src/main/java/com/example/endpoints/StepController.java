@@ -1,7 +1,9 @@
 package com.example.endpoints;
 
+import com.example.annotations.Secured;
 import com.example.dataholder.StepHolder;
 import com.example.models.StepModel;
+import com.example.models.UserRole;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 public class StepController {
 
     @GET
+    @Secured({ UserRole.USER, UserRole.INSPECTOR })
     @Path("steps")
     @Produces(MediaType.APPLICATION_JSON)
     public List<StepModel> getSteps() {
