@@ -88,7 +88,7 @@ insert into `stations` values(null,'Porto São Bento',1);
 insert into `stations` values(null,'Caide',2);
 insert into `stations` values(null,'Régua',3);
 insert into `stations` values(null,'Tua',4);
-insert into `stations` values(null,'Pocinha',5);
+insert into `stations` values(null,'Pocinho',5);
 
 insert into `trips` values(null,'Morning trip','Pocinho','Positive',1);
 insert into `trips` values(null,'Noon trip','Pocinho','Positive',2);
@@ -96,7 +96,7 @@ insert into `trips` values(null,'After-noon trip','Pocinho','Positive',3);
 insert into `trips` values(null,'Night trip','Pocinho','Positive',4);
 insert into `trips` values(null,'Morning trip','Porto','Negative',1);
 insert into `trips` values(null,'Noon trip','Porto','Negative',2);
-insert into `trips` values(null,'After-noon ','Porto','Negative',3);
+insert into `trips` values(null,'After-noon trip ','Porto','Negative',3);
 insert into `trips` values(null,'Night trip','Porto','Negative',4);
 
 insert into `steps` values(null,1,2,1,55,5.5,5,1,41,'8:00:00','8:41:00');

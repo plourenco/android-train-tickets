@@ -39,4 +39,20 @@ public class StationManager {
             return null;
         }
     }
+
+    public List<String> getDirections() {
+        List<String> directions = new ArrayList<>();
+        try {
+            ps = MySQLManager.getConnection().prepareStatement("SELECT DISTINCT direction FROM trips");
+            rs = ps.executeQuery();
+            while (rs.next()){
+                String direction = rs.getString("direction");
+                directions.add(direction);
+            }
+            return directions;
+        } catch (SQLException sql) {
+            Main.getLogger().severe(sql.getMessage());
+            return null;
+        }
+    }
 }

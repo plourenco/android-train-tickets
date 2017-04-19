@@ -1,7 +1,6 @@
 package feup.cm.traintickets.activities;
 
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,13 +17,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
-import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.models.TripModel;
+import feup.cm.traintickets.runnables.DirectionGetTask;
 import feup.cm.traintickets.runnables.DownloadGetTask;
-import feup.cm.traintickets.runnables.StationGetTask;
 import feup.cm.traintickets.runnables.TripGetTask;
 import feup.cm.traintickets.sqlite.TicketReviserBrowser;
 
@@ -68,8 +65,11 @@ public class ReviserActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Boolean success) {
                 if (success){
-                    for (TripModel tm : getTrips())
-                        tripList.add(tm.getDescription());
+                    for (TripModel tm : getTrips()){
+                        if (tripList.indexOf(tm.getDescription()) == -1) {
+                            tripList.add(tm.getDescription());
+                        }
+                    }
                     setTrips();
                 }
             }
@@ -119,17 +119,23 @@ public class ReviserActivity extends AppCompatActivity {
     }
 
     private void populateDirections(){
-        StationGetTask stationGetTask = new StationGetTask("") {
+        final DirectionGetTask directionGetTask = new DirectionGetTask("") {
             @Override
             protected void onPostExecute(Boolean success) {
-                if (success) {
-                    for (StationModel st : getStations())
-                        directions.add(st.getStationName());
+                if (success){
+                    for (String s : getDirections()) {
+                        directions.add(s);
+                    }
                     setDirections();
                 }
             }
+
+            @Override
+            protected void onCancelled() {
+
+            }
         };
-        stationGetTask.execute((Void) null);
+        directionGetTask.execute((Void) null);
     }
 
     private void setDirections() {
