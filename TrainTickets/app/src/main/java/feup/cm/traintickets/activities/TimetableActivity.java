@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -55,5 +56,10 @@ public class TimetableActivity extends BaseActivity {
     @Override
     protected int getBottomNavId() {
         return R.id.action_timetables;
+    }
+
+    @Override
+    protected ViewGroup getMainLayout() {
+        return (ViewGroup) findViewById(R.id.timetable_main_layout);
     }
 }

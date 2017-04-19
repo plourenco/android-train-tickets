@@ -6,8 +6,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -46,8 +50,18 @@ public abstract class BaseActivity extends AppCompatActivity {
             bottomNav.enableItemShiftingMode(true);
             bottomNav.setTextVisibility(false);
             bottomNav.setIconSize(26, 26);
-            bottomNav.setItemHeight(125);
+            int size = (int) (getResources().getDimension(R.dimen.bottom_bar_height) /
+                    getResources().getDisplayMetrics().density);
+            bottomNav.setItemHeight(size);
             if(getBottomNavId() != 0) bottomNav.setSelectedItemId(getBottomNavId());
+            // Fix bottom Navigation top margin
+            ViewGroup main = getMainLayout();
+            if(main != null) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)
+                        main.getLayoutParams();
+                params.setMargins(0, 0, 0, bottomNav.getItemHeight());
+                main.requestLayout();
+            }
             bottomNav.setOnNavigationItemSelectedListener(
                     new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -169,4 +183,12 @@ public abstract class BaseActivity extends AppCompatActivity {
      * Override with an empty body if the activity has no bottomNavigation
      */
     protected abstract int getBottomNavId();
+
+    /**
+     * Get the main layout in order to apply a margin to prevent bottom nav overlap
+     * Return null if you don't need it
+     */
+    protected ViewGroup getMainLayout() {
+        return null;
+    }
 }

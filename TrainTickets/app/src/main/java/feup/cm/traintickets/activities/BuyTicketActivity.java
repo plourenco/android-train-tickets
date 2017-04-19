@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -153,6 +154,11 @@ public class BuyTicketActivity extends BaseActivity {
     @Override
     protected int getBottomNavId() {
         return R.id.action_buyticket;
+    }
+
+    @Override
+    protected ViewGroup getMainLayout() {
+        return (ViewGroup) findViewById(R.id.buy_ticket_main_layout);
     }
 
     protected void loadStations() {

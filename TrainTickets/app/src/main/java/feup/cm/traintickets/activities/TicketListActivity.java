@@ -94,6 +94,11 @@ public class TicketListActivity extends BaseActivity {
         return R.id.action_tickets;
     }
 
+    @Override
+    protected ViewGroup getMainLayout() {
+        return (ViewGroup) findViewById(R.id.list);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
