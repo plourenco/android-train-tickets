@@ -35,6 +35,10 @@ public class StepModel {
         this.tripId = tripId;
     }
 
+    public StepModel(int i) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

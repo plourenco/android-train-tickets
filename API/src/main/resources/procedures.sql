@@ -1,142 +1,198 @@
 # Get all stations
 DELIMITER //
-create procedure getStations()
-  begin
-    select id, stationNumber, stationName from stations;
-  end //
+CREATE PROCEDURE getStations()
+  BEGIN
+    SELECT
+      id,
+      stationNumber,
+      stationName
+    FROM stations;
+  END //
 DELIMITER ;
 
 
 # Get schedule for the train given the DepartureStation and ArrivalStation
 DELIMITER //
-create procedure getSchedule(IN depStation INT,IN arrStation INT)
-  begin
-    if(depStation<arrStation) then
-      select sch.description,stb.startStation,stb.endStation,sch.id,sch.departureStationId,sch.arrivalStationId,sch.departureTime,sch.arrivalTime
-      from
-        (select tr.id,
-           min(departureStationId) as departureStationId,
-           max(arrivalStationId)as arrivalStationId,
-           max(arrivalTime) as arrivalTime,
-           min(departureTime)as departureTime,
+CREATE PROCEDURE getSchedule(IN depStation INT, IN arrStation INT)
+  BEGIN
+    IF (depStation < arrStation)
+    THEN
+      SELECT
+        sch.description,
+        stb.startStation,
+        stb.endStation,
+        sch.id,
+        sch.departureStationId,
+        sch.arrivalStationId,
+        sch.departureTime,
+        sch.arrivalTime
+      FROM
+        (SELECT
+           tr.id,
+           min(departureStationId) AS departureStationId,
+           max(arrivalStationId)   AS arrivalStationId,
+           max(arrivalTime)        AS arrivalTime,
+           min(departureTime)      AS departureTime,
            tr.description
-         from trips tr join steps st on tr.id=st.fkTrip
-         where departureStationId=depStation or arrivalStationId=arrStation group by id) as sch
-        join
-        (select p1.id as st1,
-                p1.stationName as startStation,
-                p2.id as st2,
-                p2.stationName as endStation
-         from stations p1,stations p2 where p1.id=depStation and p2.id=arrStation) as stb
-      where stb.st1=sch.departureStationId and stb.st2=sch.arrivalStationId order by departureTime;
-    else
-      select stb.startStation,stb.endStation,sch.id,sch.departureStationId,sch.arrivalStationId,sch.departureTime,sch.arrivalTime
-      from
-        (select tr.id,
-           max(departureStationId) as departureStationId,
-           min(arrivalStationId)as arrivalStationId,
-           max(arrivalTime) as arrivalTime,
-           min(departureTime)as departureTime,
+         FROM trips tr
+           JOIN steps st ON tr.id = st.fkTrip
+         WHERE departureStationId = depStation OR arrivalStationId = arrStation
+         GROUP BY id) AS sch
+        JOIN
+        (SELECT
+           p1.id          AS st1,
+           p1.stationName AS startStation,
+           p2.id          AS st2,
+           p2.stationName AS endStation
+         FROM stations p1, stations p2
+         WHERE p1.id = depStation AND p2.id = arrStation) AS stb
+      WHERE stb.st1 = sch.departureStationId AND stb.st2 = sch.arrivalStationId
+      ORDER BY departureTime;
+    ELSE
+      SELECT
+        stb.startStation,
+        stb.endStation,
+        sch.id,
+        sch.departureStationId,
+        sch.arrivalStationId,
+        sch.departureTime,
+        sch.arrivalTime
+      FROM
+        (SELECT
+           tr.id,
+           max(departureStationId) AS departureStationId,
+           min(arrivalStationId)   AS arrivalStationId,
+           max(arrivalTime)        AS arrivalTime,
+           min(departureTime)      AS departureTime,
            tr.description
-         from trips tr join steps st on tr.id=st.fkTrip
-         where departureStationId=depStation or arrivalStationId=arrStation group by id) as sch
-        join
-        (select p1.id as st1,
-                p1.stationName as startStation,
-                p2.id as st2,
-                p2.stationName as endStation
-         from stations p1,stations p2 where p1.id=depStation and p2.id=arrStation) as stb
-      where stb.st1=sch.departureStationId and stb.st2=sch.arrivalStationId order by departureTime;
-    end if;
-  end //
+         FROM trips tr
+           JOIN steps st ON tr.id = st.fkTrip
+         WHERE departureStationId = depStation OR arrivalStationId = arrStation
+         GROUP BY id) AS sch
+        JOIN
+        (SELECT
+           p1.id          AS st1,
+           p1.stationName AS startStation,
+           p2.id          AS st2,
+           p2.stationName AS endStation
+         FROM stations p1, stations p2
+         WHERE p1.id = depStation AND p2.id = arrStation) AS stb
+      WHERE stb.st1 = sch.departureStationId AND stb.st2 = sch.arrivalStationId
+      ORDER BY departureTime;
+    END IF;
+  END //
 DELIMITER ;
 
 # Get ticket price, travel time given the Trip, Departure station and Arrival station
 DELIMITER //
-create procedure getFair(IN Trip INT, IN startStation INT,IN endStation INT)
-  begin
-    if(endStation>startStation) then
-      select steps.fkTrip,
-        startStation as departureStationId,
-        endStation as arrivalStationId,
-        sum(steps.distance) as distance,
-        sum(steps.duration)+sum(steps.waitingTime)-'5' as duration,
-        min(steps.departureTime) as departureTime,
-        max(steps.arrivalTime) as arrivalTime,
-        sum(steps.price) as price from steps
-      where steps.departureStationId>=startStation and
-            steps.arrivalStationId<=endStation and fkTrip=Trip;
-    else
-      select steps.fkTrip,
-        startStation as departureStationId,
-        endStation as arrivalStationId,
-        sum(steps.distance) as distance,
-        sum(steps.duration)+sum(steps.waitingTime)-'5' as duration,
-        min(steps.departureTime) as departureTime,
-        max(steps.arrivalTime) as arrivalTime,
-        sum(steps.price) as price from steps
-      where steps.departureStationId<=startStation and
-            steps.arrivalStationId>=endStation and fkTrip=Trip;
-    end if;
-  end //
+CREATE PROCEDURE getFair(IN Trip INT, IN startStation INT, IN endStation INT)
+  BEGIN
+    IF (endStation > startStation)
+    THEN
+      SELECT
+        steps.fkTrip,
+        startStation                                       AS departureStationId,
+        endStation                                         AS arrivalStationId,
+        sum(steps.distance)                                AS distance,
+        sum(steps.duration) + sum(steps.waitingTime) - '5' AS duration,
+        min(steps.departureTime)                           AS departureTime,
+        max(steps.arrivalTime)                             AS arrivalTime,
+        sum(steps.price)                                   AS price
+      FROM steps
+      WHERE steps.departureStationId >= startStation AND
+            steps.arrivalStationId <= endStation AND fkTrip = Trip;
+    ELSE
+      SELECT
+        steps.fkTrip,
+        startStation                                       AS departureStationId,
+        endStation                                         AS arrivalStationId,
+        sum(steps.distance)                                AS distance,
+        sum(steps.duration) + sum(steps.waitingTime) - '5' AS duration,
+        min(steps.departureTime)                           AS departureTime,
+        max(steps.arrivalTime)                             AS arrivalTime,
+        sum(steps.price)                                   AS price
+      FROM steps
+      WHERE steps.departureStationId <= startStation AND
+            steps.arrivalStationId >= endStation AND fkTrip = Trip;
+    END IF;
+  END //
 DELIMITER ;
 
 # Check how many tickets have been sold for a trip  givem the Date, Trip ,Departure station and Arrival station
 # availability check is done on each step for the whole trip
 DELIMITER //
-create procedure availableTickets(IN checkDate DATE,IN startStation INT, IN endStation INT, IN tripID INT)
-  begin
-    if(startStation<endStation) THEN
-      select max(sa.sold) as sold,
-             sa.maxCapacity  as maxCapacity
-      from(select count(tickets.id)as sold,steps.id,trains.maxCapacity
-           from tickets join trips on tickets.fkTrip=trips.id
-             join steps on trips.id=steps.fkTrip
-             join trains on trips.skTrain=trains.id
-           where tickets.ticketDate=checkDate and
-                 steps.departureStationId>=tickets.departureStationId and
-                 steps.arrivalStationId<=tickets.arrivalStationId and steps.arrivalStationId>steps.departureStationId
-                 and steps.departureStationId>=startStation and steps.arrivalStationId<=endStation
-                 and tickets.fkTrip=tripId
-           group by steps.id) as sa;
+CREATE PROCEDURE availableTickets(IN checkDate DATE, IN startStation INT, IN endStation INT, IN tripID INT)
+  BEGIN
+    IF (startStation < endStation)
+    THEN
+      SELECT
+        max(sa.sold)   AS sold,
+        sa.maxCapacity AS maxCapacity
+      FROM (SELECT
+              count(tickets.id) AS sold,
+              steps.id,
+              trains.maxCapacity
+            FROM tickets
+              JOIN trips ON tickets.fkTrip = trips.id
+              JOIN steps ON trips.id = steps.fkTrip
+              JOIN trains ON trips.skTrain = trains.id
+            WHERE tickets.ticketDate = checkDate AND
+                  steps.departureStationId >= tickets.departureStationId AND
+                  steps.arrivalStationId <= tickets.arrivalStationId AND
+                  steps.arrivalStationId > steps.departureStationId
+                  AND steps.departureStationId >= startStation AND steps.arrivalStationId <= endStation
+                  AND tickets.fkTrip = tripId
+            GROUP BY steps.id) AS sa;
     ELSE
-      select max(sa.sold) as sold,
-             sa.maxCapacity  as maxCapacity
-      from(select count(tickets.idTickets)as sold,steps.idSteps,trains.maxCapacity
-           from tickets join trips on tickets.fkTrip=trips.idTrips
-             join steps on trips.idTrips=steps.fkTrip
-             join trains on trips.skTrain=trains.idTrains
-           where tickets.ticketDate=checkDate and
-                 steps.departureStationId<=tickets.departureStationId and
-                 steps.arrivalStationId>=tickets.arrivalStationId and steps.arrivalStationId<steps.departureStationId
-                 and steps.departureStationId<=startStation and steps.arrivalStationId>=endStation
-                 and tickets.fkTrip=tripId
-           group by steps.idS) as sa;
-    end if;
+      SELECT
+        max(sa.sold)   AS sold,
+        sa.maxCapacity AS maxCapacity
+      FROM (SELECT
+              count(tickets.idTickets) AS sold,
+              steps.idSteps,
+              trains.maxCapacity
+            FROM tickets
+              JOIN trips ON tickets.fkTrip = trips.idTrips
+              JOIN steps ON trips.idTrips = steps.fkTrip
+              JOIN trains ON trips.skTrain = trains.idTrains
+            WHERE tickets.ticketDate = checkDate AND
+                  steps.departureStationId <= tickets.departureStationId AND
+                  steps.arrivalStationId >= tickets.arrivalStationId AND
+                  steps.arrivalStationId < steps.departureStationId
+                  AND steps.departureStationId <= startStation AND steps.arrivalStationId >= endStation
+                  AND tickets.fkTrip = tripId
+            GROUP BY steps.idS) AS sa;
+    END IF;
   END //
 DELIMITER ;
 
 # create a new user (not controller)  given Username, Password and Email
 DELIMITER //
-create procedure createUser(IN username TEXT,IN pass TEXT,IN email VARCHAR(255))
-  begin
-    INSERT INTO users values(null,username,pass,email,1);
+CREATE PROCEDURE createUser(IN username TEXT, IN pass TEXT, IN email VARCHAR(255))
+  BEGIN
+    INSERT INTO users VALUES (NULL, username, pass, email, 1);
   END //
 DELIMITER ;
 
 # Return the Username and Role given Email and Password
 DELIMITER //
-create procedure loginCheck(IN pass TEXT,IN email VARCHAR(255))
-  begin
-    select id,username,role from users where email=email and password=pass;
+CREATE PROCEDURE loginCheck(IN pass TEXT, IN email VARCHAR(255))
+  BEGIN
+    SELECT
+      id,
+      username,
+      role
+    FROM users
+    WHERE email = email AND password = pass;
   END //
 DELIMITER ;
 
 # Returns all the tickets for a given User Id
 DELIMITER //
-create procedure getUserTickets(IN userId INT)
-  begin
-    select sta.uniqueId,
+CREATE PROCEDURE getUserTickets(IN userId INT)
+  BEGIN
+    SELECT
+      sta.uniqueId,
       sta.id,
       sta.ticketDate,
       sta.price,
@@ -151,229 +207,328 @@ create procedure getUserTickets(IN userId INT)
       sta.direction,
       sta.Idtrip,
       sta.isUsed
-    from(select tickets.uniqueId,
-           tickets.id,
-           tickets.ticketDate,
-           stations.id as idDeparture,
-           steps.departureTime,
-           stations.stationName as fromStation,
-           seats.seatNumber,
-           trips.direction,
-           tickets.fkTrip as idTrip,
-           tickets.isUsed,
-           tickets.price,
-           tickets.purchaseDate,
-           tickets.departureStationId,
-           tickets.arrivalStationId
-         from tickets join stations on tickets.departureStationId=stations.id
-           join steps on steps.departureStationId=stations.id
-           left join bookings on tickets.id=bookings.fkTicket
-           left join seats on bookings.fkSeat=seats.id
-           join trips on tickets.fkTrip=trips.id
-         where tickets.fkTrip=steps.fkTrip and tickets.fkUser=userId and tickets.isUsed=false)as sta
-      join(select tickets.uniqueId,
-             tickets.id,
-             stations.id as idArrival,
-             steps.arrivalTime,
-             stations.stationName as toStation
-           from tickets join stations on tickets.arrivalStationId=stations.id
-             join steps on steps.arrivalStationId=stations.id
-           where tickets.fkTrip=steps.fkTrip and tickets.fkUser=userId and tickets.isUsed=false) as stb
-        on sta.id=stb.id order by id;
+    FROM (SELECT
+            tickets.uniqueId,
+            tickets.id,
+            tickets.ticketDate,
+            stations.id          AS idDeparture,
+            steps.departureTime,
+            stations.stationName AS fromStation,
+            seats.seatNumber,
+            trips.direction,
+            tickets.fkTrip       AS idTrip,
+            tickets.isUsed,
+            tickets.price,
+            tickets.purchaseDate,
+            tickets.departureStationId,
+            tickets.arrivalStationId
+          FROM tickets
+            JOIN stations ON tickets.departureStationId = stations.id
+            JOIN steps ON steps.departureStationId = stations.id
+            LEFT JOIN bookings ON tickets.id = bookings.fkTicket
+            LEFT JOIN seats ON bookings.fkSeat = seats.id
+            JOIN trips ON tickets.fkTrip = trips.id
+          WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND tickets.isUsed = FALSE) AS sta
+      JOIN (SELECT
+              tickets.uniqueId,
+              tickets.id,
+              stations.id          AS idArrival,
+              steps.arrivalTime,
+              stations.stationName AS toStation
+            FROM tickets
+              JOIN stations ON tickets.arrivalStationId = stations.id
+              JOIN steps ON steps.arrivalStationId = stations.id
+            WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND tickets.isUsed = FALSE) AS stb
+        ON sta.id = stb.id
+    ORDER BY id;
   END //
 DELIMITER ;
 
 # returns to the controller  all the tickets for a give Date and Trip
 DELIMITER //
-create procedure getTicketsControl(IN DateCheck Date,IN trip INT)
-  begin
-    select tickets.id,
+CREATE PROCEDURE getTicketsControl(IN DateCheck DATE, IN trip INT)
+  BEGIN
+    SELECT
+      tickets.id,
       tickets.uniqueId,
       tickets.ticketDate,
       tickets.departureStationId,
       tickets.arrivalStationId
-    from tickets where tickets.isUsed=false
-                       and tickets.ticketDate=DateCheck
-                       and tickets.fkTrip=trip;
+    FROM tickets
+    WHERE tickets.isUsed = FALSE
+          AND tickets.ticketDate = DateCheck
+          AND tickets.fkTrip = trip;
   END //
 DELIMITER ;
 
 DELIMITER //
-create procedure getTrips()
-  begin
-    select * from trips;
+CREATE PROCEDURE getTrips()
+  BEGIN
+    SELECT *
+    FROM trips;
   END //
 DELIMITER ;
 
 DELIMITER //
-create procedure buyTicket(
-    IN uniqueUUID text,
-    IN depStation INT,
-    IN arrStation INT,
-    IN ticketDate Date,
-    IN price float,
-    IN purchadeDate Date,
-    IN userId INT,
-    IN tripID INT)
-  begin
-    INSERT INTO tickets VALUES(NULL,uniqueUUID,
-    depStation,
-    arrStation,
-    ticketDate,
-    price,
-    purchadeDate,
-    userId,
-    tripID,
-    FALSE);
-    SELECT * FROM tickets where id=last_insert_id();
+CREATE PROCEDURE buyTicket(IN uniqueUUID   TEXT, IN depStation INT, IN arrStation INT, IN ticketDate DATE,
+                           IN price        FLOAT,
+                           IN purchadeDate DATE, IN userId INT, IN tripID INT, IN seat VARCHAR(25))
+  BEGIN
+    DECLARE IDTICKET, OUTSTATION, INSTATION, INSEATID INT;
+    DECLARE NRSEAT VARCHAR(25);
+    IF (seat IS NULL)
+    THEN
+      SELECT
+        seatNumber,
+        seatId
+      INTO NRSEAT, INSEATID
+      FROM (SELECT
+              seats.seatNumber,
+              trips.skTrain,
+              trips.direction,
+              trains.maxCapacity,
+              trains.description,
+              trips.id AS idTrip,
+              seats.id AS seatId
+            FROM seats
+              JOIN trains ON seats.fkTrain = trains.id
+              JOIN trips ON trains.id = trips.skTrain
+            WHERE trips.id = 4) AS sta LEFT JOIN
+        (SELECT
+           bookings.id AS bookingId,
+           bookings.dateBooking,
+           bookings.fkSeat,
+           bookings.fkTicket,
+           bookings.fkTrip
+         FROM bookings
+         WHERE bookings.fkTrip = tripID AND bookings.dateBooking = ticketDate) AS stb
+          ON sta.seatId = stb.fkSeat
+      WHERE bookingId IS NULL
+      LIMIT 1;
+      SET seat = NRSEAT;
+    ELSE
+      SELECT seats.id
+      INTO INSEATID
+      FROM seats
+        JOIN trains ON seats.fkTrain = trains.id
+        JOIN trips ON trains.id = trips.skTrain
+      WHERE seats.seatNumber = seat AND trips.id = tripId;
+    END IF;
+    INSERT INTO tickets
+    VALUES (NULL, uniqueUUID, depStation, arrStation, ticketDate, price, purchadeDate, userId, tripID, FALSE, seat);
+    SELECT last_insert_id()
+    INTO IDTICKET;
+    INSERT INTO bookings VALUES (NULL, ticketDate, INSEATID, IDTICKET, tripID);
+    SELECT
+      kd.departureTime,
+      kd.arrivalTime,
+      ke.id,
+      ke.uniqueId,
+      ke.departureStationId,
+      ke.arrivalStationId,
+      ke.ticketDate,
+      ke.price,
+      ke.purchaseDate,
+      ke.fkUser,
+      ke.fkTrip,
+      ke.isUsed,
+      ke.seatNumber
+    FROM (SELECT
+            ka.departureTime,
+            kb.arrivalTime,
+            ka.fkTrip
+          FROM (SELECT
+                  steps.departureTime,
+                  steps.fkTrip
+                FROM steps
+                WHERE steps.departureStationId = depStation AND steps.fkTrip = tripID) AS ka
+            JOIN (SELECT
+                    steps.arrivalTime,
+                    steps.fkTrip
+                  FROM steps
+                  WHERE steps.arrivalStationId = arrStation AND steps.fkTrip = tripID) AS kb
+              ON ka.fkTrip = kb.fkTrip) AS kd
+      JOIN (SELECT *
+            FROM tickets) AS ke ON kd.fkTrip = ke.fkTrip AND ke.id = IDTICKET;
+
   END //
 DELIMITER ;
 
 DELIMITER //
-create procedure getFirstSeat(IN trip INT, in tripDate Date)
-  begin
-    select seatNumber,seatId,bookingId
-    from (select seats.seatNumber,
+CREATE PROCEDURE getFirstSeat(IN trip INT, IN tripDate DATE)
+  BEGIN
+    SELECT
+      seatNumber,
+      seatId,
+      bookingId
+    FROM (SELECT
+            seats.seatNumber,
             trips.skTrain,
             trips.direction,
             trains.maxCapacity,
             trains.description,
-            trips.id as idTrip,
-            seats.id as seatId
-          from seats join trains on                                                                                                                                                                                                 seats.fkTrain=trains.id join trips on trains.id=trips.skTrain where trips.id=4) as sta left join
-      (select bookings.id as bookingId,
+            trips.id AS idTrip,
+            seats.id AS seatId
+          FROM seats
+            JOIN trains ON seats.fkTrain = trains.id
+            JOIN trips ON trains.id = trips.skTrain
+          WHERE trips.id = 4) AS sta LEFT JOIN
+      (SELECT
+         bookings.id AS bookingId,
          bookings.dateBooking,
          bookings.fkSeat,
          bookings.fkTicket,
          bookings.fkTrip
-       from bookings
-      where bookings.fkTrip=trip and bookings.dateBooking=tripDate) as stb
-        on sta.seatId=stb.fkSeat where bookingId is null LIMIT 1;
+       FROM bookings
+       WHERE bookings.fkTrip = trip AND bookings.dateBooking = tripDate) AS stb
+        ON sta.seatId = stb.fkSeat
+    WHERE bookingId IS NULL
+    LIMIT 1;
   END //
 DELIMITER ;
 
 DELIMITER //
-create procedure getAvailableSeatS(IN trip INT, in checkDate Date)
-  begin
-    select seatNumber,seatId,bookingId
-    from (select seats.seatNumber,
+CREATE PROCEDURE getAvailableSeatS(IN trip INT, IN checkDate DATE)
+  BEGIN
+    SELECT
+      seatNumber,
+      seatId,
+      bookingId
+    FROM (SELECT
+            seats.seatNumber,
             trips.skTrain,
             trips.direction,
             trains.maxCapacity,
             trains.description,
-            trips.id as idTrip,
-            seats.id as seatId
-          from seats join trains on                                                                                                                                                                                                 seats.fkTrain=trains.id join trips on trains.id=trips.skTrain where trips.id=4) as sta left join
-      (select bookings.id as bookingId,
+            trips.id AS idTrip,
+            seats.id AS seatId
+          FROM seats
+            JOIN trains ON seats.fkTrain = trains.id
+            JOIN trips ON trains.id = trips.skTrain
+          WHERE trips.id = 4) AS sta LEFT JOIN
+      (SELECT
+         bookings.id AS bookingId,
          bookings.dateBooking,
          bookings.fkSeat,
          bookings.fkTicket,
          bookings.fkTrip
-       from bookings
-       where bookings.fkTrip=trip and bookings.dateBooking=checkDate) as stb
-        on sta.seatId=stb.fkSeat where bookingId IS NULL;
+       FROM bookings
+       WHERE bookings.fkTrip = trip AND bookings.dateBooking = checkDate) AS stb
+        ON sta.seatId = stb.fkSeat
+    WHERE bookingId IS NULL;
   END //
 DELIMITER ;
 
 DELIMITER //
-create procedure createBooking(IN tripDate Date, seatId INT,IN ticketID INT,IN tripId INT)
-  begin
-    INSERT INTO bookings VALUES(NULL,tripDate,seatId,ticketId,tripId);
+CREATE PROCEDURE createBooking(IN tripDate DATE, seatId INT, IN ticketID INT, IN tripId INT)
+  BEGIN
+    INSERT INTO bookings VALUES (NULL, tripDate, seatId, ticketId, tripId);
   END //
 DELIMITER ;
 
 DELIMITER //
-create procedure createRevisor(IN username TEXT,IN pass TEXT,IN email VARCHAR(255))
-  begin
-    INSERT INTO users values(null,username,pass,email,2);
+CREATE PROCEDURE createRevisor(IN username TEXT, IN pass TEXT, IN email VARCHAR(255))
+  BEGIN
+    INSERT INTO users VALUES (NULL, username, pass, email, 2);
   END //
 DELIMITER ;
 
 DELIMITER //
-create procedure setStateToUsed(IN ticketUUID text)
-  begin
-    SET SQL_SAFE_UPDATES=0;
-    Update tickets SET isUsed=True WHERE uniqueID=ticketUUID;
-    SET SQL_SAFE_UPDATES=1;
+CREATE PROCEDURE setStateToUsed(IN ticketUUID TEXT)
+  BEGIN
+    SET SQL_SAFE_UPDATES = 0;
+    UPDATE tickets
+    SET isUsed = TRUE
+    WHERE uniqueID = ticketUUID;
+    SET SQL_SAFE_UPDATES = 1;
   END //
 DELIMITER ;
 
 # Get all timetables
 DELIMITER //
-create procedure getTimeTable()
-  begin
-  select
-    trains.id as idTrain,
-    trains.description as traindescription,
-    trips.description as tripdescription,
-    trips.direction as direction,
-    trips.id as tripId,
-    trips.increment as increment,
-    stc.idStepDep as idStep,
-    stc.idStationDep as idStationDep,
-    stc.idStationArr as idStationArr,
-    stc.stationNameDe as stationNameDep,
-    stc.stationNameArr as stationNameArr,
-    stc.departureTime as departureTime,
-    stc.arrivalTime as arrivalTime,
-    stc.duration as duration,
-    stc.waitingTime as waitingTime
-  from(select * from(select steps.id as idStepDep,
-	  steps.departureStationId as idStepStationDep,
-    steps.fkTrip fkTripDep,
-    steps.duration,
-    steps.waitingTime,
-    steps.departureTime,steps.arrivalTime,
-    stations.id as idStationDep,
-    stations.stationName as stationNameDe,
-    stations.stationNumber as stationNumberDep
-    from steps join stations on
-	  steps.departureStationId=stations.id) as sta
-  join(
-  select steps.id as idStepArr,
-	steps.arrivalStationId as isStepStationArr,
-    steps.fkTrip as fkTripArr,
-    stations.id as idStationArr,
-    stations.stationName as stationNameArr,
-    stations.stationNumber as stationNumberArr
-    from steps join stations on
-	steps.arrivalStationId=stations.id) as stb
-    on sta.idStepDep=stb.IdStepArr order by idStepDep) as stc
-    join trips on stc.fkTripDep=trips.id join trains on trips.skTrain=trains.id
-    order by idTrain,tripId,idStep;
-    end //
-DELIMITER ;
-
-DELIMITER //
-create procedure getTicketsRevisor(IN direction TEXT,IN Trip TEXT,IN dateTrip DATE)
-  begin
-   select
-   tickets.id as idTicket,
-   tickets.uniqueId,
-   tickets.departureStationId,
-   tickets.arrivalStationId,
-   tickets.ticketDate,
-   tickets.isUsed,
-   tickets.price,
-   tickets.purchaseDate,
-   tickets.fkTrip as idTrip,
-   trips.description,
-   trips.direction,
-   trips.increment,
-   trips.skTrain as idTrain
-   from tickets
-   join trips on tickets.fkTrip=trips.id
-	where trips.direction=direction
-    and trips.description=Trip
-    and tickets.isUsed=0
-    and tickets.ticketDate=dateTrip;
+CREATE PROCEDURE getTimeTable()
+  BEGIN
+    SELECT
+      trains.id          AS idTrain,
+      trains.description AS traindescription,
+      trips.description  AS tripdescription,
+      trips.direction    AS direction,
+      trips.id           AS tripId,
+      trips.increment    AS increment,
+      stc.idStepDep      AS idStep,
+      stc.idStationDep   AS idStationDep,
+      stc.idStationArr   AS idStationArr,
+      stc.stationNameDe  AS stationNameDep,
+      stc.stationNameArr AS stationNameArr,
+      stc.departureTime  AS departureTime,
+      stc.arrivalTime    AS arrivalTime,
+      stc.duration       AS duration,
+      stc.waitingTime    AS waitingTime
+    FROM (SELECT *
+          FROM (SELECT
+                  steps.id                 AS idStepDep,
+                  steps.departureStationId AS idStepStationDep,
+                  steps.fkTrip                fkTripDep,
+                  steps.duration,
+                  steps.waitingTime,
+                  steps.departureTime,
+                  steps.arrivalTime,
+                  stations.id              AS idStationDep,
+                  stations.stationName     AS stationNameDe,
+                  stations.stationNumber   AS stationNumberDep
+                FROM steps
+                  JOIN stations ON
+                                  steps.departureStationId = stations.id) AS sta
+            JOIN (
+                   SELECT
+                     steps.id               AS idStepArr,
+                     steps.arrivalStationId AS isStepStationArr,
+                     steps.fkTrip           AS fkTripArr,
+                     stations.id            AS idStationArr,
+                     stations.stationName   AS stationNameArr,
+                     stations.stationNumber AS stationNumberArr
+                   FROM steps
+                     JOIN stations ON
+                                     steps.arrivalStationId = stations.id) AS stb
+              ON sta.idStepDep = stb.IdStepArr
+          ORDER BY idStepDep) AS stc
+      JOIN trips ON stc.fkTripDep = trips.id
+      JOIN trains ON trips.skTrain = trains.id
+    ORDER BY idTrain, tripId, idStep;
   END //
 DELIMITER ;
 
 DELIMITER //
-create procedure getExpiredTickets(IN userId INT)
-  begin
-    select sta.uniqueId,
+CREATE PROCEDURE getTicketsRevisor(IN direction TEXT, IN Trip TEXT, IN dateTrip DATE)
+  BEGIN
+    SELECT
+      tickets.id     AS idTicket,
+      tickets.uniqueId,
+      tickets.departureStationId,
+      tickets.arrivalStationId,
+      tickets.ticketDate,
+      tickets.isUsed,
+      tickets.price,
+      tickets.purchaseDate,
+      tickets.fkTrip AS idTrip,
+      trips.description,
+      trips.direction,
+      trips.increment,
+      trips.skTrain  AS idTrain
+    FROM tickets
+      JOIN trips ON tickets.fkTrip = trips.id
+    WHERE trips.direction = direction
+          AND trips.description = Trip
+          AND tickets.isUsed = 0
+          AND tickets.ticketDate = dateTrip;
+  END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE getExpiredTickets(IN userId INT)
+  BEGIN
+    SELECT
+      sta.uniqueId,
       sta.id,
       sta.ticketDate,
       sta.price,
@@ -388,46 +543,53 @@ create procedure getExpiredTickets(IN userId INT)
       sta.direction,
       sta.Idtrip,
       sta.isUsed
-    from(select tickets.uniqueId,
-           tickets.id,
-           tickets.ticketDate,
-           stations.id as idDeparture,
-           steps.departureTime,
-           stations.stationName as fromStation,
-           seats.seatNumber,
-           trips.direction,
-           tickets.fkTrip as idTrip,
-           tickets.isUsed,
-           tickets.price,
-           tickets.purchaseDate,
-           tickets.departureStationId,
-           tickets.arrivalStationId
-         from tickets join stations on tickets.departureStationId=stations.id
-           join steps on steps.departureStationId=stations.id
-           left join bookings on tickets.id=bookings.fkTicket
-           left join seats on bookings.fkSeat=seats.id
-           join trips on tickets.fkTrip=trips.id
-         where tickets.fkTrip=steps.fkTrip and tickets.fkUser=userId and tickets.isUsed=true)as sta
-      join(select tickets.uniqueId,
-             tickets.id,
-             stations.id as idArrival,
-             steps.arrivalTime,
-             stations.stationName as toStation
-           from tickets join stations on tickets.arrivalStationId=stations.id
-             join steps on steps.arrivalStationId=stations.id
-           where tickets.fkTrip=steps.fkTrip and tickets.fkUser=userId and tickets.isUsed=true) as stb
-        on sta.id=stb.id order by ticketDate desc LIMIT 10;
+    FROM (SELECT
+            tickets.uniqueId,
+            tickets.id,
+            tickets.ticketDate,
+            stations.id          AS idDeparture,
+            steps.departureTime,
+            stations.stationName AS fromStation,
+            seats.seatNumber,
+            trips.direction,
+            tickets.fkTrip       AS idTrip,
+            tickets.isUsed,
+            tickets.price,
+            tickets.purchaseDate,
+            tickets.departureStationId,
+            tickets.arrivalStationId
+          FROM tickets
+            JOIN stations ON tickets.departureStationId = stations.id
+            JOIN steps ON steps.departureStationId = stations.id
+            LEFT JOIN bookings ON tickets.id = bookings.fkTicket
+            LEFT JOIN seats ON bookings.fkSeat = seats.id
+            JOIN trips ON tickets.fkTrip = trips.id
+          WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND tickets.isUsed = TRUE) AS sta
+      JOIN (SELECT
+              tickets.uniqueId,
+              tickets.id,
+              stations.id          AS idArrival,
+              steps.arrivalTime,
+              stations.stationName AS toStation
+            FROM tickets
+              JOIN stations ON tickets.arrivalStationId = stations.id
+              JOIN steps ON steps.arrivalStationId = stations.id
+            WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND tickets.isUsed = TRUE) AS stb
+        ON sta.id = stb.id
+    ORDER BY ticketDate DESC
+    LIMIT 10;
   END //
 DELIMITER ;
 
 # Saves the credit card. If number is the same update!
 DELIMITER //
-create procedure saveCard(IN expiryDate DATE,IN number BIGINT,IN cvv2 INT, IN fkUser INT)
-  begin
-    insert into creditcards (expiryDate, number, cvv2, fkUser) VALUES (expiryDate, number, cvv2, fkUser) ON DUPLICATE KEY UPDATE
+CREATE PROCEDURE saveCard(IN expiryDate DATE, IN number BIGINT, IN cvv2 INT, IN fkUser INT)
+  BEGIN
+    INSERT INTO creditcards (expiryDate, number, cvv2, fkUser) VALUES (expiryDate, number, cvv2, fkUser)
+    ON DUPLICATE KEY UPDATE
       expiryDate = VALUES(expiryDate),
-      number = VALUES(number),
-      cvv2 = VALUES(cvv2),
-      fkUser = VALUES(fkUser);
+      number     = VALUES(number),
+      cvv2       = VALUES(cvv2),
+      fkUser     = VALUES(fkUser);
   END //
 DELIMITER ;
