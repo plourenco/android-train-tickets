@@ -20,11 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.kogitune.activity_transition.ActivityTransition;
 
@@ -48,6 +51,8 @@ import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.runnables.StationGetTask;
 import feup.cm.traintickets.runnables.TicketGetTask;
 import feup.cm.traintickets.runnables.TicketUserGetTask;
+import feup.cm.traintickets.sqlite.TicketBrowser;
+import feup.cm.traintickets.util.Callback;
 
 public class TicketListActivity extends BaseActivity {
 
@@ -99,6 +104,10 @@ public class TicketListActivity extends BaseActivity {
         return (ViewGroup) findViewById(R.id.list);
     }
 
+    @Override
+    protected boolean authCheck() {
+        return false;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -123,6 +132,23 @@ public class TicketListActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void download(ListAdapter adpt) {
+        if(adpt instanceof TicketListAdapter) {
+            TicketListAdapter adapter = (TicketListAdapter) adpt;
+            TicketBrowser ticketBrowser = new TicketBrowser(getApplicationContext());
+            ticketBrowser.deleteAll();
+            for (TicketModel ticket : adapter.getDataSet()) {
+                try {
+                    ticketBrowser.create(ticket);
+                } catch (android.database.SQLException ignored) {
+                }
+            }
+            Toast.makeText(getApplicationContext(), getString(R.string.success_download_tickets),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -135,7 +161,6 @@ public class TicketListActivity extends BaseActivity {
         private static final String ARG_USER_ID = "user_id";
         private static final String ARG_USER_TOKEN = "user_token";
 
-        private List<TicketModel> tickets = new ArrayList<TicketModel>();
         private ListView listView;
         private ProgressBar progressBar;
         private TextView noTicketsView;
@@ -167,23 +192,64 @@ public class TicketListActivity extends BaseActivity {
             progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
             noTicketsView = (TextView) rootView.findViewById(R.id.no_available_tickets);
             Bundle args = getArguments();
-            int userId = args.getInt(ARG_USER_ID, 0);
-            String token = args.getString(ARG_USER_TOKEN, "");
+            final int userId = args.getInt(ARG_USER_ID, 0);
+            final String token = args.getString(ARG_USER_TOKEN, "");
 
-            TicketUserGetTask task = new TicketUserGetTask(token, userId) {
+            final TicketBrowser ticketBrowser = new TicketBrowser(getContext());
+            BaseActivity base = (BaseActivity) getActivity();
+            noTicketsView.setVisibility(View.INVISIBLE);
+
+            base.hasActiveInternetConnection(getContext(), new Callback() {
+
+                TicketListActivity activity = (TicketListActivity) getActivity();
+                List<TicketModel> ticketsList = new ArrayList<TicketModel>();
+
                 @Override
-                protected void onPostExecute(Boolean success) {
-                    tickets = getTickets();
+                public void call(Boolean success) {
+                    if (success && userId != 0) { // has internet
+                        // Normal verification scheme skipped before
+                        if(!activity.tokenValid()) {
+                            activity.refreshToken();
+                            getActivity().recreate();
+                            return;
+                        }
+                        TicketUserGetTask task = new TicketUserGetTask(token, userId) {
+                            @Override
+                            protected void onPostExecute(Boolean success) {
+                                if (success) {
+                                    ticketsList = tickets;
+                                }
+                                initView(ticketsList);
+                                // Resync existing tickets
+                                activity.download(listView.getAdapter());
+                            }
+                        };
+                        task.execute((Void) null);
+                    } else { // has no internet
+                        ticketsList = ticketBrowser.getAll();
+                        initView(ticketsList);
+                    }
+                }
+            });
+            return rootView;
+        }
+
+        protected void initView(final List<TicketModel> tickets) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
                     adapter = new TicketListAdapter(tickets, getActivity().getApplicationContext());
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             TicketModel dataModel = tickets.get(position);
-                            Intent intent = new Intent(getActivity().getApplicationContext(),
-                                    SingleTicketActivity.class);
-                            intent.putExtra("TICKET_MODEL", new Gson().toJson(dataModel));
-                            startActivity(intent);
+                            if (dataModel != null) {
+                                Intent intent = new Intent(getActivity().getApplicationContext(),
+                                        SingleTicketActivity.class);
+                                intent.putExtra("TICKET_MODEL", new Gson().toJson(dataModel));
+                                startActivity(intent);
+                            }
                         }
                     });
                     progressBar.setVisibility(View.INVISIBLE);
@@ -191,11 +257,7 @@ public class TicketListActivity extends BaseActivity {
                         noTicketsView.setVisibility(View.VISIBLE);
                     }
                 }
-            };
-            progressBar.setVisibility(View.VISIBLE);
-            noTicketsView.setVisibility(View.INVISIBLE);
-            task.execute((Void) null);
-            return rootView;
+            });
         }
     }
 

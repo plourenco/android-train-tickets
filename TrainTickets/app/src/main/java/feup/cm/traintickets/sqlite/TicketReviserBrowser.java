@@ -22,9 +22,9 @@ import feup.cm.traintickets.runnables.SyncPostTask;
 
 public class TicketReviserBrowser implements IOperation<TicketModel> {
 
-    SQLiteDatabase sqLiteReadableDatabase;
-    SQLiteDatabase sqLiteWritableDatabase;
-    Cursor cursor;
+    private SQLiteDatabase sqLiteReadableDatabase;
+    private SQLiteDatabase sqLiteWritableDatabase;
+    private Cursor cursor;
 
     public TicketReviserBrowser(Context context) {
         sqLiteReadableDatabase = new SQLiteManager(context).getReadableDatabase();
@@ -67,7 +67,7 @@ public class TicketReviserBrowser implements IOperation<TicketModel> {
     /**
      * Ticket Model must contain uniqueId, depStationId, arrStationId,
      * ticketDate, isUsed and tripId
-     * @param ticketModel
+     * @param ticketModel TicketModel
      */
     @Override
     public void create(TicketModel ticketModel) {
@@ -107,10 +107,11 @@ public class TicketReviserBrowser implements IOperation<TicketModel> {
     public void deleteAll() {
         sqLiteWritableDatabase.delete("ticketsReviser", null, null);
     }
+
     /**
      * Synchronize tickets with server db
-     * @param tickets
-     * @param token
+     * @param tickets List<TicketModel>
+     * @param token String
      */
     public void synchronize(List<TicketModel> tickets, String token) {
         SyncPostTask syncPostTask = new SyncPostTask(token, tickets) {

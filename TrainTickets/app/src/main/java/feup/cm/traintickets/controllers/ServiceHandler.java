@@ -23,7 +23,7 @@ import feup.cm.traintickets.util.KeyValuePair;
 
 public class ServiceHandler {
 
-    private static final String apiUrl = "http://10.0.2.2:8080/api/";
+    public static final String apiUrl = "http://10.0.2.2:8080/api/";
 
     /**
      * Make a GET request to a sub url with parameters
@@ -41,6 +41,7 @@ public class ServiceHandler {
                 conn.setRequestProperty("Authorization", "Bearer " + token);
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
+            conn.setConnectTimeout(1500);
 
             InputStream in = new BufferedInputStream(conn.getInputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -76,6 +77,7 @@ public class ServiceHandler {
             conn.setRequestProperty("Content-Type", "application/json");
             if(token != null)
                 conn.setRequestProperty("Authorization", "Bearer " + token);
+            conn.setConnectTimeout(1500);
 
             DataOutputStream wr = null;
             try {

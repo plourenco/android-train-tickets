@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -28,8 +30,10 @@ import feup.cm.traintickets.activities.ReviserActivity;
 import feup.cm.traintickets.activities.SettingsActivity;
 import feup.cm.traintickets.activities.TicketListActivity;
 import feup.cm.traintickets.activities.TimetableActivity;
+import feup.cm.traintickets.controllers.ServiceHandler;
 import feup.cm.traintickets.runnables.TokenRefreshTask;
 import feup.cm.traintickets.util.ActivityHelper;
+import feup.cm.traintickets.util.Callback;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -42,7 +46,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!tokenValid()) {
+        sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
+        this.token = sharedPrefs.getString("LOGIN_TOKEN", "");
+        this.userId = sharedPrefs.getInt("LOGIN_ID", 0);
+
+        if (authCheck() && !tokenValid()) {
             refreshToken();
         }
     }
@@ -69,50 +77,56 @@ public abstract class BaseActivity extends AppCompatActivity {
                 params.setMargins(0, 0, 0, bottomNav.getItemHeight());
                 main.requestLayout();
             }
-            bottomNav.setOnNavigationItemSelectedListener(
-                    new BottomNavigationView.OnNavigationItemSelectedListener() {
-                        @Override
-                        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                            Intent intent;
-                            Class[] nav = {
-                                    BuyTicketActivity.class, TicketListActivity.class,
-                                    TimetableActivity.class, SettingsActivity.class
-                            };
+            bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.
+                    OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Intent intent;
+                    Class[] nav = {
+                            BuyTicketActivity.class, TicketListActivity.class,
+                            TimetableActivity.class, SettingsActivity.class
+                    };
 
-                            switch (item.getItemId()) {
-                                case R.id.action_buyticket:
-                                    if (!(nav[0].isInstance(BaseActivity.this))) {
-                                        intent = new Intent(getApplicationContext(), BuyTicketActivity.class);
-                                        startActivity(intent);
-                                        overrideTransition(nav, 0);
-                                    }
-                                    break;
-                                case R.id.action_tickets:
-                                    if (!(nav[1].isInstance(BaseActivity.this))) {
-                                        intent = new Intent(getApplicationContext(), TicketListActivity.class);
-                                        startActivity(intent);
-                                        overrideTransition(nav, 1);
-                                    }
-                                    break;
-                                case R.id.action_timetables:
-                                    if (!(nav[2].isInstance(BaseActivity.this))) {
-                                        intent = new Intent(getApplicationContext(), TimetableActivity.class);
-                                        startActivity(intent);
-                                        overrideTransition(nav, 2);
-                                    }
-                                    break;
-                                case R.id.action_settings:
-                                    if (!(nav[3].isInstance(BaseActivity.this))) {
-                                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                                        startActivity(intent);
-                                        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
-                                        overrideTransition(nav, 3);
-                                    }
-                                    break;
+                    if(!authCheck()) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.guest_mode),
+                                Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                    switch (item.getItemId()) {
+                        case R.id.action_buyticket:
+                            if (!(nav[0].isInstance(BaseActivity.this))) {
+                                intent = new Intent(getApplicationContext(), BuyTicketActivity.class);
+                                startActivity(intent);
+                                overrideTransition(nav, 0);
                             }
-                            return true;
-                        }
-                    });
+                            break;
+                        case R.id.action_tickets:
+                            if (!(nav[1].isInstance(BaseActivity.this))) {
+                                intent = new Intent(getApplicationContext(), TicketListActivity.class);
+                                startActivity(intent);
+                                overrideTransition(nav, 1);
+                            }
+                            break;
+                        case R.id.action_timetables:
+                            if (!(nav[2].isInstance(BaseActivity.this))) {
+                                intent = new Intent(getApplicationContext(), TimetableActivity.class);
+                                startActivity(intent);
+                                overrideTransition(nav, 2);
+                            }
+                            break;
+                        case R.id.action_settings:
+                            if (!(nav[3].isInstance(BaseActivity.this))) {
+                                intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+                                overrideTransition(nav, 3);
+                            }
+                            break;
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -128,7 +142,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param nav  Class[]
      * @param dest int
      */
-    private void overrideTransition(Class[] nav, int dest) {
+    protected void overrideTransition(Class[] nav, int dest) {
         int current = 0;
         for (int i = 0; i < nav.length; i++) {
             if (nav[i].isInstance(BaseActivity.this)) {
@@ -143,9 +157,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected boolean tokenValid() {
-        sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
-        this.token = sharedPrefs.getString("LOGIN_TOKEN", "");
-        this.userId = sharedPrefs.getInt("LOGIN_ID", 0);
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
 
         return !(token.isEmpty() || expires.before(new Date()));
@@ -202,6 +213,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * By rule, every activity needs to check if user is authenticated
+     * but if by any means you don't need that, override this method
+     */
+    protected boolean authCheck() {
+        return true;
+    }
+
     protected void logout() {
         ActivityHelper.cleanPrefs(sharedPrefs);
 
@@ -210,22 +229,37 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    protected boolean hasActiveInternetConnection(Context context) {
+    public void hasActiveInternetConnection(Context context, final Callback callback) {
         if (isNetworkAvailable(context)) {
-            try {
-                HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
-                urlc.setRequestProperty("User-Agent", "Test");
-                urlc.setRequestProperty("Connection", "close");
-                urlc.setConnectTimeout(1500);
-                urlc.connect();
-                return (urlc.getResponseCode() == 200);
-            } catch (IOException e) {
-                Log.e("INTERNET", "Error checking internet connection", e);
-            }
-        } else {
-            Log.d("INTERNET", "No network available!");
+            AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Void... params) {
+                    try {
+                        HttpURLConnection urlc = (HttpURLConnection)
+                                (new URL(ServiceHandler.apiUrl).openConnection());
+                        urlc.setRequestProperty("User-Agent", "Test");
+                        urlc.setRequestProperty("Connection", "close");
+                        urlc.setConnectTimeout(500);
+                        urlc.connect();
+                        return (urlc.getResponseCode() == 200);
+                    }
+                    catch (Exception e) {
+                        Log.e("INTERNET", "Error checking internet connection");
+                        return false;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(Boolean success) {
+                    callback.call(success);
+                }
+            };
+            task.execute();
         }
-        return false;
+        else {
+            Log.d("INTERNET", "No network available!");
+            callback.call(false);
+        }
     }
 
     private boolean isNetworkAvailable(Context context) {

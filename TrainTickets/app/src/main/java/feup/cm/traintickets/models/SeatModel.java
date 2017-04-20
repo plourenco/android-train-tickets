@@ -3,10 +3,6 @@ package feup.cm.traintickets.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by pedro on 26/03/17.
- */
-
 public class SeatModel {
 
     private int id;
@@ -16,7 +12,7 @@ public class SeatModel {
     public SeatModel(int id) {
         this.id = id;
     }
-    public SeatModel(int id, String seatNumber) {
+    public SeatModel(String seatNumber) {
         this.id = id;
         this.seatNumber = seatNumber;
     }

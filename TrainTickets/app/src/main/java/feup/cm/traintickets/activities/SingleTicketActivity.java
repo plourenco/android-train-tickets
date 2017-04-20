@@ -83,8 +83,9 @@ public class SingleTicketActivity extends BaseActivity {
             originView.setText(ticket.getDepartureStation().getStationName());
             destinationView.setText(ticket.getArrivalStation().getStationName());
             dateView.setText(ticketDate);
-            if(ticket.getTrip().getSteps().size() > 0) {
-                timeView.setText(timef.format(ticket.getTrip().getSteps().get(0).getDepartureTime()));
+
+            if(ticket.getDepartureTime() != null) {
+                timeView.setText(timef.format(ticket.getDepartureTime()));
             }
             seatView.setText(ticket.getSeatModel().getSeatNumber());
         }
@@ -122,6 +123,11 @@ public class SingleTicketActivity extends BaseActivity {
     @Override
     protected int getBottomNavId() {
         return R.id.action_tickets;
+    }
+
+    @Override
+    protected boolean authCheck() {
+        return false;
     }
 
     private void generateQR(final String textToEncode) {

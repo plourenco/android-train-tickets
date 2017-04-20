@@ -41,6 +41,10 @@ public class TicketListAdapter extends ArrayAdapter<TicketModel> implements View
         this.mContext=context;
     }
 
+    public List<TicketModel> getDataSet() {
+        return dataSet;
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -52,10 +56,9 @@ public class TicketListAdapter extends ArrayAdapter<TicketModel> implements View
         if(dataModel != null) {
             switch (v.getId()) {
                 case R.id.item_info:
-                    String time = timef.format(dataModel.getTrip().getSteps()
-                            .get(0).getDepartureTime());
-                    if (dataModel.getTrip().getSteps().size() > 0) {
-                        Snackbar.make(v, String.format("Departure Time: %s", time),
+                    if (dataModel.getDepartureTime() != null) {
+                        Snackbar.make(v, String.format("Departure Time: %s",
+                                timef.format(dataModel.getDepartureTime())),
                                 Snackbar.LENGTH_LONG).setAction("No action", null).show();
                     }
                     break;

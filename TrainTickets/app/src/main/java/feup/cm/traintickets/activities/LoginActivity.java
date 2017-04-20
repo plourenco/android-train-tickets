@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private TextView mProceedTicketView;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -99,6 +100,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return true;
                 }
                 return false;
+            }
+        });
+
+        mProceedTicketView = (TextView) findViewById(R.id.login_view_tickets);
+        mProceedTicketView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TicketListActivity.class);
+                startActivity(intent);
             }
         });
 

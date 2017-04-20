@@ -175,7 +175,6 @@ public class TicketManager {
                         .filter(s -> s.getId() == departureStationId).findFirst().get();
                 StationModel arrStation = StationHolder.getStations().values().stream()
                         .filter(s -> s.getId() == arrivalStationId).findFirst().get();
-
                 TripModel trip = TripHolder.getTrips().get(tripId);
 
                 try {
@@ -219,6 +218,8 @@ public class TicketManager {
                 int depStationId = rs.getInt("departureStationId");
                 int arrStationId = rs.getInt("arrivalStationId");
                 Date ticketDate = rs.getDate("ticketDate");
+                Time depTime = rs.getTime("departureTime");
+                Time arrTime = rs.getTime("arrivalTime");
                 float price = rs.getFloat("price");
                 Date purchaseDate = rs.getDate("purchaseDate");
                 int idUser = rs.getInt("fkUser");
@@ -234,7 +235,7 @@ public class TicketManager {
                         .filter(p -> p.getId() == tripId).findAny().get();
 
                 ticketToRetrieve = new TicketModel(ticketId, UUID.fromString(uniqueId), depStation, arrStation,
-                        ticketDate, price, purchaseDate, trip, used, new SeatModel(seat));
+                        ticketDate, price, purchaseDate, trip, used, depTime, arrTime, new SeatModel(seat));
                 return ticketToRetrieve;
             }
         } catch (SQLException sql) {

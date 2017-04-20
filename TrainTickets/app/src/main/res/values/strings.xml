@@ -12,6 +12,7 @@
     <string name="action_register">Register</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_settings">Settings</string>
+    <string name="action_download_tickets">Download Tickets</string>
     <string name="action_logout">Logout</string>
 
     <!-- Strings related to objects -->
@@ -55,6 +56,7 @@
     <string name="display_select_date">No date selected</string>
     <string name="display_download_tickets">Download Tickets</string>
     <string name="display_scan_tickets">Proceed to scanning</string>
+    <string name="display_login_view_tickets">Proceed to view tickets only</string>
 
     <string name="error_match_password">Passwords do not match</string>
     <string name="error_invalid_register">Unable to complete registration</string>
@@ -68,6 +70,8 @@
     <string name="error_no_tickets">There are no available tickets</string>
     <string name="error_no_trains">There are no available trains. Please select a new date or station</string>
     <string name="error_invalid_price">Unable to generate price and complete purchase</string>
+
+    <string name="success_download_tickets">Your current tickets were updated in the local storage</string>
 
     <!-- Strings train:list-->
     <string name="train_list_departure_tv">Departure Time</string>
@@ -85,4 +89,5 @@
     <string name="expiry_date">Expiry Date</string>
     <string name="save_card">Save Card</string>
     <string name="open_camera">Open Camera</string>
+    <string name="guest_mode">You can\'t switch views while in guest mode</string>
 </resources>

@@ -17,6 +17,7 @@ public class StationModel {
 
     public StationModel(int id) {
         this.id = id;
+        this.stationNumber = id;
     }
 
     public int getId() {

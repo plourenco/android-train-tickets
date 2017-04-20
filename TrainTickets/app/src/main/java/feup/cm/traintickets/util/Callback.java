@@ -1,5 +1,5 @@
 package feup.cm.traintickets.util;
 
 public interface Callback {
-    void call();
+    void call(Boolean success);
 }

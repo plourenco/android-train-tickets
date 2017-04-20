@@ -105,6 +105,15 @@
                 android:text="@string/action_register"
                 android:textColor="#009a99"
                 android:textStyle="bold" />
+            
+            <TextView
+                android:id="@+id/login_view_tickets"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:text="@string/display_login_view_tickets"
+                android:textColor="#c4c4c4"/>
 
         </LinearLayout>
     </ScrollView>

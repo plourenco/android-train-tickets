@@ -11,4 +11,5 @@ public interface IOperation<T> {
     List<T> getAll();
     void create(T t);
     int delete(int id);
+    void deleteAll();
 }
