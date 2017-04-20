@@ -7,6 +7,6 @@ Any user should be capable of consulting in the app the daily timetables of trai
 
 Features:
 * Tickets with QR Code
-* QR Code Scanner or NFC to verify tickets
+* QR Code Scanner to verify tickets
 * Both inspector and user views
 * Buying and saving tickets
