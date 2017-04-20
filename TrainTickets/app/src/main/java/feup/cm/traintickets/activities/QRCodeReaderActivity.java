@@ -34,6 +34,8 @@ public class QRCodeReaderActivity extends BaseActivity implements ZXingScannerVi
     ZXingScannerView scannerView;
     Button button;
 
+    private boolean cameraOpened = false;
+
     public static final int PERMISSION_REQUEST_CAMERA = 1;
 
     @Override
@@ -41,12 +43,12 @@ public class QRCodeReaderActivity extends BaseActivity implements ZXingScannerVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode_reader);
 
+        scannerView = new ZXingScannerView(getApplicationContext());
+
         button = (Button) findViewById(R.id.btn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scannerView = new ZXingScannerView(getApplicationContext());
-                setContentView(scannerView);
                 // Request permission.
                 // This does it asynchronously so we have to wait for onRequestPermissionResult
                 // before trying to open the camera.
@@ -59,6 +61,14 @@ public class QRCodeReaderActivity extends BaseActivity implements ZXingScannerVi
                 }
             }
         });
+
+        if(savedInstanceState != null) {
+            Log.d("camera", String.valueOf(savedInstanceState.getBoolean("camera", false)));
+            if(savedInstanceState.getBoolean("camera", false)) {
+                setContentView(scannerView);
+                startCamera();
+            }
+        }
 
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -89,9 +99,22 @@ public class QRCodeReaderActivity extends BaseActivity implements ZXingScannerVi
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("camera", cameraOpened);
+    }
+
     public void startCamera() {
+        setContentView(scannerView);
         scannerView.setResultHandler(QRCodeReaderActivity.this);
         scannerView.startCamera();
+        cameraOpened = true;
+    }
+
+    public void stopCamera() {
+        setContentView(R.layout.activity_qrcode_reader);
+        scannerView.stopCamera();
+        cameraOpened = false;
     }
 
     @Override
