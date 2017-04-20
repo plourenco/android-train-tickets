@@ -22,7 +22,7 @@ public abstract class SyncPostTask extends AsyncTask<Void, Void, Boolean> {
         TicketController ticketController = new TicketController();
         String res = ticketController.syncWithServer(tickets, token);
 
-        if (!res.equals("!update"))
+        if (res.contentEquals("!update"))
             return true;
         else
             return false;

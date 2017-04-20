@@ -108,26 +108,8 @@ public class TicketReviserBrowser implements IOperation<TicketModel> {
         sqLiteWritableDatabase.delete("ticketsReviser", null, null);
     }
 
-    /**
-     * Synchronize tickets with server db
-     * @param tickets List<TicketModel>
-     * @param token String
-     */
-    public void synchronize(List<TicketModel> tickets, String token) {
-        SyncPostTask syncPostTask = new SyncPostTask(token, tickets) {
-            @Override
-            protected void onPostExecute(Boolean success) {
-                // TODO Delete from SQLite
-                if (success) {
-                    deleteAll();
-                }
-            }
-
-            @Override
-            protected void onCancelled() {
-
-            }
-        };
-        syncPostTask.execute((Void) null);
+    public void close() {
+        sqLiteWritableDatabase.close();
+        sqLiteReadableDatabase.close();
     }
 }

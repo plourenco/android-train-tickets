@@ -23,7 +23,7 @@ import feup.cm.traintickets.util.KeyValuePair;
 
 public class ServiceHandler {
 
-    public static final String apiUrl = "http://192.168.1.67:8080/api/";
+    public static final String apiUrl = "http://192.168.1.5:8080/api/";
 
     /**
      * Make a GET request to a sub url with parameters

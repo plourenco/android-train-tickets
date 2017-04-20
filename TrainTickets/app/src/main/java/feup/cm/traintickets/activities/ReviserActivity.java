@@ -173,13 +173,15 @@ public class ReviserActivity extends BaseActivity {
     }
 
     private void syncTickets() {
-        TicketReviserBrowser browser = new TicketReviserBrowser(getApplicationContext());
+        final TicketReviserBrowser browser = new TicketReviserBrowser(getApplicationContext());
         SyncPostTask downloadGetTask = new SyncPostTask(getToken(), browser.getAll()) {
             @Override
             protected void onPostExecute(Boolean success) {
                 if (success) {
                     Toast.makeText(getApplicationContext(), getString(R.string.success_sync_tickets),
                             Toast.LENGTH_SHORT).show();
+                    browser.deleteAll();
+                    browser.close();
                 }
             }
 
