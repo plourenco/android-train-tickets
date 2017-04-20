@@ -229,7 +229,7 @@ CREATE PROCEDURE getUserTickets(IN userId INT)
             LEFT JOIN bookings ON tickets.id = bookings.fkTicket
             LEFT JOIN seats ON bookings.fkSeat = seats.id
             JOIN trips ON tickets.fkTrip = trips.id
-          WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND tickets.isUsed = FALSE) AS sta
+          WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND tickets.isUsed = FALSE and tickets.ticketDate>=curdate()) AS sta
       JOIN (SELECT
               tickets.uniqueId,
               tickets.id,
@@ -239,7 +239,7 @@ CREATE PROCEDURE getUserTickets(IN userId INT)
             FROM tickets
               JOIN stations ON tickets.arrivalStationId = stations.id
               JOIN steps ON steps.arrivalStationId = stations.id
-            WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND tickets.isUsed = FALSE) AS stb
+            WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND tickets.isUsed = FALSE and tickets.ticketDate>=curdate()) AS stb
         ON sta.id = stb.id
     ORDER BY id;
   END //
@@ -565,7 +565,7 @@ CREATE PROCEDURE getExpiredTickets(IN userId INT)
             LEFT JOIN bookings ON tickets.id = bookings.fkTicket
             LEFT JOIN seats ON bookings.fkSeat = seats.id
             JOIN trips ON tickets.fkTrip = trips.id
-          WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND tickets.isUsed = TRUE) AS sta
+          WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND (tickets.isUsed = TRUE or tickets.ticketDate<curdate())) AS sta
       JOIN (SELECT
               tickets.uniqueId,
               tickets.id,
@@ -575,7 +575,7 @@ CREATE PROCEDURE getExpiredTickets(IN userId INT)
             FROM tickets
               JOIN stations ON tickets.arrivalStationId = stations.id
               JOIN steps ON steps.arrivalStationId = stations.id
-            WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND tickets.isUsed = TRUE) AS stb
+            WHERE tickets.fkTrip = steps.fkTrip AND tickets.fkUser = userId AND (tickets.isUsed = TRUE or tickets.ticketDate<curdate())) AS stb
         ON sta.id = stb.id
     ORDER BY ticketDate DESC
     LIMIT 10;
