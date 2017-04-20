@@ -6,11 +6,15 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
 
 import feup.cm.traintickets.models.CreditCardModel;
+import feup.cm.traintickets.models.TokenModel;
 import feup.cm.traintickets.models.UserModel;
+import feup.cm.traintickets.util.DateDeserializer;
+import feup.cm.traintickets.util.TimeDeserializer;
 
 public class UserController {
 
@@ -27,6 +31,11 @@ public class UserController {
         Map<String, String> map = new HashMap<String, String>();
         map.put("token", refreshToken);
         return ServiceHandler.makePost("users/refresh", gson.toJson(map));
+    }
+
+    public boolean check(TokenModel token) {
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+        return ServiceHandler.makePostCheck("users/check", gson.toJson(token), null);
     }
 
     public String createUser(UserModel user) {

@@ -49,6 +49,7 @@ import feup.cm.traintickets.models.TokenModel;
 import feup.cm.traintickets.runnables.SeatGetTask;
 import feup.cm.traintickets.runnables.StationGetTask;
 import feup.cm.traintickets.runnables.StepGetTask;
+import feup.cm.traintickets.runnables.TokenCheckTask;
 import feup.cm.traintickets.runnables.TokenRefreshTask;
 import feup.cm.traintickets.runnables.TrainGetTask;
 import feup.cm.traintickets.runnables.TripGetTask;
@@ -112,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        final Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,15 +133,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
 
         sharedPrefs = getSharedPreferences("feup.cm.traintickets", Context.MODE_PRIVATE);
-        String token = sharedPrefs.getString("LOGIN_TOKEN", "");
-        int role = sharedPrefs.getInt("LOGIN_ROLE", 0);
+        final String token = sharedPrefs.getString("LOGIN_TOKEN", "");
+        final String refresh = sharedPrefs.getString("LOGIN_REFRESH", "");
+        final int role = sharedPrefs.getInt("LOGIN_ROLE", 0);
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
         int userid = sharedPrefs.getInt("LOGIN_ID", 0);
 
         if (!token.isEmpty() && role != 0 && userid != 0) {
             if(expires.after(new Date())) {
-                ActivityHelper.cache(token);
-                successRedirect(role);
+                TokenCheckTask task = new TokenCheckTask(new TokenModel(userid, token,
+                        refresh, expires.getTime(), role)) {
+                    @Override
+                    protected void onPostExecute(Boolean success) {
+                        if(success) {
+                            ActivityHelper.cache(token);
+                            successRedirect(role);
+                        }
+                        else mEmailSignInButton.setEnabled(true);
+                    }
+
+                    @Override
+                    protected void onCancelled() {
+                        mEmailSignInButton.setEnabled(true);
+                    }
+                };
+                mEmailSignInButton.setEnabled(false);
+                task.execute();
+                return;
             }
             else {
                 refreshToken(role);

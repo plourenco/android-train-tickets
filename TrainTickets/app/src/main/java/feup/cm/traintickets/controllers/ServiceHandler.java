@@ -103,6 +103,39 @@ public class ServiceHandler {
         return null;
     }
 
+    public static boolean makePostCheck(String sUrl, String jsonStr, String token) {
+        StringBuilder result = new StringBuilder();
+
+        try {
+            URL url = new URL(apiUrl + sUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("Content-Type", "application/json");
+            if(token != null)
+                conn.setRequestProperty("Authorization", "Bearer " + token);
+            conn.setConnectTimeout(1500);
+
+            DataOutputStream wr = null;
+            try {
+                wr = new DataOutputStream(conn.getOutputStream());
+                wr.write(jsonStr.getBytes());
+                wr.flush();
+            }
+            finally {
+                if(wr != null) wr.close();
+            }
+            return conn.getResponseCode() == 200;
+        }
+        catch(IOException e) {
+            Log.d("Exception", e.getMessage());
+        }
+        return false;
+    }
+
     public static String makePost(String sUrl, String jsonStr) {
         return makePost(sUrl, jsonStr, null);
     }

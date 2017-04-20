@@ -1,7 +1,10 @@
 package com.example.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TokenModel {
 
     private String token;

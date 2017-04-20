@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import com.google.zxing.Result;
 import java.util.Date;
 import java.util.UUID;
 
+import feup.cm.traintickets.BaseActivity;
 import feup.cm.traintickets.R;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
@@ -24,7 +26,7 @@ import feup.cm.traintickets.util.QREncryption;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import se.simbio.encryption.Encryption;
 
-public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+public class QRCodeReaderActivity extends BaseActivity implements ZXingScannerView.ResultHandler {
 
     ZXingScannerView scannerView;
     Button button;
@@ -50,6 +52,11 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
     }
 
     @Override
+    protected int getBottomNavId() {
+        return 0;
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         if (scannerView != null)
@@ -57,10 +64,20 @@ public class QRCodeReaderActivity extends AppCompatActivity implements ZXingScan
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_options_main, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.action_logout:
+                logout();
                 return true;
         }
         return super.onOptionsItemSelected(item);
