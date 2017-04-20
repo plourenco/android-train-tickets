@@ -96,10 +96,12 @@ public class UserController {
     @Path("check")
     @Produces("application/json")
     @Consumes("application/json")
-    public Response valid(TokenModel tokenModel) {
+    public Response valid(RawTokenModel tokenModel) {
         String token = tokenModel.getToken();
         if(TokenHelper.isTrustworthy("TrainTickets-Security", token)) {
-            return Response.ok().build();
+            if(tokenModel.getRole() == TokenHelper.getRole((token))) {
+                return Response.ok().build();
+            }
         }
         return Response.status(Response.Status.NOT_ACCEPTABLE).build();
     }
