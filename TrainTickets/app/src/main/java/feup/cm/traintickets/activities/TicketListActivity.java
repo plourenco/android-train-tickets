@@ -109,7 +109,7 @@ public class TicketListActivity extends BaseActivity {
     }
 
     @Override
-    protected boolean authCheck() {
+    public boolean authCheck() {
         return authCheck;
     }
 

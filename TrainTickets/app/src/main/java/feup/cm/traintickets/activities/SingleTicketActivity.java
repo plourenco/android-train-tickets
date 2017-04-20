@@ -8,8 +8,10 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +48,8 @@ public class SingleTicketActivity extends BaseActivity {
     public final static int QRCODE_WIDTH = 500;
     private TicketModel ticket;
 
+    private boolean authCheck = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +72,7 @@ public class SingleTicketActivity extends BaseActivity {
         try {
             ticket = new Gson().fromJson(ticketIntent.getStringExtra("TICKET_MODEL"),
                     TicketModel.class);
+            this.authCheck = ticketIntent.getBooleanExtra("TICKET_ONLINE", false);
         }
         catch(JsonParseException ignored) { }
 
@@ -125,9 +130,13 @@ public class SingleTicketActivity extends BaseActivity {
         return R.id.action_tickets;
     }
 
+    protected ViewGroup getMainLayout() {
+        return (ConstraintLayout) findViewById(R.id.ticket_main_layout);
+    }
+
     @Override
-    protected boolean authCheck() {
-        return false;
+    public boolean authCheck() {
+        return authCheck;
     }
 
     private void generateQR(final String textToEncode) {

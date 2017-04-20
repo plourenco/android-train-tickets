@@ -71,7 +71,7 @@ public class ExpiredTicketsFragment extends Fragment {
         final int userId = args.getInt(ARG_USER_ID, 0);
         final String token = args.getString(ARG_USER_TOKEN, "");
 
-        BaseActivity base = (BaseActivity) getActivity();
+        final BaseActivity base = (BaseActivity) getActivity();
         noTicketsView.setVisibility(View.INVISIBLE);
 
         TicketExpiredGetTask task = new TicketExpiredGetTask(token, userId) {
@@ -83,19 +83,19 @@ public class ExpiredTicketsFragment extends Fragment {
                 if (success) {
                     ticketsList = tickets;
                 }
-                initView(ticketsList);
+                initView(ticketsList, base.authCheck());
             }
 
             @Override
             protected void onCancelled(Boolean success) {
-                initView(ticketsList);
+                initView(ticketsList, base.authCheck());
             }
         };
         task.execute();
         return rootView;
     }
 
-    protected void initView(final List<TicketModel> tickets) {
+    protected void initView(final List<TicketModel> tickets, final boolean online) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -109,6 +109,7 @@ public class ExpiredTicketsFragment extends Fragment {
                             Intent intent = new Intent(getActivity().getApplicationContext(),
                                     SingleTicketActivity.class);
                             intent.putExtra("TICKET_MODEL", new Gson().toJson(dataModel));
+                            intent.putExtra("TICKET_ONLINE", online);
                             startActivity(intent);
                         }
                     }

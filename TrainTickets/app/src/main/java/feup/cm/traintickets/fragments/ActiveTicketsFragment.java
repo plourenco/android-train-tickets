@@ -95,7 +95,7 @@ public class ActiveTicketsFragment extends Fragment {
                             if (success) {
                                 ticketsList = tickets;
                             }
-                            initView(ticketsList);
+                            initView(ticketsList, activity.authCheck());
                             // Resync existing tickets
                             activity.download(listView.getAdapter());
                         }
@@ -103,14 +103,14 @@ public class ActiveTicketsFragment extends Fragment {
                     task.execute((Void) null);
                 } else { // has no internet
                     ticketsList = ticketBrowser.getAll();
-                    initView(ticketsList);
+                    initView(ticketsList, activity.authCheck());
                 }
             }
         });
         return rootView;
     }
 
-    protected void initView(final List<TicketModel> tickets) {
+    protected void initView(final List<TicketModel> tickets, final boolean online) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -124,6 +124,7 @@ public class ActiveTicketsFragment extends Fragment {
                             Intent intent = new Intent(getActivity().getApplicationContext(),
                                     SingleTicketActivity.class);
                             intent.putExtra("TICKET_MODEL", new Gson().toJson(dataModel));
+                            intent.putExtra("TICKET_ONLINE", online);
                             startActivity(intent);
                         }
                     }

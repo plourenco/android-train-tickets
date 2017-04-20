@@ -17,8 +17,6 @@ import android.widget.Toast;
 
 import com.google.gson.JsonParseException;
 
-import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -143,12 +141,16 @@ public class BuyTicketActivity extends BaseActivity {
                     StationModel org = (StationModel) origin.getSelectedItem();
                     StationModel ds = (StationModel) dest.getSelectedItem();
 
-                    forwardTrain(org, ds);
+                    Intent intent = new Intent(getApplicationContext(), TrainListActivity.class);
+                    Bundle extras = new Bundle();
+                    saveState(extras, org, ds);
+                    intent.putExtras(extras);
+                    startActivity(intent);
                 }
             }
         });
 
-        loadStations();
+        loadStations(getIntent().getExtras());
         origin.setOnItemSelectedListener(oLis);
         dest.setOnItemSelectedListener(dLis);
     }
@@ -163,7 +165,21 @@ public class BuyTicketActivity extends BaseActivity {
         return (ViewGroup) findViewById(R.id.buy_ticket_main_layout);
     }
 
-    protected void loadStations() {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // Save the values you need
+        super.onSaveInstanceState(outState);
+        if(origin.getSelectedItem() instanceof StationModel &&
+                dest.getSelectedItem() instanceof StationModel) {
+
+            StationModel org = (StationModel) origin.getSelectedItem();
+            StationModel ds = (StationModel) dest.getSelectedItem();
+
+            saveState(outState, org, ds);
+        }
+    }
+
+    protected void loadStations(final Bundle savedInstanceState) {
         final List<StationModel> list = new ArrayList<StationModel>();
         StationGetTask task = new StationGetTask(getToken()) {
 
@@ -181,7 +197,7 @@ public class BuyTicketActivity extends BaseActivity {
                     origin.setAdapter(dataAdapter);
                     dest.setAdapter(dataAdapter);
 
-                    restoreSelections();
+                    restoreSelections(savedInstanceState);
                 }
             }
 
@@ -267,13 +283,19 @@ public class BuyTicketActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    protected void forwardTrain(StationModel org, StationModel ds) {
-        Intent intent = new Intent(getApplicationContext(), TrainListActivity.class);
-        intent.putExtra("origin", org.getId());
-        intent.putExtra("destination", ds.getId());
-        intent.putExtra("departureView", departureView.getText());
-        intent.putExtra("date", (String) departureView.getTag());
-        startActivity(intent);
+    protected void saveState(Bundle extras, StationModel org, StationModel ds) {
+        if(org != null && ds != null) {
+            extras.putInt("origin", org.getId());
+            extras.putInt("destination", ds.getId());
+        }
+        if(departureView.getText() != null && departureView.getTag() != null) {
+            extras.putString("departureView", departureView.getText().toString());
+            extras.putString("date", (String) departureView.getTag());
+        }
+        if(trainView.getText() != null && trainView.getTag() != null) {
+            extras.putString("trainView", trainView.getText().toString());
+            extras.putInt("train", (int) trainView.getTag());
+        }
     }
 
     /**
@@ -281,8 +303,7 @@ public class BuyTicketActivity extends BaseActivity {
      * since I could just finish the activity on the other side, so
      * all contents are still saved. However, for other purposes, here it is.
      */
-    private void restoreSelections() {
-        Bundle extras = getIntent().getExtras();
+    private void restoreSelections(Bundle extras) {
         if(extras != null) {
             int originText = extras.getInt("origin", -1);
             int destText = extras.getInt("destination", -1);
@@ -313,7 +334,7 @@ public class BuyTicketActivity extends BaseActivity {
                 // Calculate price if applicable
                 calculatePrice();
             } catch (Exception ignored) { // do not restore anything
-
+                ignored.printStackTrace();
             }
         }
     }

@@ -217,7 +217,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * By rule, every activity needs to check if user is authenticated
      * but if by any means you don't need that, override this method
      */
-    protected boolean authCheck() {
+    public boolean authCheck() {
         return true;
     }
 
