@@ -68,7 +68,7 @@ public class TimetableAdapter extends BaseExpandableListAdapter {
                 TextView station = (TextView) convertView.findViewById(R.id.timetable_station);
                 station.setText(childStep.getDepartureStation().getStationName());
                 TextView time = (TextView) convertView.findViewById(R.id.timetable_time);
-                time.setText(childStep.getDepartureTime().toString()+" Hrs");
+                time.setText(childStep.getDepartureTime().toString());
                 TextView waiting = (TextView) convertView.findViewById(R.id.timetable_waiting);
                 waiting.setText("     -------");
             }
