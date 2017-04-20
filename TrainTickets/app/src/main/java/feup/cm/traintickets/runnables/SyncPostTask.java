@@ -7,10 +7,6 @@ import java.util.List;
 import feup.cm.traintickets.controllers.TicketController;
 import feup.cm.traintickets.models.TicketModel;
 
-/**
- * Created by mercurius on 12/04/17.
- */
-
 public abstract class SyncPostTask extends AsyncTask<Void, Void, Boolean> {
 
     private String token;

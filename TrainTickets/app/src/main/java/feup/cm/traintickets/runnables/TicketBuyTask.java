@@ -61,7 +61,6 @@ public abstract class TicketBuyTask extends AsyncTask<Void, Void, Boolean> {
                 Gson gson = new GsonBuilder()
                         .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
                         .registerTypeAdapter(Time.class, new TimeDeserializer()).create();
-                Log.d("api", res);
                 this.result = gson.fromJson(res, TicketModel.class);
                 return true;
             } catch (Exception ignored) {

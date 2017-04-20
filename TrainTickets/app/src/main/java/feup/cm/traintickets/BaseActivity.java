@@ -156,13 +156,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected boolean tokenValid() {
+    public boolean tokenValid() {
         Date expires = new Date(sharedPrefs.getLong("LOGIN_EXPIRES", 0L));
 
         return !(token.isEmpty() || expires.before(new Date()));
     }
 
-    protected void refreshToken() {
+    public void refreshToken() {
         String refresh = sharedPrefs.getString("LOGIN_REFRESH", "");
         TokenRefreshTask task = new TokenRefreshTask(refresh) {
             @Override
@@ -236,7 +236,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 protected Boolean doInBackground(Void... params) {
                     try {
                         HttpURLConnection urlc = (HttpURLConnection)
-                                (new URL(ServiceHandler.apiUrl).openConnection());
+                                (new URL(ServiceHandler.apiUrl + "application.wadl")
+                                        .openConnection());
                         urlc.setRequestProperty("User-Agent", "Test");
                         urlc.setRequestProperty("Connection", "close");
                         urlc.setConnectTimeout(500);

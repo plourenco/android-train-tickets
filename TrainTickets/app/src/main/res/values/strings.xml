@@ -55,6 +55,7 @@
     <string name="display_select_train_tip">Click in any train to select it</string>
     <string name="display_select_date">No date selected</string>
     <string name="display_download_tickets">Download Tickets</string>
+    <string name="display_sync_tickets">Sync Tickets</string>
     <string name="display_scan_tickets">Proceed to scanning</string>
     <string name="display_login_view_tickets">Proceed to view tickets only</string>
 
@@ -72,6 +73,7 @@
     <string name="error_invalid_price">Unable to generate price and complete purchase</string>
 
     <string name="success_download_tickets">Your current tickets were updated in the local storage</string>
+    <string name="success_sync_tickets">Tickets synchronized successfully</string>
 
     <!-- Strings train:list-->
     <string name="train_list_departure_tv">Departure Time</string>

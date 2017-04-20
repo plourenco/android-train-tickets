@@ -46,6 +46,8 @@ import feup.cm.traintickets.adapters.TicketListAdapter;
 import feup.cm.traintickets.datamanagers.SeatDataManager;
 import feup.cm.traintickets.datamanagers.StationDataManager;
 import feup.cm.traintickets.datamanagers.TripDataManager;
+import feup.cm.traintickets.fragments.ActiveTicketsFragment;
+import feup.cm.traintickets.fragments.ExpiredTicketsFragment;
 import feup.cm.traintickets.models.StationModel;
 import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.runnables.StationGetTask;
@@ -70,6 +72,8 @@ public class TicketListActivity extends BaseActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
+    private boolean authCheck = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +110,10 @@ public class TicketListActivity extends BaseActivity {
 
     @Override
     protected boolean authCheck() {
-        return false;
+        return authCheck;
     }
+
+    public void setAuthCheck(boolean auth) { this.authCheck = auth; }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,7 +138,7 @@ public class TicketListActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void download(ListAdapter adpt) {
+    public void download(ListAdapter adpt) {
         if(adpt instanceof TicketListAdapter) {
             TicketListAdapter adapter = (TicketListAdapter) adpt;
             TicketBrowser ticketBrowser = new TicketBrowser(getApplicationContext());
@@ -143,121 +149,6 @@ public class TicketListActivity extends BaseActivity {
                 } catch (android.database.SQLException ignored) {
                 }
             }
-            Toast.makeText(getApplicationContext(), getString(R.string.success_download_tickets),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-        private static final String ARG_USER_ID = "user_id";
-        private static final String ARG_USER_TOKEN = "user_token";
-
-        private ListView listView;
-        private ProgressBar progressBar;
-        private TextView noTicketsView;
-        private TicketListAdapter adapter;
-
-        public PlaceholderFragment() {
-
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber, String token, int userId) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            args.putInt(ARG_USER_ID, userId);
-            args.putString(ARG_USER_TOKEN, token);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_ticket_list, container, false);
-            listView = (ListView) rootView.findViewById(R.id.list);
-            progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-            noTicketsView = (TextView) rootView.findViewById(R.id.no_available_tickets);
-            Bundle args = getArguments();
-            final int userId = args.getInt(ARG_USER_ID, 0);
-            final String token = args.getString(ARG_USER_TOKEN, "");
-
-            final TicketBrowser ticketBrowser = new TicketBrowser(getContext());
-            BaseActivity base = (BaseActivity) getActivity();
-            noTicketsView.setVisibility(View.INVISIBLE);
-
-            base.hasActiveInternetConnection(getContext(), new Callback() {
-
-                TicketListActivity activity = (TicketListActivity) getActivity();
-                List<TicketModel> ticketsList = new ArrayList<TicketModel>();
-
-                @Override
-                public void call(Boolean success) {
-                    if (success && userId != 0) { // has internet
-                        // Normal verification scheme skipped before
-                        if(!activity.tokenValid()) {
-                            activity.refreshToken();
-                            getActivity().recreate();
-                            return;
-                        }
-                        TicketUserGetTask task = new TicketUserGetTask(token, userId) {
-                            @Override
-                            protected void onPostExecute(Boolean success) {
-                                if (success) {
-                                    ticketsList = tickets;
-                                }
-                                initView(ticketsList);
-                                // Resync existing tickets
-                                activity.download(listView.getAdapter());
-                            }
-                        };
-                        task.execute((Void) null);
-                    } else { // has no internet
-                        ticketsList = ticketBrowser.getAll();
-                        initView(ticketsList);
-                    }
-                }
-            });
-            return rootView;
-        }
-
-        protected void initView(final List<TicketModel> tickets) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter = new TicketListAdapter(tickets, getActivity().getApplicationContext());
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            TicketModel dataModel = tickets.get(position);
-                            if (dataModel != null) {
-                                Intent intent = new Intent(getActivity().getApplicationContext(),
-                                        SingleTicketActivity.class);
-                                intent.putExtra("TICKET_MODEL", new Gson().toJson(dataModel));
-                                startActivity(intent);
-                            }
-                        }
-                    });
-                    progressBar.setVisibility(View.INVISIBLE);
-                    if (tickets == null || tickets.isEmpty()) {
-                        noTicketsView.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
         }
     }
 
@@ -280,7 +171,12 @@ public class TicketListActivity extends BaseActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1, token, userid);
+            switch(position) {
+                case 1:
+                    return ExpiredTicketsFragment.newInstance(position + 1, token, userid);
+                default:
+                    return ActiveTicketsFragment.newInstance(position + 1, token, userid);
+            }
         }
 
         @Override

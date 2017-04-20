@@ -36,9 +36,11 @@
     <style name="Accent.Button" parent="ThemeOverlay.AppCompat">
         <item name="colorButtonNormal">@color/colorPrimary</item>
     </style>
-
     <style name="Accent.Button.Dark" parent="ThemeOverlay.AppCompat">
         <item name="colorButtonNormal">@color/colorPrimaryDark</item>
+    </style>
+    <style name="Accent.Button.Red" parent="ThemeOverlay.AppCompat">
+        <item name="colorButtonNormal">@color/colorRed</item>
     </style>
 
 </resources>

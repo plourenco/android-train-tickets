@@ -13,7 +13,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
      * Properties
      */
     public final static String DATABASE_NAME = "traintickets";
-    public final static int DATABASE_VERSION = 25;
+    public final static int DATABASE_VERSION = 26;
 
     InputStream sql;
 

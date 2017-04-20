@@ -30,13 +30,16 @@ public class TicketController {
         model.put("price", price);
         model.put("purchaseDate", new Date());
         model.put("trip", new TripModel(tripid));
-        Log.d("json", gson.toJson(model));
 
         return ServiceHandler.makePost("tickets/buy-ticket/" + userid, gson.toJson(model), token);
     }
 
     public String getUserTickets(String token, int userid) {
         return ServiceHandler.makeGet("tickets/user-tickets/" + userid, token);
+    }
+
+    public String getExpiredUserTickets(String token, int userid) {
+        return ServiceHandler.makeGet("tickets/user-tickets-exp/" + userid, token);
     }
 
     public String getPrice(String token, int tripId, int depStationId, int arrStationId) {

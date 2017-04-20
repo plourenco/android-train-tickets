@@ -24,6 +24,7 @@ import feup.cm.traintickets.models.TicketModel;
 import feup.cm.traintickets.models.TripModel;
 import feup.cm.traintickets.runnables.DirectionGetTask;
 import feup.cm.traintickets.runnables.DownloadGetTask;
+import feup.cm.traintickets.runnables.SyncPostTask;
 import feup.cm.traintickets.runnables.TripGetTask;
 import feup.cm.traintickets.sqlite.TicketReviserBrowser;
 
@@ -33,6 +34,7 @@ public class ReviserActivity extends BaseActivity {
     Spinner trip;
 
     Button dlTicket;
+    Button syncTicket;
     Button scan;
 
     String directionToSend;
@@ -49,6 +51,7 @@ public class ReviserActivity extends BaseActivity {
         direction = (Spinner)findViewById(R.id.direction_desc);
         trip = (Spinner)findViewById(R.id.trip_desc);
         dlTicket = (Button)findViewById(R.id.dlTickets);
+        syncTicket = (Button)findViewById(R.id.syncTickets);
         scan = (Button)findViewById(R.id.scan);
 
         dlTicket.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +60,15 @@ public class ReviserActivity extends BaseActivity {
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH); //format time
                 String time = df.format(Calendar.getInstance().getTime());
                 downloadTickets(directionToSend, tripToSend, Date.valueOf(time));
+            }
+        });
+
+        syncTicket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH); //format time
+                String time = df.format(Calendar.getInstance().getTime());
+                syncTickets();
             }
         });
 
@@ -124,6 +136,25 @@ public class ReviserActivity extends BaseActivity {
                         ticketReviserBrowser.create(t);
                     }
                     Toast.makeText(getApplicationContext(), "Downloaded " + tickets.size() + " tickets", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+
+            }
+        };
+        downloadGetTask.execute((Void) null);
+    }
+
+    private void syncTickets() {
+        TicketReviserBrowser browser = new TicketReviserBrowser(getApplicationContext());
+        SyncPostTask downloadGetTask = new SyncPostTask(getToken(), browser.getAll()) {
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.success_sync_tickets),
+                            Toast.LENGTH_SHORT).show();
                 }
             }
 
