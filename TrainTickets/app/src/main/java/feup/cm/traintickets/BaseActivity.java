@@ -163,6 +163,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void refreshToken() {
+        refreshToken(null);
+    }
+
+    public void refreshToken(final Callback callback) {
         String refresh = sharedPrefs.getString("LOGIN_REFRESH", "");
         TokenRefreshTask task = new TokenRefreshTask(refresh) {
             @Override
@@ -172,17 +176,19 @@ public abstract class BaseActivity extends AppCompatActivity {
                     editor.putString("LOGIN_TOKEN", getToken().getToken());
                     editor.putLong("LOGIN_EXPIRES", getToken().getExpires().getTime());
                     editor.apply();
+                    if(callback != null) callback.call(true);
                 } else {
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
+                    if(callback != null) callback.call(false);
                 }
             }
 
             @Override
             protected void onCancelled() {
-
+                if(callback != null) callback.call(false);
             }
         };
         task.execute((Void) null);

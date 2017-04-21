@@ -84,12 +84,7 @@ public class ActiveTicketsFragment extends Fragment {
                 if (success && userId != 0) { // has internet
                     // Normal verification scheme skipped before
                     activity.setAuthCheck(true);
-                    if(!activity.tokenValid()) {
-                        activity.refreshToken();
-                        getActivity().recreate();
-                        return;
-                    }
-                    TicketUserGetTask task = new TicketUserGetTask(token, userId) {
+                    final TicketUserGetTask task = new TicketUserGetTask(token, userId) {
                         @Override
                         protected void onPostExecute(Boolean success) {
                             if (success) {
@@ -100,8 +95,20 @@ public class ActiveTicketsFragment extends Fragment {
                             activity.download(listView.getAdapter());
                         }
                     };
+                    if(!activity.tokenValid()) {
+                        activity.refreshToken(new Callback() {
+                            @Override
+                            public void call(Boolean success) {
+                                if(success) {
+                                    task.execute((Void) null);
+                                }
+                            }
+                        });
+                        return;
+                    }
                     task.execute((Void) null);
-                } else { // has no internet
+                }
+                else { // has no internet
                     ticketsList = ticketBrowser.getAll();
                     initView(ticketsList, activity.authCheck());
                 }
