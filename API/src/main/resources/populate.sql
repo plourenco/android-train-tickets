@@ -139,11 +139,11 @@ insert into `steps` values(null,4,3,2,45,4.5,5,8,34,'20:35:00','21:09:00');
 insert into `steps` values(null,3,2,3,80,8.0,5,8,60,'21:14:00','22:14:00');
 insert into `steps` values(null,2,1,4,55,5.5,5,8,41,'22:19:00','23:00:00');
 
-insert into tickets values(null,'c39f78b5-9fdc-4484-8c5b-a18cbf2e69b2',1,5,'2016-03-25',10.5,'2016-03-23',10,4,false);
-insert into tickets values(null,'757cacbb-f0f8-476e-a6e6-a5a0246b91a3',1,4,'2016-03-25',9.5,'2016-03-23',10,4,false);
-insert into tickets values(null,'19597f48-4d21-482a-8282-09984ef3c9b9',3,5,'2016-03-25',6.5,'2016-03-23',10,4,false);
-insert into tickets values(null,'afdcfaae-ad2f-4ea7-bc47-4bee27b7193c',1,5,'2016-03-25',10.5,'2016-03-23',10,2,false);
-insert into tickets values(null,'56afec74-aa51-48e9-82ea-ba37a02a6b51',4,5,'2016-03-25',2.5,'2016-03-23',10,3,false);
+insert into tickets values(null,'c39f78b5-9fdc-4484-8c5b-a18cbf2e69b2',1,5,'2016-03-25',10.5,'2016-03-23',10,4,false, 'A1');
+insert into tickets values(null,'757cacbb-f0f8-476e-a6e6-a5a0246b91a3',1,4,'2016-03-25',9.5,'2016-03-23',10,4,false, 'A1');
+insert into tickets values(null,'19597f48-4d21-482a-8282-09984ef3c9b9',3,5,'2016-03-25',6.5,'2016-03-23',10,4,false, 'A1');
+insert into tickets values(null,'afdcfaae-ad2f-4ea7-bc47-4bee27b7193c',1,5,'2016-03-25',10.5,'2016-03-23',10,2,false, 'A1');
+insert into tickets values(null,'56afec74-aa51-48e9-82ea-ba37a02a6b51',4,5,'2016-03-25',2.5,'2016-03-23',10,3,false, 'A1');
 
 INSERT INTO bookings VALUES(NULL,'2016-04-25',12,1,4);
 INSERT INTO bookings VALUES(NULL,'2016-04-25',5,2,4);
