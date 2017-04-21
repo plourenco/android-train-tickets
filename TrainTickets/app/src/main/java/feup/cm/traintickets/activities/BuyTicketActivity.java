@@ -220,12 +220,14 @@ public class BuyTicketActivity extends BaseActivity {
                     trainView.setError("");
                     Snackbar.make(trainView, getString(R.string.display_select_train),
                             Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    return;
                 }
                 else if(!(priceView.getTag() instanceof Float) ||
                         ((Float) priceView.getTag()) == 0f) {
                     priceView.setError("");
                     Snackbar.make(trainView, getString(R.string.error_invalid_price),
                             Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    return;
                 }
                 StationModel org = (StationModel) origin.getSelectedItem();
                 StationModel ds = (StationModel) dest.getSelectedItem();
