@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -77,5 +78,10 @@ public class TrainListActivity extends BaseActivity {
     @Override
     protected int getBottomNavId() {
         return R.id.action_buyticket;
+    }
+
+    @Override
+    protected ViewGroup getMainLayout() {
+        return (ViewGroup) findViewById(R.id.main_layout_train_list);
     }
 }
